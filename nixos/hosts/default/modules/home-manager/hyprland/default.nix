@@ -6,9 +6,14 @@
   };
 
   config = lib.mkIf config.modules.hyprland.enable {
+
     wayland.windowManager.hyprland = {
       enable = true;
       extraConfig = builtins.readFile ./hyprland.conf;
+
+      settings.exec-once = [
+        "hyprpanel"
+      ];
     };
 
     services.hyprpaper = {

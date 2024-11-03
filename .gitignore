@@ -36,3 +36,7 @@ autostart/
 ags
 
 nixos/hosts/default/hyprland.conf
+
+git/
+
+hypr/
