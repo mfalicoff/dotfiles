@@ -42,6 +42,8 @@
     variant = "";
   };
 
+  virtualisation.docker.enable = true;
+
   main-user.enable = true;
   main-user.userName = "mazilious";
 

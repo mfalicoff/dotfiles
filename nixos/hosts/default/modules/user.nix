@@ -14,7 +14,7 @@
   config = lib.mkIf config.main-user.enable {
     users.users.${config.main-user.userName} = {
       isNormalUser = true;
-      extraGroups = [ "networkmanager" "wheel" ];
+      extraGroups = [ "networkmanager" "wheel" "docker" ];
       shell = pkgs.zsh;
     };
   };
