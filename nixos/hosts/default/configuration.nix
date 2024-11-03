@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./modules/user.nix
+      ./modules/hyprland.nix
       inputs.home-manager.nixosModules.default
       ./modules/nvidia.nix
     ];
@@ -53,6 +54,7 @@
 
   stylix.enable = true;
   stylix.image = ./wallpaper.jpg;
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
   stylix.cursor.package = pkgs.bibata-cursors;
   stylix.cursor.name = "Bibata-Modern-Ice";
 
@@ -82,15 +84,7 @@
     polkit_gnome
     gnome.adwaita-icon-theme
     gnome.gnome-themes-extra
-    swaynotificationcenter
-    wl-clipboard
-    swayidle
-    hyprpaper
-    swaylock
-    wlogout
-    hyprpanel
     libnotify
-    rofi-wayland
     alacritty
     gnome.nautilus
     git
@@ -101,6 +95,8 @@
   (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "JetBrainsMono" ]; })
 ];
 
+hyprland.enable = true;
+
   xdg.portal = {
     enable = true;
     wlr.enable = true;
@@ -110,11 +106,11 @@
     ];
   };
   
-  programs.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
-    xwayland.enable = true;
-  };
+  # programs.hyprland = {
+  #   enable = true;
+  #   package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+  #   xwayland.enable = true;
+  # };
 
   services.xserver.videoDrivers = ["nvidia"];  
 

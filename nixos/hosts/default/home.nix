@@ -26,12 +26,9 @@
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
-    vscode
+    
     insync
     insync-nautilus
-    jetbrains.rider
-    jetbrains.webstorm
-    gitkraken
     bitwarden-desktop
     pure-prompt
     # # It is sometimes useful to fine-tune packages, for example, by applying
@@ -121,14 +118,8 @@
     TEST = "cool";
   };
 
-  programs.git = {
-    enable = true;
-    userEmail = "mfalicoff@yahoo.com";
-    userName = "Maximiliano Falicoff";
-  };
-
   modules.hyprland.enable = true;
-
+  modules.devtools.enable = true;
   
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
