@@ -6,7 +6,6 @@
 }: {
   imports = [
     inputs.home-manager.nixosModules.default
-    ./modules/system
     ../../modules/system
     ./hardware-configuration.nix
   ];
