@@ -1,0 +1,70 @@
+set positional-arguments
+
+# Default hostname values (matching your flake.nix)
+hostname := if os() == "macos" { "fearful" } else { "default" }
+
+# Common Nix flags
+nix_flags := "--extra-experimental-features 'nix-command flakes'"
+
+# Build and switch to NixOS configuration
+nixos host=hostname:
+    nh os switch -H default ~/configuration/nixos
+
+# Build and switch to Darwin configuration
+darwin hostname=hostname:
+    nix build .#darwinConfigurations.{{hostname}}.system {{nix_flags}}
+    ./result/sw/bin/darwin-rebuild switch --flake .#{{hostname}}
+
+# Debug build for NixOS
+nixos-debug hostname=hostname:
+    sudo nix build .#nixosConfigurations.{{hostname}}.system --show-trace --verbose {{nix_flags}}
+    sudo ./result/bin/switch-to-configuration switch --show-trace --verbose
+
+# Debug build for Darwin
+darwin-debug hostname=hostname:
+    nix build .#darwinConfigurations.{{hostname}}.system --show-trace --verbose {{nix_flags}}
+    ./result/sw/bin/darwin-rebuild switch --flake .#{{hostname}} --show-trace --verbose
+
+# Update all flake inputs
+update:
+    nix flake update
+
+# Update specific flake input
+update-input input:
+    nix flake lock --update-input {{input}}
+
+# Check NixOS configuration
+check-nixos hostname=hostname:
+    nix flake check .#nixosConfigurations.{{hostname}}.system
+
+# Check Darwin configuration
+check-darwin hostname=hostname:
+    nix flake check .#darwinConfigurations.{{hostname}}.system
+
+# Clean up old generations
+clean:
+    #!/usr/bin/env bash
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sudo nix-env -p /nix/var/nix/profiles/system --delete-generations old
+        sudo /run/current-system/sw/bin/darwin-rebuild boot
+    else
+        sudo nix-env -p /nix/var/nix/profiles/system --delete-generations old
+        sudo /run/current-system/bin/switch-to-configuration boot
+    fi
+
+# List all available generations
+generations:
+    #!/usr/bin/env bash
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sudo nix-env -p /nix/var/nix/profiles/system --list-generations
+    else
+        sudo nix-env -p /nix/var/nix/profiles/system --list-generations
+    fi
+
+# Garbage collect old store paths
+gc:
+    nix-collect-garbage -d
+
+# Format all Nix files in the repository
+fmt:
+    nix fmt
