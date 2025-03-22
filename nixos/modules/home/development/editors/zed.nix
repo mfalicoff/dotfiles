@@ -14,23 +14,20 @@ in {
       default = ["nix" "toml" "elixir" "make" "catppuccin" "catppuccin-icons" "just"];
       description = "Extensions to install for Zed";
     };
-    extraPackages = mkOption {
-      type = types.listOf types.package;
-      default = [
-        pkgs.nil
-        pkgs.nixd
-        pkgs.alejandra
-        pkgs.omnisharp-roslyn
-      ];
-      description = "Extra packages to install for Zed";
-    };
   };
 
   config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      nil
+      nixd
+      alejandra
+      omnisharp-roslyn
+    ];
+
     programs.zed-editor = {
       enable = true;
       extensions = cfg.extensions;
-      extraPackages = cfg.extraPackages;
+      extraPackages = [];
       ## everything inside of these brackets are Zed options.
       userSettings = {
         assistant = {
@@ -120,7 +117,7 @@ in {
         vim_mode = false;
         load_direnv = "shell_hook";
         base_keymap = "JetBrains";
-        icon_theme = "catppuccin frappe";
+        icon_theme = mkForce "catppuccin_frappe";
         show_whitespaces = "all";
         files = {
           excludeDirs = [

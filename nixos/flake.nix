@@ -10,8 +10,12 @@
 
   inputs = {
     # Nixpkgs for different systems
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.11-darwin";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Linux-specific inputs
     hyprland.url = "github:hyprwm/Hyprland";
@@ -30,26 +34,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    home-manager-darwin = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nvf.url = "github:notashelf/nvf";
     nix-std.url = "github:chessai/nix-std";
-
-    # macOS specific
-    darwin = {
-      url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
-
-    home-manager-darwin = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
   };
 
   outputs = inputs @ {
     self,
     nixpkgs,
-    nixpkgs-darwin,
-    darwin,
+    nix-darwin,
     home-manager,
     home-manager-darwin,
     nix-std,
@@ -66,7 +63,7 @@
 
     # Shared special args
     sharedSpecialArgs = {
-      inherit username useremail;
+      inherit username useremail nixosHostname darwinHostname;
       inherit inputs;
       inherit isDarwin;
     };
@@ -77,7 +74,7 @@
       system = "x86_64-linux";
       modules = [
         inputs.stylix.nixosModules.stylix
-        ./hosts/default/nix-core.nix
+        ./nix-core.nix
         ./hosts/default/system.nix
         inputs.home-manager.nixosModules.home-manager
         {
@@ -91,26 +88,23 @@
     };
 
     # Darwin configuration
-    darwinConfigurations.${darwinHostname} = darwin.lib.darwinSystem {
+    darwinConfigurations.${darwinHostname} = nix-darwin.lib.darwinSystem {
       system = darwinSystem;
       specialArgs = sharedSpecialArgs;
       modules = [
-        ./modules/nix-core.nix
-        ./modules/system.nix
-        ./modules/apps.nix
-        ./modules/host-users.nix
+        inputs.stylix.darwinModules.stylix
+        ./nix-core.nix
+        ./hosts/fearful/system.nix
+        ./hosts/fearful/host-users.nix
         # home manager
-        home-manager-darwin.darwinModules.home-manager
+        inputs.home-manager-darwin.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = sharedSpecialArgs;
-          home-manager.users.${username} = import ./home;
+          home-manager.users.${username} = import ./hosts/fearful/home.nix;
         }
       ];
     };
-
-    # Formatter
-    formatter.${darwinSystem} = nixpkgs.legacyPackages.${darwinSystem}.alejandra;
   };
 }

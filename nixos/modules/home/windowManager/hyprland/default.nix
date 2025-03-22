@@ -4,14 +4,14 @@
   ...
 }:
 with lib; let
-  cfg = config.wm.hyprland;
+  cfg = config.windowManager.hyprland;
 in {
   imports = [
     ./hyprland.nix
     ./hyprpanel.nix
   ];
 
-  options.wm.hyprland = {
+  options.windowManager.hyprland = {
     enable = mkEnableOption "Enable Hyprland with HyprPanel";
   };
 
