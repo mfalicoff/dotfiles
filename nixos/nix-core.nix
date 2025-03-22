@@ -23,7 +23,7 @@
     options = lib.mkDefault "--delete-older-than 7d";
   };
 
-  programs.nix-ld.enable = true;
+  # programs.nix-ld.enable = true;
 
   # Disable auto-optimise-store because of this issue:
   #   https://github.com/NixOS/nix/issues/7273
