@@ -17,6 +17,8 @@ in {
       ripgrep
       neofetch
       btop
+      zsh-autosuggestions
+      zsh-autocomplete
     ];
 
     programs.alacritty = {
