@@ -13,7 +13,6 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       pure-prompt
-      thefuck
       fzf
       ripgrep
       neofetch
@@ -61,7 +60,6 @@ in {
         enable = true;
         plugins = [
           "git"
-          "thefuck"
           "azure"
           "bun"
           "docker"
@@ -72,6 +70,34 @@ in {
       shellAliases = {
         k = "kubectl";
         ll = "ls -l";
+      };
+    };
+
+    programs = {
+      eza = {
+        enable = true;
+        git = true;
+        icons = true;
+        enableZshIntegration = true;
+      };
+
+      # terminal file manager
+      yazi = {
+        enable = true;
+        enableZshIntegration = true;
+        settings = {
+          manager = {
+            show_hidden = true;
+            sort_dir_first = true;
+          };
+        };
+      };
+
+      # skim provides a single executable: sk.
+      # Basically anywhere you would want to use grep, try sk instead.
+      skim = {
+        enable = true;
+        enableBashIntegration = true;
       };
     };
   };

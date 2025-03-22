@@ -1,7 +1,7 @@
 {...}: {
   imports = [
     ./development
-    ./hyprland
+    ./windowManager
     ./shell
   ];
 }
