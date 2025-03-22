@@ -10,4 +10,5 @@
   };
 
   programs.zsh.enable = true;
+  nix.settings.trusted-users = [username];
 }
