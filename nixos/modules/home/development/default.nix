@@ -18,7 +18,7 @@ in {
 
   config = mkIf cfg.enable {
     development.editors.enable = true;
-    development.sdk.enable = true;
+    development.sdk.enable = false;
     development.tools.enable = true;
   };
 }

@@ -72,6 +72,7 @@ in {
       shellAliases = {
         k = "kubectl";
         ll = "ls -l";
+        ndev = "nix develop --command zsh";
       };
     };
 

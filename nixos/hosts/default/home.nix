@@ -44,7 +44,7 @@
   development = {
     enable = true;
     sdk = {
-      enable = true;
+      enable = false;
     };
     editors = {
       zed.enable = true;
