@@ -6,7 +6,12 @@
 }: {
   imports = [
     inputs.home-manager.nixosModules.default
-    ../../modules/system
+    ../../modules/system/gaming
+    ../../modules/system/greetd
+    ../../modules/system/hyprland
+    ../../modules/system/nvidia
+    ../../modules/system/stylix
+    ../../modules/system/user.nix
     ./hardware-configuration.nix
   ];
 
@@ -56,11 +61,12 @@
   # Custom Modules
   styling.stylix = {
     enable = true;
-    fonts.enableDefaultPackages = true;
-    stylix.cursor.package = pkgs.bibata-cursors;
-    stylix.cursor.name = "Bibata-Modern-Ice";
-    stylix.cursor.size = 20;
   };
+
+  stylix.cursor.package = pkgs.bibata-cursors;
+  stylix.cursor.name = "Bibata-Modern-Ice";
+  stylix.cursor.size = 20;
+  fonts.enableDefaultPackages = true;
 
   loginManager.enable = true;
   wm.hyprland.enable = true;

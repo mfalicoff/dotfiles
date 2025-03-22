@@ -30,7 +30,7 @@
   ];
 
   # Settings for this machine
-  wm.hyprland = {
+  windowManager.hyprland = {
     enable = true;
   };
 
