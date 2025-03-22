@@ -54,10 +54,12 @@
   system.stateVersion = "24.11";
 
   # Custom Modules
-  #
-
   styling.stylix = {
     enable = true;
+    fonts.enableDefaultPackages = true;
+    stylix.cursor.package = pkgs.bibata-cursors;
+    stylix.cursor.name = "Bibata-Modern-Ice";
+    stylix.cursor.size = 20;
   };
 
   loginManager.enable = true;
