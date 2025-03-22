@@ -35,6 +35,9 @@
 
   development = {
     enable = true;
+    sdk = {
+      enable = false;
+    };
     editors = {
       zed.enable = true;
       vscode.enable = true;

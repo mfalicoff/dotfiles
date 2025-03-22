@@ -1,9 +1,8 @@
 {
   username,
-  darwinHostname,
   pkgs,
   ...
-} @ args:
+}:
 #############################################################
 #
 #  Host & Users configuration
