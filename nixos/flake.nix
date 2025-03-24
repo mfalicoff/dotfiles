@@ -39,7 +39,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvf.url = "github:notashelf/nvf";
     nix-std.url = "github:chessai/nix-std";
   };
 
@@ -50,7 +49,6 @@
     home-manager,
     home-manager-darwin,
     nix-std,
-    nvf,
     ...
   }: let
     # Shared variables

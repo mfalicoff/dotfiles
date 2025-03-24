@@ -17,6 +17,7 @@ in {
       azure-cli
       direnv
       gitkraken
+      lazygit
       just
       gcc
       k9s
@@ -35,8 +36,7 @@ in {
     programs.git = {
       enable = true;
       lfs.enable = true;
-   
-   
+
       userEmail = useremail;
       userName = "Maximiliano Falicoff";
 

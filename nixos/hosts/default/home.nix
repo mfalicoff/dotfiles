@@ -4,7 +4,6 @@
   ...
 }: {
   imports = [
-    inputs.nvf.homeManagerModules.default
     ../../modules/home
   ];
 
