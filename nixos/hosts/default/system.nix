@@ -26,6 +26,8 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.tailscale.enable = true;
+
+  programs.ssh.startAgent = true;
   services.openssh = {
     enable = true;
     ports = [22];

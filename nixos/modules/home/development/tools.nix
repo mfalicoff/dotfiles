@@ -32,7 +32,7 @@ in {
     home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
       rm -f ~/.gitconfig
     '';
-
+    
     programs.git = {
       enable = true;
       lfs.enable = true;
