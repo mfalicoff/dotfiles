@@ -39,6 +39,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
     nix-std.url = "github:chessai/nix-std";
   };
 
@@ -49,6 +54,7 @@
     home-manager,
     home-manager-darwin,
     nix-std,
+    nixvim,
     ...
   }: let
     # Shared variables

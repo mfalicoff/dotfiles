@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
+    inputs.nixvim.homeManagerModules.nixvim
     ../../modules/home
   ];
 
@@ -26,6 +27,7 @@
     _1password-gui
     _1password-cli
     vlc
+    discord
   ];
 
   # Settings for this machine
@@ -48,6 +50,7 @@
     editors = {
       zed.enable = true;
       vscode.enable = true;
+      neovim.enable = true;
 
       jetbrains = {
         enable = true;

@@ -8,6 +8,7 @@ with lib; let
 in {
   imports = [
     ./zed.nix
+    ./neovim.nix
     ./vscode.nix
     ./jetbrains.nix
   ];
@@ -23,6 +24,7 @@ in {
     # Note: Users will still need to explicitly enable specific editors
     # This just ensures the modules themselves are loaded
     development.editors.zed.enable = mkDefault false;
+    development.editors.neovim.enable = mkDefault false;
     development.editors.vscode.enable = mkDefault false;
     development.editors.jetbrains.enable = mkDefault false;
   };

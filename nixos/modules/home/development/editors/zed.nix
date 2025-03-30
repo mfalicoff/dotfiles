@@ -117,7 +117,7 @@ in {
         vim_mode = false;
         load_direnv = "shell_hook";
         base_keymap = "JetBrains";
-        icon_theme = mkForce "catppuccin_frappe";
+        icon_theme = mkForce "Catppuccin Frappé";
         show_whitespaces = "all";
         files = {
           excludeDirs = [
