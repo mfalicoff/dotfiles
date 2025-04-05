@@ -30,43 +30,50 @@ in {
       # Fix the overwrite issue with HyprPanel
       overwrite.enable = true;
 
-      # Use Catppuccin Frappe theme
-      theme = "catppuccin_frappe";
-
       # Override specific theme elements
       override = {
         theme.bar.menus.text = "#123ABC";
       };
 
-      # Configure bar layouts for monitors
-      layout = {
-        "bar.layouts" = {
-          "0" = {
-            left = ["dashboard" "workspaces"];
-            middle = ["media"];
-            right = ["clock" "volume" "systray" "notifications"];
-          };
-        };
-      };
-
       # Configure panel settings
       settings = {
-        bar.autoHide = "fullscreen";
-        bar.launcher.autoDetectIcon = true;
-        bar.workspaces.show_icons = true;
-        menus.clock = {
-          time = {
-            military = true;
-            hideSeconds = true;
+        theme = {
+          name = "catppuccin_frappe";
+          font = {
+            name = "CaskaydiaCove NF";
+            size = "16px";
           };
-          weather.unit = "metric";
+          bar.transparent = true;
         };
-        menus.dashboard.directories.enabled = false;
-        menus.dashboard.stats.enable_gpu = true;
-        theme.bar.transparent = true;
-        theme.font = {
-          name = "CaskaydiaCove NF";
-          size = "16px";
+
+        # Configure bar layouts for monitors
+        layout = {
+          "bar.layouts" = {
+            "0" = {
+              left = ["dashboard" "workspaces"];
+              middle = ["media"];
+              right = ["clock" "volume" "systray" "notifications"];
+            };
+          };
+        };
+
+        # Configure bar settings
+        bar = {
+          autoHide = "fullscreen";
+          launcher.autoDetectIcon = true;
+          workspaces.show_icons = true;
+        };
+
+        menus = {
+          clock = {
+            time = {
+              military = true;
+              hideSeconds = true;
+            };
+            weather.unit = "metric";
+          };
+          dashboard.directories.enabled = false;
+          dashboard.stats.enable_gpu = true;
         };
       };
     };
