@@ -22,7 +22,7 @@ in {
       enable = true;
 
       # Automatically restart HyprPanel with systemd
-      # systemd.enable = true;
+      systemd.enable = true;
 
       # Add HyprPanel to Hyprland exec-once
       hyprland.enable = true;
