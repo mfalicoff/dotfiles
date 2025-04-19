@@ -28,6 +28,7 @@
     _1password-cli
     vlc
     discord
+    calibre
   ];
 
   # Settings for this machine

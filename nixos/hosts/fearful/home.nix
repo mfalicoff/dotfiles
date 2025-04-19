@@ -22,6 +22,7 @@
     firefox
     google-chrome
     raycast
+    calibre
   ];
 
   shellOptions = {
