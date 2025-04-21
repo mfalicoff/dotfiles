@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  username,
   ...
 }: {
   imports = [
@@ -8,8 +9,8 @@
     ../../modules/home
   ];
 
-  home.username = "mazilious";
-  home.homeDirectory = "/home/mazilious";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
   home.stateVersion = "24.11";
 
   # Let Home Manager install and manage itself.

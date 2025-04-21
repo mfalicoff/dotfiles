@@ -2,6 +2,7 @@
   inputs,
   config,
   pkgs,
+  desktopHostname,
   ...
 }: {
   imports = [
@@ -21,7 +22,7 @@
 
   # Networking
   networking.networkmanager.enable = true;
-  networking.hostName = "desktop-nixos";
+  networking.hostName = desktopHostname;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
