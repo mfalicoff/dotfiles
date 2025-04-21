@@ -55,6 +55,7 @@
             "clock"
           ];
           right = [
+            "wireplumber"
             "temperature"
             "cpu"
             "memory"

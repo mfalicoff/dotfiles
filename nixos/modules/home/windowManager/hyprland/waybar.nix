@@ -79,11 +79,11 @@ in {
             format = "{icon} {volume}%";
             format-muted = "󰖁 0%";
             format-icons = {
-              default = ["" "" ""];
+              default = ["" "" ""];
             };
-            on-click = "swayosd-client --output-volume mute-toggle";
-            on-scroll-down = "swayosd-client --output-volume +1";
-            on-scroll-up = "swayosd-client --output-volume -1";
+            on-click = "hyprctl dispatch exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+            on-scroll-up = "hyprctl dispatch exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
+            on-scroll-down = "hyprctl dispatch exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
             tooltip = false;
           };
 
