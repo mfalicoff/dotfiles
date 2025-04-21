@@ -52,7 +52,7 @@ in {
             "0" = {
               left = ["dashboard" "workspaces"];
               middle = ["media"];
-              right = ["clock" "volume" "systray" "notifications"];
+              right = ["battery" "network" "bluetooth" "clock" "volume" "systray" "notifications"];
             };
           };
         };

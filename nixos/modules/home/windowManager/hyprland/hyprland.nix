@@ -17,7 +17,7 @@ in {
       settings = {
         # Monitor configuration
         monitor = [
-          "DP-1, 3440x1440@164.90, 0x0, 1, bitdepth, 10"
+          "eDP-1, 3456x2160@60.00, 0x0, 2"
           # "DP-2, 2560x1440@144.00, -1440x-400, 1, transform, 1"
         ];
 
@@ -102,7 +102,7 @@ in {
           sensitivity = 0;
 
           touchpad = {
-            natural_scroll = false;
+            natural_scroll = true;
           };
         };
 
@@ -118,18 +118,18 @@ in {
         };
 
         # Workspace rules
-        workspace = [
-          "1,monitor:DP-1"
-          "3,monitor:DP-1"
-          "5,monitor:DP-1"
-          "7,monitor:DP-1"
-          "9,monitor:DP-1"
-          "2,monitor:DP-1"
-          "4,monitor:DP-1"
-          "6,monitor:DP-1"
-          "8,monitor:DP-1"
-          "0,monitor:DP-1"
-        ];
+        # workspace = [
+        #   "1,monitor:eDP-1"
+        #   "3,monitor:eDP-1"
+        #   "5,monitor:eDP-1"
+        #   "7,monitor:eDP-1"
+        #   "9,monitor:eDP-1"
+        #   "2,monitor:eDP-1"
+        #   "4,monitor:eDP-1"
+        #   "6,monitor:eDP-1"
+        #   "8,monitor:eDP-1"
+        #   "0,monitor:eDP-1"
+        # ];
 
         # Window rules
         windowrulev2 = "suppressevent maximize, class:.*";
@@ -204,7 +204,7 @@ in {
           "$mainMod, mouse_up, workspace, e-1"
 
           # Custom application bindings
-          "$mainMod, D, exec, rofi -show drun -theme /home/mazilious/.config/rofi/launchers/type-6/style-6.rasi -show-icons"
+          "$mainMod, D, exec, rofi -show drun"
           "$mainMod SHIFT, P, exec, wlogout"
         ];
 

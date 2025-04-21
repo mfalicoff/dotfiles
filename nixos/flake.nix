@@ -62,6 +62,7 @@
     useremail = "mfalicoff2001@gmail.com";
     darwinSystem = "aarch64-darwin";
     nixosHostname = "default";
+    laptopHostname = "laptop";
     darwinHostname = "fearful";
     isDarwin = system: (builtins.elem system ["aarch64-darwin" "x86_64-darwin"]);
 
@@ -86,6 +87,24 @@
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./hosts/default/home.nix;
+        }
+        {nixpkgs.overlays = [inputs.hyprpanel.overlay];}
+      ];
+    };
+    
+     nixosConfigurations.${laptopHostname} = nixpkgs.lib.nixosSystem {
+      specialArgs = sharedSpecialArgs;
+      system = "x86_64-linux";
+      modules = [
+        inputs.stylix.nixosModules.stylix
+        ./nix-core.nix
+        ./hosts/laptop/system.nix
+        inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = sharedSpecialArgs;
+          home-manager.users.${username} = import ./hosts/laptop/home.nix;
         }
         {nixpkgs.overlays = [inputs.hyprpanel.overlay];}
       ];

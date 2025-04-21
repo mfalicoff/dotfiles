@@ -28,5 +28,9 @@ in {
       extensions = cfg.extensions;
       profiles.default.userSettings = cfg.userSettings;
     };
+
+    home.packages = with pkgs; [
+      windsurf
+    ];
   };
 }

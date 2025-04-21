@@ -18,7 +18,6 @@ in {
       hyprpaper
       swaylock
       wlogout
-      rofi-wayland
     ];
 
     xdg.portal = {
