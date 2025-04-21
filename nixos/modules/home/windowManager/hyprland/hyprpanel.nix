@@ -5,13 +5,13 @@
   ...
 }:
 with lib; let
-  cfg = config.wm.hyprland.panel;
+  cfg = config.windowManager.wayland.bar.hyprpanel;
 in {
   imports = [
     inputs.hyprpanel.homeManagerModules.hyprpanel
   ];
 
-  options.wm.hyprland.panel = {
+  options.windowManager.wayland.bar.hyprpanel = {
     enable = mkEnableOption "Enable HyprPanel configuration";
   };
 

@@ -4,10 +4,15 @@
   ...
 }:
 with lib; let
-  cfg = config.wm.hyprland.configuration;
+  cfg = config.windowManager.wayland.hyprland;
 in {
-  options.wm.hyprland.configuration = {
+  options.windowManager.wayland.hyprland = {
     enable = mkEnableOption "Enable Hyprland window manager configuration";
+    monitors = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Monitor configuration";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -16,10 +21,7 @@ in {
       enable = true;
       settings = {
         # Monitor configuration
-        monitor = [
-          "eDP-1, 3456x2160@60.00, 0x0, 2"
-          # "DP-2, 2560x1440@144.00, -1440x-400, 1, transform, 1"
-        ];
+        monitor = cfg.monitors;
 
         # Environment variables
         env = [
@@ -117,20 +119,6 @@ in {
           sensitivity = -0.5;
         };
 
-        # Workspace rules
-        # workspace = [
-        #   "1,monitor:eDP-1"
-        #   "3,monitor:eDP-1"
-        #   "5,monitor:eDP-1"
-        #   "7,monitor:eDP-1"
-        #   "9,monitor:eDP-1"
-        #   "2,monitor:eDP-1"
-        #   "4,monitor:eDP-1"
-        #   "6,monitor:eDP-1"
-        #   "8,monitor:eDP-1"
-        #   "0,monitor:eDP-1"
-        # ];
-
         # Window rules
         windowrulev2 = "suppressevent maximize, class:.*";
 
@@ -156,6 +144,7 @@ in {
           "$mainMod, R, exec, $menu"
           "$mainMod, P, pseudo," # dwindle
           "$mainMod, J, togglesplit," # dwindle
+          "$mainMod, F, fullscreen,"
 
           # Move focus with mainMod + arrow keys
           "$mainMod, left, movefocus, l"
@@ -206,6 +195,19 @@ in {
           # Custom application bindings
           "$mainMod, D, exec, rofi -show drun"
           "$mainMod SHIFT, P, exec, wlogout"
+        ];
+
+        # Workspace rules
+        workspace = [
+          "1"
+          "2"
+          "3"
+          "4"
+          "5"
+          "6"
+          "7"
+          "8"
+          "9"
         ];
 
         # Move/resize windows with mainMod + mouse

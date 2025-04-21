@@ -22,6 +22,6 @@ in {
     # Note: Users will still need to explicitly enable specific editors
     # This just ensures the modules themselves are loaded
     windowManager.aerospace.enable = mkDefault false;
-    windowManager.hyprland.enable = mkDefault false;
+    windowManager.wayland.enable = mkDefault false;
   };
 }

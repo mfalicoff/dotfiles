@@ -31,8 +31,39 @@
   ];
 
   # Settings for this machine
-  windowManager.hyprland = {
-    enable = true;
+  windowManager = {
+    wayland = {
+      enable = true;
+
+      hyprland = {
+        enable = true;
+        monitors = [
+          "DP-1, 3440x1440@164.90, 0x0, 1, bitdepth, 10"
+        ];
+      };
+
+      bar.waybar = {
+        enable = true;
+        modules = {
+          left = [
+            "custom/launcher"
+            "wlr/taskbar"
+            "custom/launcher"
+            "hyprland/workspaces"
+          ];
+          center = [
+            "clock"
+          ];
+          right = [
+            "temperature"
+            "cpu"
+            "memory"
+            "network"
+            "custom/powermenu"
+          ];
+        };
+      };
+    };
   };
 
   shellOptions = {
