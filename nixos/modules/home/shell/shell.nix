@@ -50,7 +50,7 @@ in {
         path = "${config.xdg.dataHome}/zsh/history";
       };
 
-      initExtra = ''
+      initContent = ''
         autoload -U promptinit; promptinit
         prompt pure
         if [[ -z "$TMUX" ]]; then

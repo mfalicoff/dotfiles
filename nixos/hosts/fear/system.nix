@@ -13,6 +13,7 @@
     ../../modules/system/nvidia
     ../../modules/system/stylix
     ../../modules/system/user.nix
+    ../../modules/system/virtualization
     ./hardware-configuration.nix
   ];
 

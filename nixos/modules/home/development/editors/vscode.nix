@@ -25,8 +25,12 @@ in {
     programs.vscode = {
       enable = true;
       package = pkgs.vscode;
-      extensions = cfg.extensions;
-      profiles.default.userSettings = cfg.userSettings;
+      profiles = {
+        default = {
+          userSettings = {};
+          extensions = cfg.extensions;
+        };
+      };
     };
 
     home.packages = with pkgs; [
