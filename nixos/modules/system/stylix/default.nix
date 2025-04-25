@@ -16,6 +16,11 @@ in {
     stylix.image = ./wallpaper.jpg;
     stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
 
+    stylix.opacity = {
+      desktop = 0.5;
+      terminal = 0.9;
+    };
+
     stylix.fonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;

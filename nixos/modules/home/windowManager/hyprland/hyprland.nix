@@ -4,10 +4,15 @@
   ...
 }:
 with lib; let
-  cfg = config.wm.hyprland.configuration;
+  cfg = config.windowManager.wayland.hyprland;
 in {
-  options.wm.hyprland.configuration = {
+  options.windowManager.wayland.hyprland = {
     enable = mkEnableOption "Enable Hyprland window manager configuration";
+    monitors = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Monitor configuration";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -16,10 +21,7 @@ in {
       enable = true;
       settings = {
         # Monitor configuration
-        monitor = [
-          "DP-1, 3440x1440@164.90, 0x0, 1, bitdepth, 10"
-          # "DP-2, 2560x1440@144.00, -1440x-400, 1, transform, 1"
-        ];
+        monitor = cfg.monitors;
 
         # Environment variables
         env = [
@@ -102,7 +104,7 @@ in {
           sensitivity = 0;
 
           touchpad = {
-            natural_scroll = false;
+            natural_scroll = true;
           };
         };
 
@@ -116,20 +118,6 @@ in {
           name = "epic-mouse-v1";
           sensitivity = -0.5;
         };
-
-        # Workspace rules
-        workspace = [
-          "1,monitor:DP-1"
-          "3,monitor:DP-1"
-          "5,monitor:DP-1"
-          "7,monitor:DP-1"
-          "9,monitor:DP-1"
-          "2,monitor:DP-1"
-          "4,monitor:DP-1"
-          "6,monitor:DP-1"
-          "8,monitor:DP-1"
-          "0,monitor:DP-1"
-        ];
 
         # Window rules
         windowrulev2 = "suppressevent maximize, class:.*";
@@ -156,6 +144,7 @@ in {
           "$mainMod, R, exec, $menu"
           "$mainMod, P, pseudo," # dwindle
           "$mainMod, J, togglesplit," # dwindle
+          "$mainMod, F, fullscreen,"
 
           # Move focus with mainMod + arrow keys
           "$mainMod, left, movefocus, l"
@@ -204,8 +193,21 @@ in {
           "$mainMod, mouse_up, workspace, e-1"
 
           # Custom application bindings
-          "$mainMod, D, exec, rofi -show drun -theme /home/mazilious/.config/rofi/launchers/type-6/style-6.rasi -show-icons"
+          "$mainMod, D, exec, rofi -show drun"
           "$mainMod SHIFT, P, exec, wlogout"
+        ];
+
+        # Workspace rules
+        workspace = [
+          "1"
+          "2"
+          "3"
+          "4"
+          "5"
+          "6"
+          "7"
+          "8"
+          "9"
         ];
 
         # Move/resize windows with mainMod + mouse

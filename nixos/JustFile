@@ -1,14 +1,14 @@
 set positional-arguments
 
 # Default hostname values (matching your flake.nix)
-hostname := if os() == "macos" { "fearful" } else { "default" }
+hostname := `hostname`
 
 # Common Nix flags
 nix_flags := "--extra-experimental-features 'nix-command flakes'"
 
 # Build and switch to NixOS configuration
 nixos host=hostname:
-    nh os switch -H default ~/dotfiles/nixos
+    nh os switch -H {{host}} ~/dotfiles/nixos
 
 # Build and switch to Darwin configuration
 darwin hostname=hostname:

@@ -4,20 +4,22 @@
   ...
 }:
 with lib; let
-  cfg = config.windowManager.hyprland;
+  cfg = config.windowManager.wayland;
 in {
   imports = [
     ./hyprland.nix
     ./hyprpanel.nix
+    ./waybar.nix
   ];
 
-  options.windowManager.hyprland = {
-    enable = mkEnableOption "Enable Hyprland with HyprPanel";
+  options.windowManager.wayland = {
+    enable = mkEnableOption "Enable window manager configuration";
   };
 
   config = mkIf cfg.enable {
     # Enable both components when custom.hyprland.enable = true
-    wm.hyprland.configuration.enable = true;
-    wm.hyprland.panel.enable = true;
+    windowManager.wayland.hyprland.enable = mkDefault false;
+    windowManager.wayland.bar.hyprpanel.enable = mkDefault false;
+    windowManager.wayland.bar.waybar.enable = mkDefault false;
   };
 }

@@ -27,12 +27,13 @@ in {
       kubeseal
       k9s
       jq
+      uv
     ];
 
     home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
       rm -f ~/.gitconfig
     '';
-    
+
     programs.git = {
       enable = true;
       lfs.enable = true;
@@ -53,7 +54,7 @@ in {
         };
       };
 
-       aliases = {
+      aliases = {
         # common aliases
         br = "branch";
         co = "checkout";
