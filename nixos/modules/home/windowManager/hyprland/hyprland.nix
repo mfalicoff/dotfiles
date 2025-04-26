@@ -195,6 +195,11 @@ in {
           # Custom application bindings
           "$mainMod, D, exec, rofi -show drun"
           "$mainMod SHIFT, P, exec, wlogout"
+
+          # Screenshots
+          "$mainMod, PRINT, exec, hyprshot -m window"
+          ", PRINT, exec, hyprshot -m output" # Screenshot a monitor
+          "$shiftMod, PRINT, exec, hyprshot -m region" # Screenshot a region
         ];
 
         # Workspace rules
