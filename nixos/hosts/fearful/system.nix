@@ -1,8 +1,8 @@
 {darwinHostname, ...}: {
   imports = [
+    ../common/system.nix
     ../../modules/system/homebrew
     ../../modules/system/nix-darwin
-    ../../modules/system/stylix
   ];
 
   # Networking
@@ -19,11 +19,6 @@
 
   #Locales
   time.timeZone = "America/Toronto";
-
-  # Custom Modules
-  styling.stylix = {
-    enable = true;
-  };
 
   homebred = {
     enable = true;

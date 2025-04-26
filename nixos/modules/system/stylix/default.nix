@@ -17,7 +17,7 @@ in {
     stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
 
     stylix.opacity = {
-      desktop = 0.5;
+      desktop = 0.0;
       terminal = 0.9;
     };
 

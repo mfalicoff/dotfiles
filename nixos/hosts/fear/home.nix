@@ -6,6 +6,7 @@
 }: {
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
+    ../common/home.nix
     ../../modules/home
   ];
 
@@ -23,12 +24,9 @@
   home.packages = with pkgs; [
     insync
     insync-nautilus
-    firefox
-    google-chrome
     _1password-gui
     _1password-cli
     vlc
-    discord
   ];
 
   # Settings for this machine
@@ -65,13 +63,6 @@
           ];
         };
       };
-    };
-  };
-
-  shellOptions = {
-    enable = true;
-    shell = {
-      tmux.enable = true;
     };
   };
 

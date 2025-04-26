@@ -7,19 +7,16 @@
 }: {
   imports = [
     inputs.home-manager.nixosModules.default
+    ../common/system.nix
+    ../../modules/system/boot
     ../../modules/system/gaming
     ../../modules/system/greetd
     ../../modules/system/hyprland
     ../../modules/system/nvidia
-    ../../modules/system/stylix
     ../../modules/system/user.nix
     ../../modules/system/virtualization
     ./hardware-configuration.nix
   ];
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   # Networking
   networking.networkmanager.enable = true;
@@ -58,7 +55,6 @@
     jack.enable = true;
   };
 
-  virtualisation.docker.enable = true;
   programs.nix-ld.enable = true;
 
   system.stateVersion = "24.11";
@@ -96,6 +92,5 @@
     alacritty
     nautilus
     bluetuith
-    impala
   ];
 }

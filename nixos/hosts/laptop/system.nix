@@ -1,21 +1,18 @@
 {
   inputs,
-  config,
   pkgs,
   ...
 }: {
   imports = [
     inputs.home-manager.nixosModules.default
+    ../../modules/system/boot
     ../../modules/system/greetd
     ../../modules/system/hyprland
     ../../modules/system/stylix
     ../../modules/system/user.nix
+    ../../modules/system/virtualization
     ./hardware-configuration.nix
   ];
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   # Networking
   networking.networkmanager.enable = true;
@@ -53,8 +50,6 @@
     pulse.enable = true;
     jack.enable = true;
   };
-
-  virtualisation.docker.enable = true;
 
   system.stateVersion = "24.11";
 

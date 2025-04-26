@@ -6,6 +6,7 @@
 }: {
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
+    ../common/home.nix
     ../../modules/home
   ];
 
@@ -19,18 +20,8 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    firefox
-    google-chrome
     raycast
-    calibre
   ];
-
-  shellOptions = {
-    enable = true;
-    shell = {
-      tmux.enable = true;
-    };
-  };
 
   windowManager = {
     aerospace.enable = true;
