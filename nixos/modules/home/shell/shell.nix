@@ -37,6 +37,7 @@ in {
 
     home.sessionVariables = {
       EDITOR = "nvim";
+      XDG_PICTURES_DIR = "~/screenshots";
     };
 
     programs.zsh = {
