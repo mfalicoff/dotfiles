@@ -18,6 +18,8 @@ in {
       hyprpaper
       swaylock
       wlogout
+      hyprshot
+      wlr-randr
     ];
 
     xdg.portal = {

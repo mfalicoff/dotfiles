@@ -39,6 +39,9 @@
         monitors = [
           "DP-1, 3440x1440@164.90, 0x0, 1, bitdepth, 10"
         ];
+        exec-once = [
+          "hyprctl dispatch dpms off DP-2"
+        ];
       };
 
       bar.waybar = {

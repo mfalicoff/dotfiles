@@ -13,6 +13,11 @@ in {
       default = [];
       description = "Monitor configuration";
     };
+    exec-once = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Exec once";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -129,7 +134,7 @@ in {
 
         # Define variables
         "$mainMod" = "SUPER";
-        "$terminal" = "alacritty";
+        "$terminal" = "kitty";
         "$fileManager" = "nautilus";
         "$menu" = "wofi --show drun";
 
@@ -195,6 +200,11 @@ in {
           # Custom application bindings
           "$mainMod, D, exec, rofi -show drun"
           "$mainMod SHIFT, P, exec, wlogout"
+
+          # Screenshots
+          "$mainMod, PRINT, exec, hyprshot -m window"
+          ", PRINT, exec, hyprshot -m output" # Screenshot a monitor
+          "$shiftMod, PRINT, exec, hyprshot -m region" # Screenshot a region
         ];
 
         # Workspace rules
@@ -215,6 +225,8 @@ in {
           "$mainMod, mouse:272, movewindow"
           "$mainMod, mouse:273, resizewindow"
         ];
+
+        exec-once = cfg.exec-once;
       };
     };
 
