@@ -13,6 +13,11 @@ in {
       default = [];
       description = "Monitor configuration";
     };
+    exec-once = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Exec once";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -129,7 +134,7 @@ in {
 
         # Define variables
         "$mainMod" = "SUPER";
-        "$terminal" = "alacritty";
+        "$terminal" = "kitty";
         "$fileManager" = "nautilus";
         "$menu" = "wofi --show drun";
 
@@ -220,6 +225,8 @@ in {
           "$mainMod, mouse:272, movewindow"
           "$mainMod, mouse:273, resizewindow"
         ];
+
+        exec-once = cfg.exec-once;
       };
     };
 

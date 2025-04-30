@@ -19,6 +19,7 @@ in {
       swaylock
       wlogout
       hyprshot
+      wlr-randr
     ];
 
     xdg.portal = {
