@@ -1,27 +1,18 @@
 {
   inputs,
-  config,
   pkgs,
   wslHostname,
+  username,
   ...
 }: {
   imports = [
-     inputs.home-manager.nixosModules.default
+    inputs.home-manager.nixosModules.default
     ../common/system.nix
-    # ../../modules/system/boot
-    # ../../modules/system/gaming
-    # ../../modules/system/greetd
-    # ../../modules/system/hyprland
-    # ../../modules/system/nvidia
-     ../../modules/system/user.nix
-     ../../modules/system/virtualization
+    ../../modules/system/user.nix
+    ../../modules/system/virtualization
   ];
 
-  #wsl
-  environment.systemPackages = [
-          pkgs.vscode];
-
-  wsl.defaultUser = "mazilious";
+  wsl.defaultUser = username;
   wsl.enable = true;
 
   # Networking
@@ -45,38 +36,11 @@
 
   system.stateVersion = "24.11";
 
-  # # Custom Modules
-  # styling.stylix = {
-  #   enable = true;
-  # };
-
-  # stylix.cursor.package = pkgs.bibata-cursors;
-  # stylix.cursor.name = "Bibata-Modern-Ice";
-  # stylix.cursor.size = 20;
-  # fonts.enableDefaultPackages = true;
-
-  # loginManager.enable = true;
-  # wm.hyprland.enable = true;
-
-  # gaming = {
-  #   enable = true;
-  # };
-
-  # hardware.graphics.nvidia = {
-  #   enable = true;
-  #   driverPackage = config.boot.kernelPackages.nvidiaPackages.beta;
-  #   useOpenSource = false;
-  #   enableModesetting = true;
-  #   enableSettings = true;
-  # };
-
-  # environment.systemPackages = with pkgs; [
-  #   polkit_gnome
-  #   adwaita-icon-theme
-  #   gnome-themes-extra
-  #   libnotify
-  #   alacritty
-  #   nautilus
-  #   bluetuith
-  # ];
+  environment.systemPackages = with pkgs; [
+    polkit_gnome
+    adwaita-icon-theme
+    gnome-themes-extra
+    libnotify
+    nautilus
+  ];
 }

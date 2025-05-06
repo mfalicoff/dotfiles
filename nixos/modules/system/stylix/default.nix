@@ -16,6 +16,11 @@ in {
     stylix.image = ./wallpaper.jpg;
     stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
 
+    stylix.cursor.package = pkgs.bibata-cursors;
+    stylix.cursor.name = "Bibata-Modern-Ice";
+    stylix.cursor.size = 20;
+    fonts.enableDefaultPackages = true;
+
     stylix.opacity = {
       desktop = 0.0;
       terminal = 0.9;
