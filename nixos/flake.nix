@@ -45,6 +45,7 @@
     };
 
     nix-std.url = "github:chessai/nix-std";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
   outputs = inputs @ {
@@ -64,11 +65,12 @@
     desktopHostname = "fear";
     laptopHostname = "laptop";
     darwinHostname = "fearful";
+    wslHostname = "frater";
     isDarwin = system: (builtins.elem system ["aarch64-darwin" "x86_64-darwin"]);
 
     # Shared special args
     sharedSpecialArgs = {
-      inherit username useremail desktopHostname darwinHostname laptopHostname;
+      inherit username useremail desktopHostname darwinHostname laptopHostname wslHostname;
       inherit inputs;
       inherit isDarwin;
     };
@@ -107,6 +109,24 @@
           home-manager.users.${username} = import ./hosts/laptop/home.nix;
         }
         {nixpkgs.overlays = [inputs.hyprpanel.overlay];}
+      ];
+    };
+
+    nixosConfigurations.${wslHostname} = nixpkgs.lib.nixosSystem {
+      specialArgs = sharedSpecialArgs;
+      system = "x86_64-linux";
+      modules = [
+        inputs.stylix.nixosModules.stylix
+        ./nix-core.nix
+        inputs.nixos-wsl.nixosModules.default
+        ./hosts/frater/system.nix
+        inputs.home-manager.nixosModules.home-manager
+         {
+           home-manager.useGlobalPkgs = true;
+           home-manager.useUserPackages = true;
+           home-manager.extraSpecialArgs = sharedSpecialArgs;
+           home-manager.users.${username} = import ./hosts/frater/home.nix;
+         }
       ];
     };
 
