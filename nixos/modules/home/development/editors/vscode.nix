@@ -9,16 +9,6 @@ with lib; let
 in {
   options.development.editors.vscode = {
     enable = mkEnableOption "Enable Visual Studio Code";
-    extensions = mkOption {
-      type = types.listOf types.package;
-      default = [];
-      description = "VS Code extensions to install";
-    };
-    userSettings = mkOption {
-      type = types.attrs;
-      default = {};
-      description = "VS Code settings";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -28,13 +18,19 @@ in {
       profiles = {
         default = {
           userSettings = {};
-          extensions = cfg.extensions;
+          extensions = with pkgs.vscode-extensions; [
+            # Languages
+            ms-dotnettools.csharp
+            jnoortheen.nix-ide
+            ziglang.vscode-zig
+            yzhang.markdown-all-in-one
+
+            # tools
+            csharpier.csharpier-vscode
+            alefragnani.project-manager
+          ];
         };
       };
     };
-
-    home.packages = with pkgs; [
-      windsurf
-    ];
   };
 }
