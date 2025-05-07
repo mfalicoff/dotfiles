@@ -2,10 +2,14 @@
   home.packages = with pkgs; [
     calibre
     discord
-    firefox
     google-chrome
     spotify-player
   ];
+
+  browsers = {
+    enable = true;
+    firefox.enable = true;
+  };
 
   shellOptions = {
     enable = true;
