@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib; let
@@ -581,11 +580,5 @@ in {
         }
       ];
     };
-
-    # Ensure netcoredbg is installed
-    home.packages = with pkgs; [
-      # .NET Development tools
-      dotnet-sdk
-    ];
   };
 }

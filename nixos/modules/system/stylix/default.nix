@@ -13,8 +13,8 @@ in {
 
   config = mkIf cfg.stylix.enable {
     stylix.enable = true;
-    stylix.image = ./wallpaper.jpg;
-    stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
+    stylix.image = ./boy_heron.png;
+    stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/da-one-sea.yaml";
 
     stylix.opacity = {
       desktop = 0.0;

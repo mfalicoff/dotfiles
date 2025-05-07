@@ -15,7 +15,6 @@ in {
     environment.systemPackages = with pkgs; [
       wl-clipboard
       swayidle
-      hyprpaper
       swaylock
       wlogout
       hyprshot

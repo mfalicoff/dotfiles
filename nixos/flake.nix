@@ -27,6 +27,7 @@
 
     # Shared inputs
     stylix.url = "github:danth/stylix";
+    base16.url = "github:SenchoPens/base16.nix";
 
     # System-specific home-manager versions
     home-manager = {
@@ -36,6 +37,11 @@
 
     home-manager-darwin = {
       url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nur = {
+      url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -88,7 +94,7 @@
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./hosts/fear/home.nix;
         }
-        {nixpkgs.overlays = [inputs.hyprpanel.overlay];}
+        {nixpkgs.overlays = [inputs.hyprpanel.overlay inputs.nur.overlays.default];}
       ];
     };
 

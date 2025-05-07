@@ -229,16 +229,5 @@ in {
         exec-once = cfg.exec-once;
       };
     };
-
-    # Hyprpaper configuration
-    services.hyprpaper = {
-      enable = true;
-      settings = {
-        wallpaper = [
-          ", /home/mazilious/.config/nixos/hosts/default/wallpapper.jpg"
-          ", /home/mazilious/.config/nixos/hosts/default/wallpapper.jpg"
-        ];
-      };
-    };
   };
 }
