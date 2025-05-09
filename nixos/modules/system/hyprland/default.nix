@@ -16,7 +16,6 @@ in {
       wl-clipboard
       swayidle
       swaylock
-      wlogout
       hyprshot
       wlr-randr
     ];

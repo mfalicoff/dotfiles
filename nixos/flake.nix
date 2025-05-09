@@ -50,6 +50,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    textfox.url = "github:adriankarlen/textfox";
+
     nix-std.url = "github:chessai/nix-std";
   };
 

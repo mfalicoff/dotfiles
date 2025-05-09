@@ -21,6 +21,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    programs.wlogout = {
+      enable = true;
+    };
+
     # Hyprland configuration
     wayland.windowManager.hyprland = {
       enable = true;
