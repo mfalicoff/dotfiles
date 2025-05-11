@@ -114,7 +114,7 @@
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./hosts/laptop/home.nix;
         }
-        {nixpkgs.overlays = [inputs.hyprpanel.overlay];}
+        {nixpkgs.overlays = [inputs.hyprpanel.overlay inputs.nur.overlays.default];}
       ];
     };
 
@@ -135,6 +135,7 @@
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./hosts/fearful/home.nix;
         }
+        {nixpkgs.overlays = [inputs.nur.overlays.default];}
       ];
     };
   };

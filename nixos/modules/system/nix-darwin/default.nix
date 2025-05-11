@@ -35,15 +35,12 @@
     defaults = {
       # customize dock
       dock = {
-        autohide = true;
+        autohide = false;
         show-recents = false; # disable recent apps
 
         persistent-apps = [
           "/Users/mazilious/Applications/Nix Trampolines/Firefox.app"
-          "/Users/mazilious/Applications/Nix Trampolines/Alacritty.app"
-          "/Users/mazilious/Applications/Nix Trampolines/Gitkraken.app"
-          "/Applications/Rider.app"
-          "/Applications/Webstorm.app"
+          "/Users/mazilious/Applications/Nix Trampolines/Kitty.app"
         ];
       };
 
@@ -171,15 +168,4 @@
 
   # Add ability to used TouchID for sudo authentication
   security.pam.services.sudo_local.touchIdAuth = true;
-
-  launchd.user.agents = {
-    aerospace = {
-      serviceConfig = {
-        Label = "com.aerospace.agent";
-        ProgramArguments = ["${pkgs.aerospace}/bin/aerospace"];
-        KeepAlive = true;
-        RunAtLoad = true;
-      };
-    };
-  };
 }

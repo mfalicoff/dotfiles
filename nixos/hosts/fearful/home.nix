@@ -24,10 +24,6 @@
     raycast
   ];
 
-  windowManager = {
-    aerospace.enable = true;
-  };
-
   development = {
     enable = true;
     sdk = {

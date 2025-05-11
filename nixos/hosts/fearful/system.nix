@@ -16,6 +16,7 @@
   #     PasswordAuthentication = false;
   #   };
   # };
+  #
 
   #Locales
   time.timeZone = "America/Toronto";
@@ -24,18 +25,20 @@
     enable = true;
     taps = [
       "homebrew/services"
-      "FelixKratz/formulae"
     ];
     brews = [
       "mas"
-      "sketchybar"
+      "node"
+      "go"
     ];
     casks = [
-      "rider"
-      "webstorm"
-      "insync"
+      "1password"
+      "1password-cli"
+      "jetbrains-toolbox"
+      "gitkraken"
       "stats"
       "orbstack"
+      "dotnet-sdk"
     ];
     appStoreApps = {
       Tailscale = 1475387142;
