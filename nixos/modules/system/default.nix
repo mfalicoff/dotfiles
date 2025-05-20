@@ -1,11 +1,14 @@
 {...}: {
   imports = [
+    ./boot
+    ./caddy
     ./gaming
     ./greetd
-    ./homebrew
     ./hyprland
     ./nvidia
+    ./ssh
     ./stylix
     ./user.nix
+    ./virtualization
   ];
 }

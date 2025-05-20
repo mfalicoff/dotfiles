@@ -1,4 +1,12 @@
-{pkgs, ...}: {
+{config, lib, pkgs, ...}: 
+with lib; let
+  cfg = config.bootManager;
+in {
+  options.bootManager = {
+    enable = mkEnableOption "Enable Boot Manager";
+  };
+
+  config = mkIf cfg.enable {
   # Bootloader.
   boot = {
     tmp.cleanOnBoot = true;
@@ -17,4 +25,5 @@
       };
     };
   };
+};
 }

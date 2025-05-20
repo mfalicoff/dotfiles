@@ -1,2 +1,4 @@
 
 nixos/result
+**.secrets.*
+*.env
