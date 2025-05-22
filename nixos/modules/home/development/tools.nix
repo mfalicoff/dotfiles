@@ -10,25 +10,39 @@ with lib; let
 in {
   options.development.tools = {
     enable = mkEnableOption "Enable Tools";
+    exclude = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "List of package names to exclude from installation";
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      azure-cli
-      direnv
-      gitkraken
-      lazygit
-      just
-      gcc
-      k9s
-      killport
-      kubectl
-      lazydocker
-      kubeseal
-      k9s
-      jq
-      uv
-    ];
+    home.packages = with pkgs; let
+      allPackages = [
+        azure-cli
+        direnv
+        gitkraken
+        lazygit
+        just
+        gcc
+        k9s
+        killport
+        kubectl
+        lazydocker
+        kubeseal
+        k9s
+        jq
+        uv
+      ];
+      filteredPackages =
+        builtins.filter (
+          p:
+            !(builtins.elem (lib.getName p) cfg.exclude)
+        )
+        allPackages;
+    in
+      filteredPackages;
 
     home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
       rm -f ~/.gitconfig

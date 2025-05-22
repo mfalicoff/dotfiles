@@ -1,7 +1,5 @@
 {
-  config,
   inputs,
-  pkgs,
   workerHostname,
   ...
 }: {
@@ -47,5 +45,5 @@
   # Custom
   bootManager.enable = true;
   reverseProxy.enable = true;
-  sshServer.enable = true;  
+  sshServer.enable = true;
 }

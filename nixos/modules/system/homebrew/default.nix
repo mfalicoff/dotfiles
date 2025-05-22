@@ -33,7 +33,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+  config = mkIf cfg.enable {
     # Configure homebrew with the user's lists
     homebrew = {
       enable = true;

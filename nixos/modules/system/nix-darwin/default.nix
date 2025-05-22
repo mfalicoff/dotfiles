@@ -39,8 +39,11 @@
         show-recents = false; # disable recent apps
 
         persistent-apps = [
-          "/Users/mazilious/Applications/Nix Trampolines/Firefox.app"
+          "/Applications/Firefox.app"
           "/Users/mazilious/Applications/Nix Trampolines/Kitty.app"
+          "/Applications/Gitkraken.app"
+          "/Users/mazilious/Applications/Rider.app"
+          "/Users/mazilious/Applications/Nix Trampolines/Zed.app"
         ];
       };
 
