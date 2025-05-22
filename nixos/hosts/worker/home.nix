@@ -7,7 +7,6 @@
   imports = [
     inputs.textfox.homeManagerModules.default
     inputs.nixvim.homeManagerModules.nixvim
-    ../common/home.nix
     ../../modules/home
   ];
 
@@ -22,15 +21,22 @@
     enable = true;
   };
 
-  home.packages = with pkgs; [
-    _1password-cli
-  ];
+  shellOptions = {
+    enable = true;
+    shell = {
+      tmux.enable = true;
+    };
+  };
 
   # Settings for this machine
+  browsers.enable = false;
   development = {
     enable = true;
     tools = {
       enable = true;
+      exclude = [
+        "gitkraken"
+      ];
     };
     editors = {
       neovim.enable = true;

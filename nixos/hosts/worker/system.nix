@@ -6,7 +6,6 @@
   imports = [
     inputs.home-manager.nixosModules.default
     ./hardware-configuration.nix
-    ../common/system.nix
     ../../modules/system
   ];
 
@@ -43,6 +42,7 @@
   system.stateVersion = "24.11";
 
   # Custom
+  styling.stylix.enable = true;
   bootManager.enable = true;
   reverseProxy.enable = true;
   sshServer.enable = true;
