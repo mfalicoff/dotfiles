@@ -8,6 +8,7 @@ with lib; let
 in {
   imports = [
     ./editors
+    ./git.nix
     ./sdk.nix
     ./tools.nix
   ];
@@ -20,5 +21,6 @@ in {
     development.editors.enable = mkDefault false;
     development.sdk.enable = mkDefault false;
     development.tools.enable = mkDefault true;
+    development.git.enable = mkDefault true;
   };
 }

@@ -49,6 +49,7 @@
           "/Applications/Gitkraken.app"
           "/Users/mazilious/Applications/Rider.app"
           "/Users/mazilious/Applications/Nix Trampolines/Zed.app"
+          "/Applications/Yaak.app"
         ];
       };
 

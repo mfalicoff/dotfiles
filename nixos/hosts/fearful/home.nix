@@ -42,10 +42,10 @@
     enable = true;
     tools = {
       enable = true;
-      exclude = [
-        "gitkraken"
-      ];
+      enableCli = true;
+      enableGui = false;
     };
+    git.enable = true;
     sdk = {
       enable = false;
     };

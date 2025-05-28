@@ -1,6 +1,5 @@
 {
   inputs,
-  pkgs,
   username,
   ...
 }: {
@@ -34,9 +33,8 @@
     enable = true;
     tools = {
       enable = true;
-      exclude = [
-        "gitkraken"
-      ];
+      enableCli = true;
+      enableGui = false;
     };
     editors = {
       neovim.enable = true;

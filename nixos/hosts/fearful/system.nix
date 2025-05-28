@@ -32,6 +32,7 @@
       "1password-cli"
       "firefox"
       "google-chrome"
+      "only-switch"
       "stats"
       "vmware-fusion"
 
@@ -40,8 +41,10 @@
       "gitkraken"
       "jetbrains-toolbox"
       "orbstack"
+      "yaak"
     ];
     appStoreApps = {
+      Amphetamine = 937984704;
       Tailscale = 1475387142;
       Infuse = 1136220934;
       AutoMounter = 1160435653;
