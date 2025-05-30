@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  useremail,
   ...
 }:
 with lib; let
@@ -18,7 +17,7 @@ in {
 
     userEmail = mkOption {
       type = types.str;
-      default = useremail;
+      default = "git@mazilious.org";
       description = "Git user email";
     };
 

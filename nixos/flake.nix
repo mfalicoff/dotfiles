@@ -68,7 +68,6 @@
   }: let
     # Shared variables
     username = "mazilious";
-    useremail = "mfalicoff2001@gmail.com";
     darwinSystem = "aarch64-darwin";
     desktopHostname = "fear";
     laptopHostname = "laptop";
@@ -78,7 +77,7 @@
 
     # Shared special args
     sharedSpecialArgs = {
-      inherit username useremail desktopHostname darwinHostname laptopHostname workerHostname;
+      inherit username desktopHostname darwinHostname laptopHostname workerHostname;
       inherit inputs;
       inherit isDarwin;
     };
