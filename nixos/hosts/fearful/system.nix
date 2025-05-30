@@ -30,7 +30,6 @@
     casks = [
       "1password"
       "1password-cli"
-      "calibre"
       "firefox"
       "google-chrome"
       "only-switch"
