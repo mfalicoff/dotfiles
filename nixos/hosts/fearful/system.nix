@@ -33,6 +33,7 @@
       "firefox"
       "google-chrome"
       "only-switch"
+      "proton-mail"
       "stats"
       "vmware-fusion"
 
