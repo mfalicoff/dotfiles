@@ -6,6 +6,8 @@
 }:
 with lib; let
   cfg = config.reverseProxy;
+  unraid = "100.94.140.88";
+  homeassistant = "100.118.232.49";
 in {
   options.reverseProxy = {
     enable = mkEnableOption "Enable Caddy";
@@ -24,7 +26,7 @@ in {
       virtualHosts = {
         "beszel.caddy.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8093
+            reverse_proxy http://${unraid}:8093
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
@@ -61,6 +63,15 @@ in {
         "glance.caddy.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://100.94.140.88:8280
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "home.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${homeassistant}:8123
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
