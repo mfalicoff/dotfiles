@@ -36,6 +36,7 @@
       enableCli = true;
       enableGui = false;
     };
+    git.enable = true;
     editors = {
       neovim.enable = true;
     };

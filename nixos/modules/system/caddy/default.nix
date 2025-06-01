@@ -85,6 +85,15 @@ in {
           '';
         };
 
+        "jellyseer.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:5055
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
         "karapeep.caddy.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://100.94.140.88:3010
@@ -94,9 +103,63 @@ in {
           '';
         };
 
+        "paperless.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:3012
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "pocket.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:8000
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "radarr.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:7878
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "sonarr.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:8989
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "recipes.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:3154
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
         "torrent.caddy.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8096
+            reverse_proxy http://100.94.140.88:8080
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "uptime.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:3001
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
