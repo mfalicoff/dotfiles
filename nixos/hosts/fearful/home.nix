@@ -6,7 +6,6 @@
 }: {
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
-    inputs.textfox.homeManagerModules.default
     ../../modules/home
   ];
 
