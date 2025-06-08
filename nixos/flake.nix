@@ -63,7 +63,6 @@
     home-manager-darwin,
     nix-std,
     nixvim,
-    sops-nix,
     ...
   }: let
     # Shared variables
