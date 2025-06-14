@@ -6,6 +6,7 @@
     ./greetd
     ./hyprland
     ./nvidia
+    ./password-manager
     ./ssh
     ./stylix
     ./user.nix
