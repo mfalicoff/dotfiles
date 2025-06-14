@@ -1,6 +1,5 @@
 {
   inputs,
-  pkgs,
   username,
   ...
 }: {
@@ -9,25 +8,15 @@
     ../../modules/home
   ];
 
-  home = {
-    username = username;
-    homeDirectory = "/Users/${username}";
-    stateVersion = "24.11";
-  };
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
+  home.stateVersion = "24.11";
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [
-    raycast
-    discord
-    spotify-player
-  ];
-
-  browsers = {
+  programs.nh = {
     enable = true;
-    firefox.enable = false; # using brew because it can integrate with 1password
-    chrome.enable = true;
   };
 
   shellOptions = {
@@ -37,6 +26,8 @@
     };
   };
 
+  # Settings for this machine
+  browsers.enable = false;
   development = {
     enable = true;
     tools = {
@@ -45,12 +36,8 @@
       enableGui = false;
     };
     git.enable = true;
-    sdk = {
-      enable = false;
-    };
     editors = {
-      zed.enable = true;
-      vscode.enable = true;
+      neovim.enable = true;
     };
   };
 }

@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  useremail,
   ...
 }:
 with lib; let
@@ -10,67 +9,60 @@ with lib; let
 in {
   options.development.tools = {
     enable = mkEnableOption "Enable Tools";
+
+    enableCli = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable CLI applications";
+    };
+
+    enableGui = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable GUI applications";
+    };
+
+    exclude = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "List of package names to exclude from installation";
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      azure-cli
-      direnv
-      gitkraken
-      lazygit
-      just
-      gcc
-      k9s
-      killport
-      kubectl
-      lazydocker
-      kubeseal
-      k9s
-      jq
-      uv
-    ];
+    home.packages = with pkgs; let
+      cliPackages = [
+        azure-cli
+        direnv
+        lazygit
+        just
+        gcc
+        k9s
+        killport
+        kubectl
+        lazydocker
+        kubeseal
+        jq
+        uv
+      ];
 
-    home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
-      rm -f ~/.gitconfig
-    '';
+      guiPackages = [
+        gitkraken
+        yaak
+      ];
 
-    programs.git = {
-      enable = true;
-      lfs.enable = true;
+      selectedPackages =
+        []
+        ++ (optionals cfg.enableCli cliPackages)
+        ++ (optionals cfg.enableGui guiPackages);
 
-      userEmail = useremail;
-      userName = "Maximiliano Falicoff";
-
-      extraConfig = {
-        init.defaultBranch = "main";
-        push.autoSetupRemote = true;
-        pull.rebase = true;
-      };
-
-      delta = {
-        enable = true;
-        options = {
-          features = "side-by-side";
-        };
-      };
-
-      aliases = {
-        # common aliases
-        br = "branch";
-        co = "checkout";
-        st = "status";
-        ls = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate";
-        ll = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate --numstat";
-        cm = "commit -m";
-        ca = "commit -am";
-        dc = "diff --cached";
-        amend = "commit --amend -m";
-
-        # aliases for submodule
-        update = "submodule update --init --recursive";
-        foreach = "submodule foreach";
-      };
-    };
+      filteredPackages =
+        builtins.filter (
+          p: !(builtins.elem (lib.getName p) cfg.exclude)
+        )
+        selectedPackages;
+    in
+      filteredPackages;
 
     programs.direnv = {
       enable = true;

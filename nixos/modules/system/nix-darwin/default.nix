@@ -1,4 +1,8 @@
-{pkgs, ...}:
+{
+  pkgs,
+  username,
+  ...
+}:
 ###################################################################################
 #
 #  macOS's System configuration
@@ -15,8 +19,9 @@
 
   system = {
     stateVersion = 5;
+    primaryUser = username;
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
-    activationScripts.postUserActivation.text = ''
+    activationScripts."nix".text = ''
       # activateSettings -u will reload the settings from the database and apply them to the current session,
       # so we do not need to logout and login again to make the changes take effect.
       /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
@@ -25,7 +30,7 @@
        app_target_base="$HOME/Applications"
        app_target="$app_target_base/$moniker"
        mkdir -p "$app_target"
-       ${pkgs.rsync}/bin/rsync --archive --checksum --chmod=-w --copy-unsafe-links --delete "$apps_source/" "$app_target"
+       sudo ${pkgs.rsync}/bin/rsync --archive --checksum --chmod=-w --copy-unsafe-links --delete "$apps_source/" "$app_target"
     '';
 
     # activationScripts.extraActivation.text = ''
@@ -39,8 +44,12 @@
         show-recents = false; # disable recent apps
 
         persistent-apps = [
-          "/Users/mazilious/Applications/Nix Trampolines/Firefox.app"
+          "/Applications/Firefox.app"
           "/Users/mazilious/Applications/Nix Trampolines/Kitty.app"
+          "/Applications/Gitkraken.app"
+          "/Users/mazilious/Applications/Rider.app"
+          "/Users/mazilious/Applications/Nix Trampolines/Zed.app"
+          "/Applications/Yaak.app"
         ];
       };
 

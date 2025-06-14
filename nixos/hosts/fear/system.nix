@@ -7,14 +7,8 @@
 }: {
   imports = [
     inputs.home-manager.nixosModules.default
-    ../common/system.nix
-    ../../modules/system/boot
-    ../../modules/system/gaming
-    ../../modules/system/greetd
-    ../../modules/system/hyprland
-    ../../modules/system/nvidia
     ../../modules/system/user.nix
-    ../../modules/system/virtualization
+    ../../modules/system
     ./hardware-configuration.nix
   ];
 
@@ -60,14 +54,11 @@
   system.stateVersion = "24.11";
 
   # Custom Modules
+  bootManager.enable = true;
+
   styling.stylix = {
     enable = true;
   };
-
-  stylix.cursor.package = pkgs.bibata-cursors;
-  stylix.cursor.name = "Bibata-Modern-Ice";
-  stylix.cursor.size = 20;
-  fonts.enableDefaultPackages = true;
 
   loginManager.enable = true;
   wm.hyprland.enable = true;
@@ -75,6 +66,10 @@
   gaming = {
     enable = true;
   };
+
+  virt.enable = true;
+
+  passwordManager.enable = true;
 
   hardware.graphics.nvidia = {
     enable = true;
@@ -89,7 +84,6 @@
     adwaita-icon-theme
     gnome-themes-extra
     libnotify
-    alacritty
     nautilus
     bluetuith
   ];

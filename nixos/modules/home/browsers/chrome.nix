@@ -5,15 +5,15 @@
   ...
 }:
 with lib; let
-  cfg = config.browsers.firefox;
+  cfg = config.browsers.chrome;
 in {
-  options.browsers.firefox = {
-    enable = mkEnableOption "Enable Firefox";
+  options.browsers.chrome = {
+    enable = mkEnableOption "Enable Chrome";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      firefox
+      google-chrome
     ];
   };
 }

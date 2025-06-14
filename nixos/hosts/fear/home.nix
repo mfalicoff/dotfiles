@@ -6,8 +6,6 @@
 }: {
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
-    inputs.textfox.homeManagerModules.default
-    ../common/home.nix
     ../../modules/home
   ];
 
@@ -25,10 +23,25 @@
   home.packages = with pkgs; [
     insync
     insync-nautilus
-    _1password-gui
-    _1password-cli
     vlc
+    discord
+    spotify-player
   ];
+
+  browsers = {
+    enable = true;
+    firefox.enable = true;
+    chrome.enable = true;
+  };
+
+  rofi.enable = true;
+
+  shellOptions = {
+    enable = true;
+    shell = {
+      tmux.enable = true;
+    };
+  };
 
   # Settings for this machine
   windowManager = {
@@ -75,6 +88,12 @@
     sdk = {
       enable = false;
     };
+    tools = {
+      enable = true;
+      enableCli = true;
+      enableGui = true;
+    };
+    git.enable = true;
     editors = {
       zed.enable = true;
       vscode.enable = true;
