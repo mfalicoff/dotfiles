@@ -67,6 +67,8 @@
     enable = true;
   };
 
+  smb.enable = true;
+
   virt.enable = true;
 
   passwordManager.enable = true;
