@@ -116,7 +116,7 @@ in {
 
         "paperless.caddy.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:3012
+            reverse_proxy http://100.94.140.88:8000
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
@@ -126,6 +126,15 @@ in {
         "pocket.caddy.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://100.94.140.88:8000
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "prowlarr.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:9696
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
@@ -159,6 +168,33 @@ in {
           '';
         };
 
+        "stashy.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:9999
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "switch.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:8465
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "tandoor.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88:8154
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
         "torrent.caddy.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://100.94.140.88:8080
@@ -168,9 +204,18 @@ in {
           '';
         };
 
-        "uptime.caddy.mazilious.org" = {
+        "unraid.caddy.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://100.94.140.88:3001
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "uptime.caddy.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://100.94.140.88
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }

@@ -20,15 +20,6 @@
   hardware.bluetooth.powerOnBoot = true;
   services.tailscale.enable = true;
 
-  programs.ssh.startAgent = true;
-  services.openssh = {
-    enable = true;
-    ports = [22];
-    settings = {
-      PasswordAuthentication = false;
-    };
-  };
-
   #Locales
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
