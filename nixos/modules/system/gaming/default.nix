@@ -20,5 +20,13 @@ in {
 
     programs.steam.enable = true;
     programs.gamemode.enable = true;
+
+    services.sunshine = {
+      enable = true;
+      package = pkgs.sunshine.override {cudaSupport = true;};
+      autoStart = true;
+      capSysAdmin = true;
+      openFirewall = true;
+    };
   };
 }

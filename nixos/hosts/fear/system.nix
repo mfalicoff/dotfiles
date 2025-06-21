@@ -88,5 +88,18 @@
     libnotify
     nautilus
     bluetuith
+
+    ## custom script
+    (writeScriptBin "set-60hz" ''
+      #!${bash}/bin/bash
+      ${hyprland}/bin/hyprctl keyword monitor "DP-1,2560x1440@59.95,0x0,1,bitdepth,10"
+      echo "Display changed to centered 2560x1440 @ 60Hz"
+    '')
+
+    (writeScriptBin "set-164hz" ''
+      #!${bash}/bin/bash
+      ${hyprland}/bin/hyprctl keyword monitor "DP-1,3440x1440@164.90,0x0,1,bitdepth,10"
+      echo "Display restored to 3440x1440 @ 164.90Hz"
+    '')
   ];
 }
