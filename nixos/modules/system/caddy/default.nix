@@ -24,7 +24,7 @@ in {
       dataDir = "/var/lib/caddy";
 
       virtualHosts = {
-        "beszel.caddy.mazilious.org" = {
+        "beszel.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:8093
             tls {
@@ -33,43 +33,43 @@ in {
           '';
         };
 
-        "books.caddy.mazilious.org" = {
+        "books.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8083
+            reverse_proxy http://${unraid}:8083
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "code.caddy.mazilious.org" = {
+        "code.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:3200
+            reverse_proxy http://${unraid}:3200
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "daawarich.caddy.mazilious.org" = {
+        "daawarich.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:3008
+            reverse_proxy http://${unraid}:3008
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "glance.caddy.mazilious.org" = {
+        "glance.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8280
+            reverse_proxy http://${unraid}:8280
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "home.caddy.mazilious.org" = {
+        "home.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${homeassistant}:8123
             tls {
@@ -78,144 +78,144 @@ in {
           '';
         };
 
-        "immich.caddy.mazilious.org" = {
+        "immich.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:2283
+            reverse_proxy http://${unraid}:2283
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "jellyfin.caddy.mazilious.org" = {
+        "jellyfin.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8096
+            reverse_proxy http://${unraid}:8096
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "jellyseer.caddy.mazilious.org" = {
+        "jellyseer.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:5055
+            reverse_proxy http://${unraid}:5055
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "karapeep.caddy.mazilious.org" = {
+        "karakeep.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:3010
+            reverse_proxy http://${unraid}:3010
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "paperless.caddy.mazilious.org" = {
+        "paperless.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8000
+            reverse_proxy http://${unraid}:8000
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "pocket.caddy.mazilious.org" = {
+        "pocket.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8000
+            reverse_proxy http://${unraid}:3012
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "prowlarr.caddy.mazilious.org" = {
+        "prowlarr.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:9696
+            reverse_proxy http://${unraid}:9696
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "radarr.caddy.mazilious.org" = {
+        "radarr.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:7878
+            reverse_proxy http://${unraid}:7878
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "sonarr.caddy.mazilious.org" = {
+        "sonarr.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8989
+            reverse_proxy http://${unraid}:8989
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "recipes.caddy.mazilious.org" = {
+        "recipes.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:3154
+            reverse_proxy http://${unraid}:3154
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "stashy.caddy.mazilious.org" = {
+        "stashy.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:9999
+            reverse_proxy http://${unraid}:9999
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "switch.caddy.mazilious.org" = {
+        "switch.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8465
+            reverse_proxy http://${unraid}:8465
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "tandoor.caddy.mazilious.org" = {
+        "tandoor.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8154
+            reverse_proxy http://${unraid}:8154
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "torrent.caddy.mazilious.org" = {
+        "torrent.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:8080
+            reverse_proxy http://${unraid}:8080
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "unraid.caddy.mazilious.org" = {
+        "unraid.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88:3001
+            reverse_proxy http://${unraid}:3001
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
           '';
         };
 
-        "uptime.caddy.mazilious.org" = {
+        "uptime.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://100.94.140.88
+            reverse_proxy http://${unraid}
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
