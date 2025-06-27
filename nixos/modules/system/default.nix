@@ -2,6 +2,7 @@
   imports = [
     ./boot
     ./caddy
+    ./calibre
     ./gaming
     ./greetd
     ./hyprland

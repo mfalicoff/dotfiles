@@ -13,6 +13,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      ryujinx
       (lutris.override {
         extraPkgs = pkgs: [];
       })

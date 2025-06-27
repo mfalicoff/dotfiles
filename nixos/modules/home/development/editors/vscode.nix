@@ -28,6 +28,7 @@ in {
             # tools
             csharpier.csharpier-vscode
             alefragnani.project-manager
+            ms-vscode-remote.remote-ssh
           ];
         };
       };

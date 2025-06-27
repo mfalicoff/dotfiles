@@ -1,7 +1,7 @@
 {...}: {
   imports = [
-    ./development
     ./browsers
+    ./development
     ./windowManager
     ./rofi
     ./shell

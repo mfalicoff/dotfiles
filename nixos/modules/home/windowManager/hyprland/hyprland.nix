@@ -211,8 +211,9 @@ in {
           "$shiftMod, PRINT, exec, hyprshot -m region" # Screenshot a region
 
           # Screen resolutions
-          "$mainMod, F1, exec, set-60hz"
-          "$mainMod, F2, exec, set-164hz"
+          "$mainMod, F1, exec, set-normal"
+          "$mainMod, F2, exec, set-1440"
+          "$mainMod, F3, exec, set-1080"
         ];
 
         # Workspace rules
