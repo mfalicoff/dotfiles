@@ -86,7 +86,7 @@
   development = {
     enable = true;
     sdk = {
-      enable = false;
+      enable = true;
     };
     tools = {
       enable = true;

@@ -8,7 +8,6 @@ with lib; let
 in {
   imports = [
     ./hyprland.nix
-    ./hyprpanel.nix
     ./waybar.nix
   ];
 
@@ -19,7 +18,6 @@ in {
   config = mkIf cfg.enable {
     # Enable both components when custom.hyprland.enable = true
     windowManager.wayland.hyprland.enable = mkDefault false;
-    windowManager.wayland.bar.hyprpanel.enable = mkDefault false;
     windowManager.wayland.bar.waybar.enable = mkDefault false;
   };
 }

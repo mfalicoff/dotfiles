@@ -17,7 +17,6 @@ in {
         combinePackages [
           sdk_9_0
         ])
-      nodejs_23
     ];
   };
 }
