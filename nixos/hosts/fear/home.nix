@@ -26,6 +26,9 @@
     vlc
     discord
     spotify-player
+    tauon
+    strawberry
+    owncloud-client
   ];
 
   browsers = {

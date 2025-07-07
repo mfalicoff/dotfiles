@@ -42,6 +42,15 @@ in {
           '';
         };
 
+        "calibre.local.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${unraid}:8383
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
         "code.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:3200
@@ -108,6 +117,24 @@ in {
         "karakeep.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:3010
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "onlyoffice.local.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${unraid}:8981
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "owncloud.local.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${unraid}:8980
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
