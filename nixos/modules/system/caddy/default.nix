@@ -132,9 +132,9 @@ in {
           '';
         };
 
-        "opencloud.local.mazilious.org" = {
+        "owncloud.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://${unraid}:9200
+            reverse_proxy http://${unraid}:8980
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
