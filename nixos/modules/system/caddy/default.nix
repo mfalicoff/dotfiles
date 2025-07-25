@@ -24,6 +24,16 @@ in {
       dataDir = "/var/lib/caddy";
 
       virtualHosts = {
+
+        "affine.local.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${unraid}:3210
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
         "beszel.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:8093
@@ -195,9 +205,9 @@ in {
           '';
         };
 
-        "stashy.local.mazilious.org" = {
+        "strava.local.mazilious.org" = {
           extraConfig = ''
-            reverse_proxy http://${unraid}:9999
+            reverse_proxy http://${unraid}:8480
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
