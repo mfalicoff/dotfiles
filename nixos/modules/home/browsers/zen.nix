@@ -12,8 +12,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      zen
-    ];
+    programs.zen-browser.enable = true;
   };
 }
