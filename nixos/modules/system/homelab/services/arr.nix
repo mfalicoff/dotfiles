@@ -29,6 +29,13 @@ in
       }
     ];
 
+    homelab.monitoring.targets = [
+      {
+        target = "https://sonarr.caddy.mazilious.org";
+        service = "arr";
+      }
+    ];
+
     services.caddy.virtualHosts = {
       "sonarr.caddy.mazilious.org" = {
         extraConfig = ''

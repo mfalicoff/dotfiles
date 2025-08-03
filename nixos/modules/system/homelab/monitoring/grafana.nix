@@ -2,10 +2,12 @@
   lib,
   config,
   mkBorgJob,
+  pkgs,
   ...
 }:
 let
   cfg = config.homelab.monitoring.grafana;
+  monotoringcfg = config.homelab.monitoring;
 in
 {
   options.homelab.monitoring.grafana = {
@@ -37,6 +39,20 @@ in
     };
   };
 
+  options.homelab.monitoring = {
+    targets = lib.mkOption {
+      type = lib.types.listOf (lib.types.submodule {
+        options = {
+          target = lib.mkOption { type = lib.types.str; };
+          service = lib.mkOption { type = lib.types.str; };
+        };
+      });
+      default = [];
+      description = "List of monitoring targets";
+    };
+  };
+
+
   config = lib.mkIf cfg.enable {
     services = {
       grafana = {
@@ -58,13 +74,71 @@ in
             enabledCollectors = [ "systemd" ];
             port = cfg.prometheusNodePort;
           };
+
+          blackbox = {
+            enable = true;
+            port = 9103;
+            configFile = pkgs.writeText "config.yaml"
+              ''
+                modules:
+                  http_2xx:
+                    prober: http
+                    timeout: 5s
+                    http:
+                      valid_http_versions:
+                        - "HTTP/1.1"
+                        - "HTTP/2.0"
+                      valid_status_codes: []
+                      method: GET
+                      follow_redirects: true
+                  http_403:
+                    prober: http
+                    timeout: 5s
+                    http:
+                      valid_http_versions:
+                        - "HTTP/1.1"
+                        - "HTTP/2.0"
+                      valid_status_codes: [ 403 ]
+                      method: GET
+                      follow_redirects: true
+              '';
+          };
         };
         scrapeConfigs = [
           {
-            job_name = "media";
+            job_name = "worker";
             static_configs = [
               {
                 targets = [ "${cfg.hostAddress}:${toString cfg.prometheusNodePort}" ];
+              }
+            ];
+          }
+          {
+            job_name = "blackbox";
+            static_configs = [
+              {
+                targets = map (t: t.target) monotoringcfg.targets;
+                labels = {
+                  job = "uptime-monitoring";
+                };
+              }
+            ];
+            metrics_path = "/probe";
+            params = {
+              module = [ "http_2xx" ];
+            };
+            relabel_configs = [
+              {
+                source_labels = [ "__address__" ];
+                target_label = "__param_target";
+              }
+              {
+                source_labels = [ "__param_target" ];
+                target_label = "instance";
+              }
+              {
+                target_label = "__address__";
+                replacement = "127.0.0.1:9103";  # blackbox exporter address
               }
             ];
           }

@@ -166,6 +166,13 @@ in
       };
     };
 
+    homelab.monitoring.targets = [
+      {
+        target = "https://glance.caddy.mazilious.org";
+        service = "glance";
+      }
+    ];
+
     services.caddy.virtualHosts = {
       "glance.caddy.mazilious.org" = {
         extraConfig = ''
