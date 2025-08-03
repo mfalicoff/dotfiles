@@ -41,6 +41,7 @@ in {
         killport
         kubectl
         lazydocker
+        nixfmt-rfc-style
         kubeseal
         jq
         uv

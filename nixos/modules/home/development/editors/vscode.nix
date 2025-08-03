@@ -24,6 +24,7 @@ in {
             jnoortheen.nix-ide
             ziglang.vscode-zig
             yzhang.markdown-all-in-one
+            jnoortheen.nix-ide
 
             # tools
             csharpier.csharpier-vscode

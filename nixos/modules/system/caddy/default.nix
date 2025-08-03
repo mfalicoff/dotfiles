@@ -79,6 +79,15 @@ in {
           '';
         };
 
+        "excalidraw.local.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${unraid}:5432
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
         "glance.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:8280
