@@ -22,6 +22,7 @@
   };
 
   home.packages = with pkgs; [
+    affine
     insync
     insync-nautilus
     vlc
@@ -36,6 +37,7 @@
     enable = true;
     firefox.enable = true;
     chrome.enable = true;
+    zen.enable = true;
   };
 
   rofi.enable = true;
