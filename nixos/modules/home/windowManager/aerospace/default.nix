@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.windowManager.aerospace;
-in {
+in
+{
   options.windowManager.aerospace = {
     enable = mkEnableOption "Enable AeroSpace window manager";
   };

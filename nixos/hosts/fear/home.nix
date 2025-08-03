@@ -3,7 +3,8 @@
   pkgs,
   username,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
     ../../modules/home

@@ -53,106 +53,130 @@
     nix-std.url = "github:chessai/nix-std";
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    nix-darwin,
-    home-manager,
-    home-manager-darwin,
-    nix-std,
-    nixvim,
-    ...
-  }: let
-    # Shared variables
-    username = "mazilious";
-    darwinSystem = "aarch64-darwin";
-    desktopHostname = "fear";
-    laptopHostname = "laptop";
-    workerHostname = "worker";
-    darwinHostname = "fearful";
-    isDarwin = system: (builtins.elem system ["aarch64-darwin" "x86_64-darwin"]);
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nix-darwin,
+      home-manager,
+      home-manager-darwin,
+      nix-std,
+      nixvim,
+      ...
+    }:
+    let
+      # Shared variables
+      username = "mazilious";
+      darwinSystem = "aarch64-darwin";
+      desktopHostname = "fear";
+      laptopHostname = "laptop";
+      workerHostname = "worker";
+      darwinHostname = "fearful";
+      isDarwin =
+        system:
+        (builtins.elem system [
+          "aarch64-darwin"
+          "x86_64-darwin"
+        ]);
 
-    # Shared special args
-    sharedSpecialArgs = {
-      inherit username desktopHostname darwinHostname laptopHostname workerHostname;
-      inherit inputs;
-      inherit isDarwin;
-    };
-  in {
-    # NixOS configuration
-    nixosConfigurations.${desktopHostname} = nixpkgs.lib.nixosSystem {
-      specialArgs = sharedSpecialArgs;
-      system = "x86_64-linux";
-      modules = [
-        inputs.stylix.nixosModules.stylix
-        ./nix-core.nix
-        ./hosts/fear/system.nix
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = sharedSpecialArgs;
-          home-manager.users.${username} = import ./hosts/fear/home.nix;
-        }
-        {nixpkgs.overlays = [inputs.hyprpanel.overlay inputs.nur.overlays.default];}
-      ];
-    };
+      # Shared special args
+      sharedSpecialArgs = {
+        inherit
+          username
+          desktopHostname
+          darwinHostname
+          laptopHostname
+          workerHostname
+          ;
+        inherit inputs;
+        inherit isDarwin;
+      };
+    in
+    {
+      # NixOS configuration
+      nixosConfigurations.${desktopHostname} = nixpkgs.lib.nixosSystem {
+        specialArgs = sharedSpecialArgs;
+        system = "x86_64-linux";
+        modules = [
+          inputs.stylix.nixosModules.stylix
+          ./nix-core.nix
+          ./hosts/fear/system.nix
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = sharedSpecialArgs;
+            home-manager.users.${username} = import ./hosts/fear/home.nix;
+          }
+          {
+            nixpkgs.overlays = [
+              inputs.hyprpanel.overlay
+              inputs.nur.overlays.default
+            ];
+          }
+        ];
+      };
 
-    nixosConfigurations.${laptopHostname} = nixpkgs.lib.nixosSystem {
-      specialArgs = sharedSpecialArgs;
-      system = "x86_64-linux";
-      modules = [
-        inputs.stylix.nixosModules.stylix
-        ./nix-core.nix
-        ./hosts/laptop/system.nix
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = sharedSpecialArgs;
-          home-manager.users.${username} = import ./hosts/laptop/home.nix;
-        }
-        {nixpkgs.overlays = [inputs.hyprpanel.overlay inputs.nur.overlays.default];}
-      ];
-    };
+      nixosConfigurations.${laptopHostname} = nixpkgs.lib.nixosSystem {
+        specialArgs = sharedSpecialArgs;
+        system = "x86_64-linux";
+        modules = [
+          inputs.stylix.nixosModules.stylix
+          ./nix-core.nix
+          ./hosts/laptop/system.nix
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = sharedSpecialArgs;
+            home-manager.users.${username} = import ./hosts/laptop/home.nix;
+          }
+          {
+            nixpkgs.overlays = [
+              inputs.hyprpanel.overlay
+              inputs.nur.overlays.default
+            ];
+          }
+        ];
+      };
 
-    nixosConfigurations.${workerHostname} = nixpkgs.lib.nixosSystem {
-      specialArgs = sharedSpecialArgs;
-      system = "x86_64-linux";
-      modules = [
-        inputs.stylix.nixosModules.stylix
-        ./nix-core.nix
-        ./hosts/worker/system.nix
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = sharedSpecialArgs;
-          home-manager.users.${username} = import ./hosts/worker/home.nix;
-        }
-        {nixpkgs.overlays = [inputs.nur.overlays.default];}
-      ];
-    };
+      nixosConfigurations.${workerHostname} = nixpkgs.lib.nixosSystem {
+        specialArgs = sharedSpecialArgs;
+        system = "x86_64-linux";
+        modules = [
+          inputs.stylix.nixosModules.stylix
+          ./nix-core.nix
+          ./hosts/worker/system.nix
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = sharedSpecialArgs;
+            home-manager.users.${username} = import ./hosts/worker/home.nix;
+          }
+          { nixpkgs.overlays = [ inputs.nur.overlays.default ]; }
+        ];
+      };
 
-    # Darwin configuration
-    darwinConfigurations.${darwinHostname} = nix-darwin.lib.darwinSystem {
-      system = darwinSystem;
-      specialArgs = sharedSpecialArgs;
-      modules = [
-        inputs.stylix.darwinModules.stylix
-        ./nix-core.nix
-        ./hosts/fearful/system.nix
-        ./hosts/fearful/host-users.nix
-        # home manager
-        inputs.home-manager-darwin.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = sharedSpecialArgs;
-          home-manager.users.${username} = import ./hosts/fearful/home.nix;
-        }
-        {nixpkgs.overlays = [inputs.nur.overlays.default];}
-      ];
+      # Darwin configuration
+      darwinConfigurations.${darwinHostname} = nix-darwin.lib.darwinSystem {
+        system = darwinSystem;
+        specialArgs = sharedSpecialArgs;
+        modules = [
+          inputs.stylix.darwinModules.stylix
+          ./nix-core.nix
+          ./hosts/fearful/system.nix
+          ./hosts/fearful/host-users.nix
+          # home manager
+          inputs.home-manager-darwin.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = sharedSpecialArgs;
+            home-manager.users.${username} = import ./hosts/fearful/home.nix;
+          }
+          { nixpkgs.overlays = [ inputs.nur.overlays.default ]; }
+        ];
+      };
     };
-  };
 }

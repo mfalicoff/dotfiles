@@ -1,7 +1,8 @@
-{config, lib, ...}: 
-with lib; let 
+{ config, lib, ... }:
+with lib;
+let
   cfg = config.homelab;
-in 
+in
 {
   imports = [
     ./backups.nix

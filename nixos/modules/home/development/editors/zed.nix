@@ -4,14 +4,24 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.editors.zed;
-in {
+in
+{
   options.development.editors.zed = {
     enable = mkEnableOption "Enable Zed Editor";
     extensions = mkOption {
       type = types.listOf types.str;
-      default = ["nix" "toml" "elixir" "make" "catppuccin" "catppuccin-icons" "just"];
+      default = [
+        "nix"
+        "toml"
+        "elixir"
+        "make"
+        "catppuccin"
+        "catppuccin-icons"
+        "just"
+      ];
       description = "Extensions to install for Zed";
     };
   };
@@ -27,7 +37,7 @@ in {
     programs.zed-editor = {
       enable = true;
       extensions = cfg.extensions;
-      extraPackages = [];
+      extraPackages = [ ];
       ## everything inside of these brackets are Zed options.
       userSettings = {
         assistant = {
@@ -46,7 +56,12 @@ in {
           dock = "bottom";
           detect_venv = {
             on = {
-              directories = [".env" "env" ".venv" "venv"];
+              directories = [
+                ".env"
+                "env"
+                ".venv"
+                "venv"
+              ];
               activate_script = "default";
             };
           };
@@ -87,29 +102,50 @@ in {
         };
         languages = {
           "Elixir" = {
-            language_servers = ["!lexical" "elixir-ls" "!next-ls"];
+            language_servers = [
+              "!lexical"
+              "elixir-ls"
+              "!next-ls"
+            ];
             format_on_save = {
               external = {
                 command = "mix";
-                arguments = ["format" "--stdin-filename" "{buffer_path}" "-"];
+                arguments = [
+                  "format"
+                  "--stdin-filename"
+                  "{buffer_path}"
+                  "-"
+                ];
               };
             };
           };
           "HEEX" = {
-            language_servers = ["!lexical" "elixir-ls" "!next-ls"];
+            language_servers = [
+              "!lexical"
+              "elixir-ls"
+              "!next-ls"
+            ];
             format_on_save = {
               external = {
                 command = "mix";
-                arguments = ["format" "--stdin-filename" "{buffer_path}" "-"];
+                arguments = [
+                  "format"
+                  "--stdin-filename"
+                  "{buffer_path}"
+                  "-"
+                ];
               };
             };
           };
           Nix = {
-            language_servers = ["nixd"];
+            language_servers = [ "nixd" ];
             formatter = {
               external = {
                 command = "alejandra";
-                arguments = ["-q" "-"];
+                arguments = [
+                  "-q"
+                  "-"
+                ];
               };
             };
           };

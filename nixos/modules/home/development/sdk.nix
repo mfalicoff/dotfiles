@@ -4,19 +4,23 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.sdk;
-in {
+in
+{
   options.development.sdk = {
     enable = mkEnableOption "Enable Sdk's";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      (with dotnetCorePackages;
+      (
+        with dotnetCorePackages;
         combinePackages [
           sdk_9_0
-        ])
+        ]
+      )
     ];
   };
 }

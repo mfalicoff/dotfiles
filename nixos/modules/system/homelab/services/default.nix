@@ -1,7 +1,8 @@
-{config, lib, ...}: 
-with lib; let 
+{ config, lib, ... }:
+with lib;
+let
   cfg = config.homelab.services;
-in 
+in
 {
   imports = [
     ./arr.nix

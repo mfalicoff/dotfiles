@@ -3,9 +3,11 @@
   config,
   mkBorgJob,
   ...
-}: let
+}:
+let
   cfg = config.homelab.monitoring.loki;
-in {
+in
+{
   options.homelab.monitoring.loki = {
     enable = lib.mkEnableOption "Enable log capture with Loki and Promtail";
     hostAddress = lib.mkOption {
@@ -101,7 +103,7 @@ in {
               };
               relabel_configs = [
                 {
-                  source_labels = ["__journal__systemd_unit"];
+                  source_labels = [ "__journal__systemd_unit" ];
                   target_label = "unit";
                 }
               ];

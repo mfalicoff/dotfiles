@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.browsers;
-in {
+in
+{
   imports = [
     ./firefox.nix
     ./chrome.nix

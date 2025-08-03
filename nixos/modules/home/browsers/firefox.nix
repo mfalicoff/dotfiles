@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.browsers.firefox;
-in {
+in
+{
   options.browsers.firefox = {
     enable = mkEnableOption "Enable Firefox";
   };

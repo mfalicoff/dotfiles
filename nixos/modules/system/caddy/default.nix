@@ -4,11 +4,13 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.reverseProxy;
   unraid = "100.94.140.88";
   homeassistant = "100.118.232.49";
-in {
+in
+{
   options.reverseProxy = {
     enable = mkEnableOption "Enable Caddy";
   };
@@ -17,7 +19,7 @@ in {
     services.caddy = {
       enable = true;
       package = pkgs.caddy.withPlugins {
-        plugins = ["github.com/caddy-dns/cloudflare@v0.2.1"];
+        plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
         hash = "sha256-2D7dnG50CwtCho+U+iHmSj2w14zllQXPjmTHr6lJZ/A=";
       };
       logDir = "/var/log/caddy";
@@ -270,6 +272,8 @@ in {
       };
     };
 
-    systemd.services.caddy.serviceConfig.EnvironmentFile = ["/home/mazilious/dotfiles/nixos/modules/system/caddy/.env"];
+    systemd.services.caddy.serviceConfig.EnvironmentFile = [
+      "/home/mazilious/dotfiles/nixos/modules/system/caddy/.env"
+    ];
   };
 }

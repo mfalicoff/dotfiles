@@ -3,9 +3,11 @@
   config,
   mkBorgJob,
   ...
-}: let
+}:
+let
   cfg = config.homelab.monitoring.grafana;
-in {
+in
+{
   options.homelab.monitoring.grafana = {
     enable = lib.mkEnableOption "Enable monitoring with Grafana and Prometheus";
     domain = lib.mkOption {
@@ -53,7 +55,7 @@ in {
         exporters = {
           node = {
             enable = true;
-            enabledCollectors = ["systemd"];
+            enabledCollectors = [ "systemd" ];
             port = cfg.prometheusNodePort;
           };
         };
@@ -62,7 +64,7 @@ in {
             job_name = "media";
             static_configs = [
               {
-                targets = ["${cfg.hostAddress}:${toString cfg.prometheusNodePort}"];
+                targets = [ "${cfg.hostAddress}:${toString cfg.prometheusNodePort}" ];
               }
             ];
           }
@@ -82,7 +84,7 @@ in {
         icon = "si:grafana";
       }
     ];
-    
+
     services.caddy.virtualHosts = {
       "grafana.caddy.mazilious.org" = {
         extraConfig = ''

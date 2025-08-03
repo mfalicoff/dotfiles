@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.windowManager.wayland;
-in {
+in
+{
   imports = [
     ./hyprland.nix
     ./waybar.nix

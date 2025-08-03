@@ -2,7 +2,8 @@
   inputs,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.default
     ../../modules/system/boot
@@ -25,7 +26,7 @@
   programs.ssh.startAgent = true;
   services.openssh = {
     enable = true;
-    ports = [22];
+    ports = [ 22 ];
     settings = {
       PasswordAuthentication = false;
     };

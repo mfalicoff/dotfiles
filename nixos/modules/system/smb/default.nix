@@ -4,9 +4,11 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.smb;
-in {
+in
+{
   options.smb = {
     enable = mkEnableOption "Enable SMB";
   };

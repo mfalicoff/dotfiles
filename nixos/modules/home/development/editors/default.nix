@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.editors;
-in {
+in
+{
   imports = [
     ./zed.nix
     ./neovim.nix

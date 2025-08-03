@@ -3,19 +3,21 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.windowManager.wayland.hyprland;
-in {
+in
+{
   options.windowManager.wayland.hyprland = {
     enable = mkEnableOption "Enable Hyprland window manager configuration";
     monitors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Monitor configuration";
     };
     exec-once = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Exec once";
     };
   };

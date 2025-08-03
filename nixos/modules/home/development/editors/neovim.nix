@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.editors.neovim;
-in {
+in
+{
   # imports = [ inputs.nixvim.homeManagerModules.nixvim ];
   options.development.editors.neovim = {
     enable = mkEnableOption "Enable Neovim";
@@ -96,8 +98,11 @@ in {
               theme = "catppuccin";
             };
             sections = {
-              lualine_a = ["mode"];
-              lualine_b = ["branch" "diff"];
+              lualine_a = [ "mode" ];
+              lualine_b = [
+                "branch"
+                "diff"
+              ];
               lualine_c = [
                 {
                   filename = {
@@ -105,16 +110,20 @@ in {
                   };
                 }
               ];
-              lualine_x = ["encoding" "fileformat" "filetype"];
-              lualine_y = ["progress"];
-              lualine_z = ["location"];
+              lualine_x = [
+                "encoding"
+                "fileformat"
+                "filetype"
+              ];
+              lualine_y = [ "progress" ];
+              lualine_z = [ "location" ];
             };
           };
         };
 
         mini = {
           enable = true;
-          modules.icons = {};
+          modules.icons = { };
           mockDevIcons = true;
         };
 
@@ -187,11 +196,11 @@ in {
             };
             snippet.expand = "luasnip";
             sources = [
-              {name = "nvim_lsp";}
-              {name = "luasnip";}
-              {name = "path";}
-              {name = "buffer";}
-              {name = "nvim_lua";}
+              { name = "nvim_lsp"; }
+              { name = "luasnip"; }
+              { name = "path"; }
+              { name = "buffer"; }
+              { name = "nvim_lua"; }
             ];
           };
         };
@@ -341,7 +350,7 @@ in {
         # UI improvements
         which-key = {
           enable = true;
-          settings.spec = [];
+          settings.spec = [ ];
         };
 
         #   # Git UI
@@ -415,8 +424,12 @@ in {
         project-nvim = {
           enable = true;
           settings = {
-            detection_methods = ["pattern"];
-            patterns = [".git" "*.sln" "*.csproj"];
+            detection_methods = [ "pattern" ];
+            patterns = [
+              ".git"
+              "*.sln"
+              "*.csproj"
+            ];
           };
         };
       };

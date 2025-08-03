@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.editors.vscode;
-in {
+in
+{
   options.development.editors.vscode = {
     enable = mkEnableOption "Enable Visual Studio Code";
   };
@@ -17,7 +19,7 @@ in {
       package = pkgs.vscode;
       profiles = {
         default = {
-          userSettings = {};
+          userSettings = { };
           extensions = with pkgs.vscode-extensions; [
             # Languages
             ms-dotnettools.csharp
