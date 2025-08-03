@@ -5,11 +5,9 @@
   username,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.loginManager;
-in
-{
+in {
   options.loginManager = {
     enable = mkEnableOption "Enable Login Manager";
   };
@@ -22,7 +20,6 @@ in
     services = {
       greetd = {
         enable = true;
-        vt = 3;
         settings = {
           default_session = {
             user = username;
