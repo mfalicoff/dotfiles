@@ -5,6 +5,7 @@
     ./calibre
     ./gaming
     ./greetd
+    ./homelab
     ./hyprland
     ./nvidia
     ./password-manager

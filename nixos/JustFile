@@ -8,7 +8,7 @@ nix_flags := "--extra-experimental-features 'nix-command flakes'"
 
 # Build and switch to NixOS configuration
 nixos host=hostname:
-    nh os switch -H {{host}} ~/dotfiles/nixos
+    nh os switch -H {{host}} ~/dotfiles/nixos -- --impure
 
 # Build and switch to Darwin configuration
 darwin hostname=hostname:

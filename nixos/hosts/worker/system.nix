@@ -43,7 +43,14 @@
 
   # Custom
   styling.stylix.enable = true;
+  smb.enable = true;
   bootManager.enable = true;
   reverseProxy.enable = true;
   sshServer.enable = true;
+
+  homelab = {
+    enable = true;
+    services.enable = true;
+    monitoring.enable = true;
+  };
 }
