@@ -23,6 +23,8 @@ in
         "noauto"
         "uid=1000"
         "gid=100"
+        "file_mode=0664"
+        "dir_mode=0775"
       ];
     };
 
@@ -35,6 +37,8 @@ in
         "noauto"
         "uid=1000"
         "gid=100"
+        "file_mode=0664"
+        "dir_mode=0775"
       ];
     };
 
@@ -47,6 +51,8 @@ in
         "noauto"
         "uid=1000"
         "gid=100"
+        "file_mode=0664"
+        "dir_mode=0775"
       ];
     };
 
@@ -59,6 +65,8 @@ in
         "noauto"
         "uid=1000"
         "gid=100"
+        "file_mode=0664"
+        "dir_mode=0775"
       ];
     };
   };
