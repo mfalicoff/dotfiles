@@ -4,13 +4,12 @@
   pkgs,
   ...
 }:
-
+with lib;
 let
   mkBorgJob =
     {
       paths,
       services,
-
       dbName ? null,
       dbUser ? null,
       dbHost ? "localhost",
@@ -32,5 +31,13 @@ let
 in
 {
   services.borgmatic.enable = true;
-  _module.args.mkBorgJob = mkBorgJob;
+
+  services.postgresqlBackup = {
+    enable = true;
+    location = "/mnt/appdata/nixos/backups/postgresql";
+  };
+
+  _module.args = {
+    mkBorgJob = mkBorgJob;
+  };
 }

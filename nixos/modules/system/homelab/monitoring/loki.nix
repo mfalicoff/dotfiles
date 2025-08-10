@@ -2,6 +2,8 @@
   lib,
   config,
   mkBorgJob,
+  mkCaddyVirtualHost,
+  mkGlanceMonitor,
   ...
 }:
 let
@@ -115,7 +117,21 @@ in
 
     services.borgbackup.jobs.loki = mkBorgJob {
       paths = config.services.loki.dataDir;
-      services = "monitoring/loki";
+      services = "loki";
     };
+
+    homelab.services.glance.monitorSites = [
+      (mkGlanceMonitor { service = "promtail"; })
+    ];
+
+    services.caddy.virtualHosts =
+      (mkCaddyVirtualHost {
+        service = "loki";
+        port = cfg.lokiPort;
+      })
+      // (mkCaddyVirtualHost {
+        service = "promtail";
+        port = cfg.promtailPort;
+      });
   };
 }

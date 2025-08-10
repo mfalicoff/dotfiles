@@ -2,12 +2,26 @@
   lib,
   config,
   mkBorgJob,
+  mkCaddyVirtualHost,
+  mkGlanceMonitor,
   pkgs,
   ...
 }:
 let
   cfg = config.homelab.monitoring.grafana;
   monotoringcfg = config.homelab.monitoring;
+  mkMonitoringTarget =
+    {
+      service,
+      subdomain ? service,
+      domain ? "caddy.mazilious.org",
+      targetService ? "arr",
+    }:
+    {
+      target = "https://${subdomain}.${domain}";
+      service = targetService;
+    };
+
 in
 {
   options.homelab.monitoring.grafana = {
@@ -41,17 +55,18 @@ in
 
   options.homelab.monitoring = {
     targets = lib.mkOption {
-      type = lib.types.listOf (lib.types.submodule {
-        options = {
-          target = lib.mkOption { type = lib.types.str; };
-          service = lib.mkOption { type = lib.types.str; };
-        };
-      });
-      default = [];
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            target = lib.mkOption { type = lib.types.str; };
+            service = lib.mkOption { type = lib.types.str; };
+          };
+        }
+      );
+      default = [ ];
       description = "List of monitoring targets";
     };
   };
-
 
   config = lib.mkIf cfg.enable {
     services = {
@@ -78,30 +93,29 @@ in
           blackbox = {
             enable = true;
             port = 9103;
-            configFile = pkgs.writeText "config.yaml"
-              ''
-                modules:
-                  http_2xx:
-                    prober: http
-                    timeout: 5s
-                    http:
-                      valid_http_versions:
-                        - "HTTP/1.1"
-                        - "HTTP/2.0"
-                      valid_status_codes: []
-                      method: GET
-                      follow_redirects: true
-                  http_403:
-                    prober: http
-                    timeout: 5s
-                    http:
-                      valid_http_versions:
-                        - "HTTP/1.1"
-                        - "HTTP/2.0"
-                      valid_status_codes: [ 403 ]
-                      method: GET
-                      follow_redirects: true
-              '';
+            configFile = pkgs.writeText "config.yaml" ''
+              modules:
+                http_2xx:
+                  prober: http
+                  timeout: 5s
+                  http:
+                    valid_http_versions:
+                      - "HTTP/1.1"
+                      - "HTTP/2.0"
+                    valid_status_codes: []
+                    method: GET
+                    follow_redirects: true
+                http_403:
+                  prober: http
+                  timeout: 5s
+                  http:
+                    valid_http_versions:
+                      - "HTTP/1.1"
+                      - "HTTP/2.0"
+                    valid_status_codes: [ 403 ]
+                    method: GET
+                    follow_redirects: true
+            '';
           };
         };
         scrapeConfigs = [
@@ -138,7 +152,7 @@ in
               }
               {
                 target_label = "__address__";
-                replacement = "127.0.0.1:9103";  # blackbox exporter address
+                replacement = "127.0.0.1:9103"; # blackbox exporter address
               }
             ];
           }
@@ -148,26 +162,31 @@ in
 
     services.borgbackup.jobs.grafana = mkBorgJob {
       paths = config.services.grafana.dataDir;
-      services = "monitoring/grafana";
+      services = "grafana";
     };
 
     homelab.services.glance.monitorSites = [
-      {
-        title = "Grafana";
-        url = "https://grafana.caddy.mazilious.org";
-        icon = "si:grafana";
-      }
+      (mkGlanceMonitor { service = "grafana"; })
+      (mkGlanceMonitor { service = "prometheus"; })
     ];
 
-    services.caddy.virtualHosts = {
-      "grafana.caddy.mazilious.org" = {
-        extraConfig = ''
-          reverse_proxy http://100.104.27.77:${toString cfg.grafanaPort}
-          tls {
-            dns cloudflare {env.CF_API_TOKEN}
-          }
-        '';
-      };
+    homelab.monitoring.targets = [
+      (mkMonitoringTarget { service = "grafana"; })
+      (mkMonitoringTarget { service = "prometheus"; })
+    ];
+
+    services.caddy.virtualHosts =
+      (mkCaddyVirtualHost {
+        service = "grafana";
+        port = cfg.grafanaPort;
+      })
+      // (mkCaddyVirtualHost {
+        service = "prometheus";
+        port = cfg.prometheusPort;
+      });
+
+    _module.args = {
+      mkMonitoringTarget = mkMonitoringTarget;
     };
   };
 }

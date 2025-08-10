@@ -7,6 +7,7 @@ in
   imports = [
     ./arr.nix
     ./glance.nix
+    ./miniflux.nix
   ];
 
   options.homelab.services = {
@@ -17,6 +18,10 @@ in
     homelab.services = {
       arr.enable = true;
       glance.enable = true;
+      miniflux = {
+        enable = true;
+        port = 8900;
+      };
     };
   };
 }

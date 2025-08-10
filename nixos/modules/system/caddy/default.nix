@@ -9,6 +9,27 @@ let
   cfg = config.reverseProxy;
   unraid = "100.94.140.88";
   homeassistant = "100.118.232.49";
+
+  mkCaddyVirtualHost =
+    {
+      service,
+      port,
+      subdomain ? service,
+      domain ? "caddy.mazilious.org",
+      targetHost ? "100.104.27.77",
+      dnsProvider ? "cloudflare",
+      envVar ? "CF_API_TOKEN",
+    }:
+    {
+      "${subdomain}.${domain}" = {
+        extraConfig = ''
+          reverse_proxy http://${targetHost}:${toString port}
+          tls {
+            dns ${dnsProvider} {env.${envVar}}
+          }
+        '';
+      };
+    };
 in
 {
   options.reverseProxy = {
@@ -275,5 +296,9 @@ in
     systemd.services.caddy.serviceConfig.EnvironmentFile = [
       "/home/mazilious/dotfiles/nixos/modules/system/caddy/.env"
     ];
+
+    _module.args = {
+      mkCaddyVirtualHost = mkCaddyVirtualHost;
+    };
   };
 }

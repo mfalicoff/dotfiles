@@ -4,6 +4,23 @@
 with lib;
 let
   cfg = config.homelab.services.glance;
+  mkGlanceMonitor =
+    {
+      service,
+      title ? null,
+      subdomain ? service,
+      domain ? "caddy.mazilious.org",
+      icon ? "si:${service}",
+    }:
+    {
+      title =
+        if title != null then
+          title
+        else
+          strings.toUpper (substring 0 1 service) + substring 1 (stringLength service) service;
+      url = "https://${subdomain}.${domain}";
+      icon = icon;
+    };
 in
 {
   options.homelab.services.glance = {
@@ -182,6 +199,10 @@ in
           }
         '';
       };
+    };
+
+    _module.args = {
+      mkGlanceMonitor = mkGlanceMonitor;
     };
   };
 }
