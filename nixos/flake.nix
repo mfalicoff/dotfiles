@@ -55,6 +55,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
     nix-std.url = "github:chessai/nix-std";
   };
 
@@ -67,6 +70,7 @@
       home-manager-darwin,
       nix-std,
       nixvim,
+      sops-nix,
       ...
     }:
     let
@@ -150,6 +154,7 @@
         system = "x86_64-linux";
         modules = [
           inputs.stylix.nixosModules.stylix
+          sops-nix.nixosModules.sops
           ./nix-core.nix
           ./hosts/worker/system.nix
           inputs.home-manager.nixosModules.home-manager
