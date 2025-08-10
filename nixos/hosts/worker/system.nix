@@ -10,6 +10,21 @@
     ../../modules/system
   ];
 
+  sops = {
+    age.keyFile = "/home/mazilious/.config/sops/age/keys.txt";
+
+    secrets = {
+      miniflux-admin-credentials = {
+        sopsFile = ../../secrets/secrets.miniflux.yaml;
+      };
+      miniflux-oauth2 = {
+        sopsFile = ../../secrets/secrets.miniflux.yaml;
+        owner = "miniflux";
+        group = "miniflux";
+      };
+    };
+  };
+
   # Networking
   networking.networkmanager.enable = true;
   networking.hostName = workerHostname;

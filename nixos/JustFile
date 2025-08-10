@@ -68,3 +68,19 @@ gc:
 # Format all Nix files in the repository
 fmt:
     nix fmt
+
+
+# SOPS secrets management commands
+
+# Decrypt and view a secrets file
+decrypt-secret file:
+    nix-shell -p sops --run "sops -d secrets/secrets.{{file}}.yaml"
+
+# Create a new encrypted secrets file
+create-secret file:
+    nix-shell -p sops --run "sops secrets/secrets.{{file}}.yaml"
+
+# Edit/modify an existing encrypted secrets file
+edit-secret file:
+    nix-shell -p sops --run "sops secrets/secrets.{{file}}.yaml"
+

@@ -36,6 +36,7 @@ in
       with pkgs;
       let
         cliPackages = [
+          age
           azure-cli
           direnv
           lazygit

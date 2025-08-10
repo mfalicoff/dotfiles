@@ -5,9 +5,11 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.loginManager;
-in {
+in
+{
   options.loginManager = {
     enable = mkEnableOption "Enable Login Manager";
   };

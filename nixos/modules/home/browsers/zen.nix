@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.browsers.zen;
-in {
+in
+{
   imports = [
     inputs.zen-browser.homeModules.beta
   ];
