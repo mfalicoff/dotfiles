@@ -38,6 +38,7 @@ in
         cliPackages = [
           age
           azure-cli
+          compose2nix
           direnv
           lazygit
           just

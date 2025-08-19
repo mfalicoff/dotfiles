@@ -10,6 +10,7 @@ let
       title ? null,
       subdomain ? service,
       domain ? "caddy.mazilious.org",
+      path ? null,
       icon ? "si:${service}",
     }:
     {
@@ -18,7 +19,7 @@ let
           title
         else
           strings.toUpper (substring 0 1 service) + substring 1 (stringLength service) service;
-      url = "https://${subdomain}.${domain}";
+      url = "https://${subdomain}.${domain}" + (if path != null then "/${path}" else "");
       icon = icon;
     };
 in

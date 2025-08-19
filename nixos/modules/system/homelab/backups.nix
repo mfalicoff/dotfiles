@@ -34,7 +34,11 @@ in
 
   services.postgresqlBackup = {
     enable = true;
-    location = "/mnt/appdata/nixos/backups/postgresql";
+  };
+
+  services.borgbackup.jobs.postgres = mkBorgJob {
+    paths = "/var/backup/postgresql";
+    services = "postgresql";
   };
 
   _module.args = {

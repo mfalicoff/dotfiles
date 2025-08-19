@@ -121,7 +121,7 @@ in
     };
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = "promtail"; })
+      (mkGlanceMonitor { service = "promtail"; icon = "https://grafana.com/media/docs/loki/logo-grafana-loki.png"; })
     ];
 
     services.caddy.virtualHosts =
