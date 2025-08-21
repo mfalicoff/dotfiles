@@ -95,14 +95,14 @@ in
             port = 9103;
             configFile = pkgs.writeText "config.yaml" ''
               modules:
-                http_2xx:
+                http_200:
                   prober: http
                   timeout: 5s
                   http:
                     valid_http_versions:
                       - "HTTP/1.1"
                       - "HTTP/2.0"
-                    valid_status_codes: []
+                    valid_status_codes: [200]
                     method: GET
                     follow_redirects: true
                 http_403:
@@ -139,7 +139,7 @@ in
             ];
             metrics_path = "/probe";
             params = {
-              module = [ "http_2xx" ];
+              module = [ "http_200" ];
             };
             relabel_configs = [
               {
@@ -156,6 +156,19 @@ in
               }
             ];
           }
+        ];
+        rules = [
+          ''
+            groups:
+            - name: blackbox-alerts
+              rules:
+              - alert: HttpNot200
+                expr: probe_success == 0
+                for: 15m
+                annotations:
+                  summary: "HTTP check failed for {{ $labels.instance }}"
+                  description: "Target {{ $labels.instance }} did not return 200 for at least 1m."
+          ''
         ];
       };
     };

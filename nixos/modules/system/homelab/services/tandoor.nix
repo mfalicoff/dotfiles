@@ -10,12 +10,12 @@
 }:
 with lib;
 let
-  cfg = config.homelab.services.jellyseerr;
-  service = "jellyseerr";
+  cfg = config.homelab.services.tandoor;
+  service = "tandoor-recipes";
 in
 {
-  options.homelab.services.jellyseerr = {
-    enable = mkEnableOption "Enable jellyseerr";
+  options.homelab.services.tandoor = {
+    enable = mkEnableOption "Enable tandoor";
     port = mkOption {
       type = types.port;
       description = "port to use";
@@ -26,12 +26,12 @@ in
     services.${service} = {
       enable = true;
       port = cfg.port;
+      address = "0.0.0.0";
+
+      database.createLocally = true;
     };
 
-    services.borgbackup.jobs.${service} = mkBorgJob {
-      paths = "/var/lib/jellyseerr";
-      services = service;
-    };
+    users.users.paperless.extraGroups = [ "users" ];
 
     homelab.services.glance.monitorSites = [
       (mkGlanceMonitor {
@@ -39,6 +39,13 @@ in
         icon = "di:${service}";
       })
     ];
+
+    services.postgresqlBackup.databases = [ "tandoor_recipes" ];
+
+    services.borgbackup.jobs.${service} = mkBorgJob {
+      paths = "/var/lib/tandoor-recipes";
+      services = service;
+    };
 
     homelab.monitoring.targets = [
       (mkMonitoringTarget { service = service; })

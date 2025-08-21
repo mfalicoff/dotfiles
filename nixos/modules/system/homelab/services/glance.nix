@@ -40,6 +40,20 @@ in
       default = [ ];
       description = "Sites to monitor in the dashboard";
     };
+
+    monitorUnraidSites = mkOption {
+      type = types.listOf (
+        types.submodule {
+          options = {
+            title = mkOption { type = types.str; };
+            url = mkOption { type = types.str; };
+            icon = mkOption { type = types.str; };
+          };
+        }
+      );
+      default = [ ];
+      description = "Sites to monitor in the dashboard";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -106,8 +120,15 @@ in
                   {
                     type = "monitor";
                     cache = "1m";
-                    title = "Services";
+                    title = "Services Nixos";
                     sites = builtins.sort (a: b: a.title < b.title) cfg.monitorSites;
+                  }
+
+                  {
+                    type = "monitor";
+                    cache = "1m";
+                    title = "Services Unraid";
+                    sites = builtins.sort (a: b: a.title < b.title) cfg.monitorUnraidSites;
                   }
 
                   {
