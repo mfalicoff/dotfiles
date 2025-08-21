@@ -9,12 +9,12 @@
 }:
 with lib;
 let
-  cfg = config.homelab.services.sonarr;
-  service = "sonarr";
+  cfg = config.homelab.services.prowlarr;
+  service = "prowlarr";
 in
 {
-  options.homelab.services.sonarr = {
-    enable = mkEnableOption "Enable arr stack";
+  options.homelab.services.prowlarr = {
+    enable = mkEnableOption "Enable prowlarr";
     port = mkOption {
       type = types.port;
       description = "port to use";
@@ -26,8 +26,6 @@ in
       enable = true;
       settings.server.port = cfg.port;
     };
-
-    users.users.${service}.extraGroups = [ "users" ];
 
     services.borgbackup.jobs.${service} = mkBorgJob {
       paths = config.services.${service}.dataDir;

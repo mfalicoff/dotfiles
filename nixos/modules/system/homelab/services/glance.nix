@@ -11,7 +11,7 @@ let
       subdomain ? service,
       domain ? "caddy.mazilious.org",
       path ? null,
-      icon ? "si:${service}",
+      icon ? "di:${service}",
     }:
     {
       title =

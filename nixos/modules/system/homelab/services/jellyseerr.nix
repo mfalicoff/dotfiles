@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   mkBorgJob,
   mkGlanceMonitor,
   mkMonitoringTarget,
@@ -9,12 +10,12 @@
 }:
 with lib;
 let
-  cfg = config.homelab.services.sonarr;
-  service = "sonarr";
+  cfg = config.homelab.services.jellyseerr;
+  service = "jellyseerr";
 in
 {
-  options.homelab.services.sonarr = {
-    enable = mkEnableOption "Enable arr stack";
+  options.homelab.services.jellyseerr = {
+    enable = mkEnableOption "Enable jellyseerr";
     port = mkOption {
       type = types.port;
       description = "port to use";
@@ -24,18 +25,14 @@ in
   config = mkIf cfg.enable {
     services.${service} = {
       enable = true;
-      settings.server.port = cfg.port;
-    };
-
-    users.users.${service}.extraGroups = [ "users" ];
-
-    services.borgbackup.jobs.${service} = mkBorgJob {
-      paths = config.services.${service}.dataDir;
-      services = service;
+      port = cfg.port;
     };
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = service; })
+      (mkGlanceMonitor {
+        service = service;
+        icon = "di:${service}";
+      })
     ];
 
     homelab.monitoring.targets = [
@@ -47,4 +44,5 @@ in
       port = cfg.port;
     };
   };
+
 }

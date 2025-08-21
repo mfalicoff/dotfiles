@@ -21,8 +21,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable
-  {
+  config = mkIf cfg.enable {
     services.${service} = {
       enable = true;
       settings.server.port = cfg.port;
