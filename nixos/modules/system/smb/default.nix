@@ -42,6 +42,20 @@ in
       ];
     };
 
+    fileSystems."/mnt/documents" = {
+      device = "//192.168.2.41/documents";
+      fsType = "cifs";
+      options = [
+        "credentials=/home/${username}/dotfiles/nixos/modules/system/smb/smb-secrets"
+        "x-systemd.automount"
+        "noauto"
+        "uid=1000"
+        "gid=100"
+        "file_mode=0664"
+        "dir_mode=0775"
+      ];
+    };
+
     fileSystems."/mnt/downloads" = {
       device = "//192.168.2.41/downloads";
       fsType = "cifs";
