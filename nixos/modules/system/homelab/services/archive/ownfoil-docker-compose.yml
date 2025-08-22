@@ -1,0 +1,11 @@
+name: "ownfoil"
+services:
+  ownfoil:
+    container_name: ownfoil
+    image: a1ex4/ownfoil
+    volumes:
+      - /mnt/user/media/games/roms/switch:/games/
+      - /mnt/user/media/games/bios/switch:/bios/
+      - /mnt/user/appdata/ownfoil/config:/app/config
+    ports:
+      - "8465:8465"
