@@ -8,6 +8,7 @@ in
     ./backups.nix
     ./monitoring
     ./services
+    ./reverseProxy.nix
   ];
 
   options.homelab = {
@@ -17,5 +18,6 @@ in
   config = mkIf cfg.enable {
     homelab.services.enable = mkDefault false;
     homelab.monitoring.enable = mkDefault false;
+    homelab.reverseProxy.enable = mkDefault false;
   };
 }

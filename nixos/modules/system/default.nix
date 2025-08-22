@@ -2,7 +2,6 @@
 {
   imports = [
     ./boot
-    ./caddy
     ./calibre
     ./gaming
     ./greetd
@@ -10,6 +9,7 @@
     ./hyprland
     ./nvidia
     ./password-manager
+    ./secrets
     ./smb
     ./ssh
     ./stylix

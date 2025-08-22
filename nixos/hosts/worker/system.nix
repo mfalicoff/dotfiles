@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   workerHostname,
   ...
@@ -9,21 +10,6 @@
     ./hardware-configuration.nix
     ../../modules/system
   ];
-
-  sops = {
-    age.keyFile = "/home/mazilious/.config/sops/age/keys.txt";
-
-    secrets = {
-      miniflux-admin-credentials = {
-        sopsFile = ../../secrets/secrets.miniflux.yaml;
-      };
-      miniflux-oauth2 = {
-        sopsFile = ../../secrets/secrets.miniflux.yaml;
-        owner = "miniflux";
-        group = "miniflux";
-      };
-    };
-  };
 
   # Networking
   networking.networkmanager.enable = true;
@@ -61,12 +47,12 @@
   styling.stylix.enable = true;
   smb.enable = true;
   bootManager.enable = true;
-  reverseProxy.enable = true;
   sshServer.enable = true;
 
   homelab = {
     enable = true;
     services.enable = true;
     monitoring.enable = true;
+    reverseProxy.enable = true;
   };
 }
