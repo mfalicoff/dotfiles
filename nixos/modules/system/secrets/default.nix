@@ -20,6 +20,9 @@
           "karakeep-browsers.service"
         ];
       };
+      smb = {
+        sopsFile = ../../../secrets/secrets.smb.yaml;
+      };
       strava = {
         sopsFile = ../../../secrets/secrets.strava.yaml;
         restartUnits = [ "podman-statistics-for-strava.service" ];

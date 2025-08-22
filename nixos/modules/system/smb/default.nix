@@ -18,7 +18,7 @@ in
       device = "//192.168.2.41/media";
       fsType = "cifs";
       options = [
-        "credentials=/home/${username}/dotfiles/nixos/modules/system/smb/smb-secrets"
+        "credentials=${config.sops.secrets.smb.path}"
         "x-systemd.automount"
         "noauto"
         "uid=1000"
@@ -32,7 +32,7 @@ in
       device = "//192.168.2.41/appdata";
       fsType = "cifs";
       options = [
-        "credentials=/home/${username}/dotfiles/nixos/modules/system/smb/smb-secrets"
+        "credentials=${config.sops.secrets.smb.path}"
         "x-systemd.automount"
         "noauto"
         "uid=1000"
@@ -46,7 +46,7 @@ in
       device = "//192.168.2.41/documents";
       fsType = "cifs";
       options = [
-        "credentials=/home/${username}/dotfiles/nixos/modules/system/smb/smb-secrets"
+        "credentials=${config.sops.secrets.smb.path}"
         "x-systemd.automount"
         "noauto"
         "uid=1000"
@@ -60,7 +60,7 @@ in
       device = "//192.168.2.41/downloads";
       fsType = "cifs";
       options = [
-        "credentials=/home/${username}/dotfiles/nixos/modules/system/smb/smb-secrets"
+        "credentials=${config.sops.secrets.smb.path}"
         "x-systemd.automount"
         "noauto"
         "uid=1000"
@@ -74,7 +74,7 @@ in
       device = "//192.168.2.41/isos";
       fsType = "cifs";
       options = [
-        "credentials=/home/${username}/dotfiles/nixos/modules/system/smb/smb-secrets"
+        "credentials=${config.sops.secrets.smb.path}"
         "x-systemd.automount"
         "noauto"
         "uid=1000"
