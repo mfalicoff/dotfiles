@@ -35,7 +35,7 @@ in
     homelab.services.glance.monitorSites = [
       (mkGlanceMonitor {
         service = "${service}";
-        icon = "${service}-budget";
+        icon = "di:${service}-budget";
       })
     ];
 

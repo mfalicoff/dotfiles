@@ -4,9 +4,10 @@
   pkgs,
   ...
 }:
+# todo make a backup
 with lib;
 let
-  cfg = config.reverseProxy;
+  cfg = config.homelab.reverseProxy;
   unraid = "100.94.140.88";
   homeassistant = "100.118.232.49";
 
@@ -32,7 +33,7 @@ let
     };
 in
 {
-  options.reverseProxy = {
+  options.homelab.reverseProxy = {
     enable = mkEnableOption "Enable Caddy";
   };
 
@@ -47,7 +48,6 @@ in
       dataDir = "/var/lib/caddy";
 
       virtualHosts = {
-
         "affine.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:3210
@@ -293,9 +293,7 @@ in
       };
     };
 
-    systemd.services.caddy.serviceConfig.EnvironmentFile = [
-      "/home/mazilious/dotfiles/nixos/modules/system/caddy/.env"
-    ];
+    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets.caddy.path;
 
     _module.args = {
       mkCaddyVirtualHost = mkCaddyVirtualHost;
