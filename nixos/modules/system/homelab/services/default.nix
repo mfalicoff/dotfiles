@@ -35,6 +35,10 @@ in
         enable = true;
         port = 9000;
       };
+      byparr = {
+        enable = true;
+        port = 8191;
+      };
       glance = {
         enable = true;
         port = 5678;
@@ -50,6 +54,10 @@ in
       miniflux = {
         enable = true;
         port = 8900;
+      };
+      ownfoil = {
+        enable = true;
+        port = 8465;
       };
       paperless = {
         enable = true;
