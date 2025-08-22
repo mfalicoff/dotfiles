@@ -1,9 +1,10 @@
 # Add this to your NixOS configuration.nix or as a separate module
 
-{ config, lib, ... }:
+{ config, lib, mkCaddyVirtualHost,... }:
 with lib;
 let
   cfg = config.homelab.services.glance;
+  service = "glance";
   mkGlanceMonitor =
     {
       service,
@@ -26,6 +27,10 @@ in
 {
   options.homelab.services.glance = {
     enable = mkEnableOption "Enable glance";
+    port = mkOption {
+      type = types.port;
+      description = "port to use";
+    };
 
     monitorSites = mkOption {
       type = types.listOf (
@@ -57,12 +62,13 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.glance = {
+    services.${service} = {
       enable = true;
 
       settings = {
         server = {
           host = "0.0.0.0";
+          port = cfg.port;
         };
 
         pages = [
@@ -206,21 +212,12 @@ in
     };
 
     homelab.monitoring.targets = [
-      {
-        target = "https://glance.caddy.mazilious.org";
-        service = "glance";
-      }
+      (mkMonitoringTarget { service = service; })
     ];
 
-    services.caddy.virtualHosts = {
-      "glance.caddy.mazilious.org" = {
-        extraConfig = ''
-          reverse_proxy http://100.104.27.77:${toString config.services.glance.settings.server.port}
-          tls {
-            dns cloudflare {env.CF_API_TOKEN}
-          }
-        '';
-      };
+    services.caddy.virtualHosts = mkCaddyVirtualHost {
+      service = service;
+      port = cfg.port;
     };
 
     _module.args = {
