@@ -33,7 +33,10 @@ in
     };
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = "${service}"; icon = "${service}-budget"; })
+      (mkGlanceMonitor {
+        service = "${service}";
+        icon = "${service}-budget";
+      })
     ];
 
     homelab.monitoring.targets = [

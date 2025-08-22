@@ -1,6 +1,12 @@
 # Add this to your NixOS configuration.nix or as a separate module
 
-{ config, lib, mkCaddyVirtualHost,... }:
+{
+  config,
+  lib,
+  mkCaddyVirtualHost,
+  mkMonitoringTarget,
+  ...
+}:
 with lib;
 let
   cfg = config.homelab.services.glance;
