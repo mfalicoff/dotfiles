@@ -25,27 +25,21 @@ in
   config = mkIf cfg.enable {
     services.${service} = {
       enable = true;
-      adminCredentialsFile = config.sops.secrets.miniflux-admin-credentials.path;
+      adminCredentialsFile = config.sops.secrets.miniflux.path;
 
       config = {
         LISTEN_ADDR = "0.0.0.0:8900";
         BASE_URL = "https://${service}.caddy.mazilious.org";
-
-        # OAuth2/SSO Configuration
-        OAUTH2_PROVIDER = "oidc";
-        OAUTH2_OIDC_PROVIDER_NAME = "Pocket";
-        OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://pocket.local.mazilious.org";
-        OAUTH2_REDIRECT_URL = "https://miniflux.caddy.mazilious.org/oauth2/oidc/callback";
-        OAUTH2_CLIENT_ID = "2d3afb27-1046-474d-8c08-5217179268c5";
-        OAUTH2_CLIENT_SECRET_FILE = config.sops.secrets.miniflux-oauth2.path;
-        OAUTH2_USER_CREATION = "1";
       };
     };
 
     services.postgresqlBackup.databases = [ "miniflux" ];
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = service; })
+      (mkGlanceMonitor {
+        service = service;
+        icon = "di:${service}-light";
+      })
     ];
 
     homelab.monitoring.targets = [
