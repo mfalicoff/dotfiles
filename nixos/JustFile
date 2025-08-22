@@ -84,3 +84,6 @@ create-secret file:
 edit-secret file:
     nix-shell -p sops --run "sops secrets/secrets.{{file}}.yaml"
 
+update-keys file:
+    nix-shell -p sops --run "sops updatekeys secrets/secrets.{{file}}.yaml"
+
