@@ -21,7 +21,6 @@ let
       target = "https://${subdomain}.${domain}";
       service = targetService;
     };
-
 in
 {
   options.homelab.monitoring.grafana = {

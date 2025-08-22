@@ -34,9 +34,11 @@ in
 
       settings = {
         PAPERLESS_URL = "https://paperless.caddy.mazilious.org";
+        PAPERLESS_CONSUMER_POLLING = 60;
       };
     };
-
+    users.users.paperless.group = "paperless";
+    users.groups.paperless = { };
     users.users.paperless.extraGroups = [ "users" ];
 
     homelab.services.glance.monitorSites = [
@@ -62,5 +64,4 @@ in
       port = cfg.port;
     };
   };
-
 }
