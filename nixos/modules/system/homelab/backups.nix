@@ -14,9 +14,15 @@ with lib; let
     dbHost ? "localhost",
   }: {
     paths = paths;
-    repo = "/mnt/appdata/nixos/backups/${services}";
+    repo = "${config.smb.paths.documents}/nixos/${services}";
     doInit = true;
     encryption.mode = "none";
+    prune.keep = {
+      within = "1d"; # Keep all archives from the last day
+      daily = 7;
+      weekly = 4;
+      monthly = -1;  # Keep at least one archive for each month
+    };
     exclude = [
       "*/logs/*"
       "*/Backups/*"

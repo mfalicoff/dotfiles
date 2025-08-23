@@ -51,6 +51,7 @@
 
   homelab = {
     enable = true;
+    backups.enable = true;
     services.enable = true;
     monitoring.enable = true;
     reverseProxy.enable = true;

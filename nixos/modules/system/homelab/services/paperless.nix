@@ -29,8 +29,8 @@ in
       address = "0.0.0.0";
 
       database.createLocally = true;
-      consumptionDir = "/mnt/documents/paperless/consume";
-      mediaDir = "/mnt/documents/paperless/media";
+      consumptionDir = "${config.smb.paths.documents}/paperless/consume";
+      mediaDir = "${config.smb.paths.documents}/paperless/media";
 
       settings = {
         PAPERLESS_URL = "https://paperless.caddy.mazilious.org";
