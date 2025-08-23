@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   ...
 }:
@@ -8,7 +9,6 @@ let
   cfg = config.development.editors.neovim;
 in
 {
-  # imports = [ inputs.nixvim.homeManagerModules.nixvim ];
   options.development.editors.neovim = {
     enable = mkEnableOption "Enable Neovim";
   };
@@ -169,14 +169,16 @@ in
         # LSP UI improvements
         lspkind = {
           enable = true;
-          cmp = {
-            enable = true;
-            menu = {
-              nvim_lsp = "[LSP]";
-              nvim_lua = "[Lua]";
-              path = "[Path]";
-              luasnip = "[Snippet]";
-              buffer = "[Buffer]";
+          settings = {
+            cmp = {
+              enable = true;
+              menu = {
+                nvim_lsp = "[LSP]";
+                nvim_lua = "[Lua]";
+                path = "[Path]";
+                luasnip = "[Snippet]";
+                buffer = "[Buffer]";
+              };
             };
           };
         };
@@ -243,17 +245,27 @@ in
         # File explorer
         nvim-tree = {
           enable = true;
-          disableNetrw = true;
-          hijackNetrw = true;
-          hijackCursor = true;
-          syncRootWithCwd = true;
-          respectBufCwd = true;
-          updateFocusedFile.enable = true;
-          diagnostics.enable = true;
-          git.enable = true;
-          renderer = {
-            highlightGit = true;
-            icons.gitPlacement = "before";
+          settings = {
+            disable_netrw = true;
+            hijack_netrw = true;
+            hijack_cursor = true;
+            sync_root_with_cwd = true;
+            respect_buf_cwd = true;
+            update_focused_file = {
+              enable = true;
+            };
+            diagnostics = {
+              enable = true;
+            };
+            git = {
+              enable = true;
+            };
+            renderer = {
+              highlight_git = true;
+              icons = {
+                git_placement = "before";
+              };
+            };
           };
         };
 
