@@ -16,7 +16,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      greetd.tuigreet
+      tuigreet
     ];
 
     services = {
@@ -25,7 +25,7 @@ in
         settings = {
           default_session = {
             user = username;
-            command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+            command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
           };
         };
       };

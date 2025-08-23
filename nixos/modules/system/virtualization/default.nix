@@ -4,9 +4,11 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.virt;
-in {
+in
+{
   options.virt = {
     enable = mkEnableOption "Enable Virtualisation";
   };
@@ -17,7 +19,7 @@ in {
 
     # virt manager
     programs.virt-manager.enable = true;
-    users.groups.libvirtd.members = [username];
+    users.groups.libvirtd.members = [ username ];
     virtualisation.libvirtd.enable = true;
     virtualisation.spiceUSBRedirection.enable = true;
 
@@ -28,9 +30,9 @@ in {
       defaultNetwork.settings.dns_enabled = true;
     };
 
-    networking.firewall.interfaces."podman+".allowedUDPPorts = [53];
+    networking.firewall.interfaces."podman+".allowedUDPPorts = [ 53 ];
     virtualisation.oci-containers.backend = "podman";
 
-    users.users."${username}".extraGroups = ["libvirtd"];
+    users.users."${username}".extraGroups = [ "libvirtd" ];
   };
 }

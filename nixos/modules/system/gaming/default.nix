@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.gaming;
-in {
+in
+{
   options.gaming = {
     enable = mkEnableOption "Enable Gaming";
   };
@@ -15,7 +17,7 @@ in {
     environment.systemPackages = with pkgs; [
       ryubing
       (lutris.override {
-        extraPkgs = pkgs: [];
+        extraPkgs = pkgs: [ ];
       })
     ];
 
@@ -24,7 +26,7 @@ in {
 
     services.sunshine = {
       enable = true;
-      package = pkgs.sunshine.override {cudaSupport = true;};
+      package = pkgs.sunshine.override { cudaSupport = true; };
       autoStart = true;
       capSysAdmin = true;
       openFirewall = true;
