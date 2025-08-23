@@ -14,7 +14,7 @@ with lib; let
     dbHost ? "localhost",
   }: {
     paths = paths;
-    repo = "${config.smb.paths.documents}/nixos/${services}";
+    repo = "${config.smb.paths.backups}/nixos/homelab/${services}";
     doInit = true;
     encryption.mode = "none";
     prune.keep = {
@@ -30,6 +30,9 @@ with lib; let
     ];
     compression = "auto,zstd";
     startAt = "daily";
+      preHook = ''
+      mkdir -p ${config.smb.paths.backups}/nixos/homelab/${services}
+    '';
   };
 in {
   options.homelab.backups = {
