@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.shellOptions;
-in {
+in
+{
   imports = [
     ./shell.nix
     ./tmux.nix

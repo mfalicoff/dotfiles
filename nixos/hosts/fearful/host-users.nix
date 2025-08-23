@@ -20,6 +20,6 @@
   environment.shells = [
     pkgs.zsh
   ];
-  nix.settings.trusted-users = [username];
+  nix.settings.trusted-users = [ username ];
   programs.zsh.enable = true;
 }

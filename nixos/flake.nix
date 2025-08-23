@@ -55,6 +55,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
     nix-std.url = "github:chessai/nix-std";
   };
 
@@ -66,6 +69,7 @@
     home-manager-darwin,
     nix-std,
     nixvim,
+    sops-nix,
     ...
   }: let
     # Shared variables
@@ -75,11 +79,20 @@
     laptopHostname = "laptop";
     workerHostname = "worker";
     darwinHostname = "fearful";
-    isDarwin = system: (builtins.elem system ["aarch64-darwin" "x86_64-darwin"]);
+    isDarwin = system: (builtins.elem system [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ]);
 
     # Shared special args
     sharedSpecialArgs = {
-      inherit username desktopHostname darwinHostname laptopHostname workerHostname;
+      inherit
+        username
+        desktopHostname
+        darwinHostname
+        laptopHostname
+        workerHostname
+        ;
       inherit inputs;
       inherit isDarwin;
     };
@@ -90,6 +103,7 @@
       system = "x86_64-linux";
       modules = [
         inputs.stylix.nixosModules.stylix
+        sops-nix.nixosModules.sops
         ./nix-core.nix
         ./hosts/fear/system.nix
         inputs.home-manager.nixosModules.home-manager
@@ -99,7 +113,12 @@
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./hosts/fear/home.nix;
         }
-        {nixpkgs.overlays = [inputs.hyprpanel.overlay inputs.nur.overlays.default];}
+        {
+          nixpkgs.overlays = [
+            inputs.hyprpanel.overlay
+            inputs.nur.overlays.default
+          ];
+        }
       ];
     };
 
@@ -117,7 +136,12 @@
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./hosts/laptop/home.nix;
         }
-        {nixpkgs.overlays = [inputs.hyprpanel.overlay inputs.nur.overlays.default];}
+        {
+          nixpkgs.overlays = [
+            inputs.hyprpanel.overlay
+            inputs.nur.overlays.default
+          ];
+        }
       ];
     };
 
@@ -126,6 +150,7 @@
       system = "x86_64-linux";
       modules = [
         inputs.stylix.nixosModules.stylix
+        sops-nix.nixosModules.sops
         ./nix-core.nix
         ./hosts/worker/system.nix
         inputs.home-manager.nixosModules.home-manager

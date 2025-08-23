@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.shellOptions;
-in {
+in
+{
   options.shellOptions.shell = {
     enable = mkEnableOption "Enable Shell";
   };

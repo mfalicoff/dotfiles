@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.tools;
-in {
+in
+{
   options.development.tools = {
     enable = mkEnableOption "Enable Tools";
 
@@ -24,44 +26,45 @@ in {
 
     exclude = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "List of package names to exclude from installation";
     };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; let
-      cliPackages = [
-        azure-cli
-        direnv
-        lazygit
-        just
-        gcc
-        k9s
-        killport
-        kubectl
-        lazydocker
-        kubeseal
-        jq
-        uv
-      ];
+    home.packages =
+      with pkgs;
+      let
+        cliPackages = [
+          age
+          azure-cli
+          compose2nix
+          direnv
+          lazygit
+          just
+          gcc
+          k9s
+          killport
+          kubectl
+          lazydocker
+          nixfmt-rfc-style
+          kubeseal
+          jq
+          uv
+        ];
 
-      guiPackages = [
-        gitkraken
-        yaak
-      ];
+        guiPackages = [
+          gitkraken
+          yaak
+        ];
 
-      selectedPackages =
-        []
-        ++ (optionals cfg.enableCli cliPackages)
-        ++ (optionals cfg.enableGui guiPackages);
+        selectedPackages =
+          [ ] ++ (optionals cfg.enableCli cliPackages) ++ (optionals cfg.enableGui guiPackages);
 
-      filteredPackages =
-        builtins.filter (
+        filteredPackages = builtins.filter (
           p: !(builtins.elem (lib.getName p) cfg.exclude)
-        )
-        selectedPackages;
-    in
+        ) selectedPackages;
+      in
       filteredPackages;
 
     programs.direnv = {

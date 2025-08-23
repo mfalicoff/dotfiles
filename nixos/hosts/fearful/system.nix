@@ -1,4 +1,5 @@
-{darwinHostname, ...}: {
+{ darwinHostname, ... }:
+{
   imports = [
     ../../modules/system/stylix
     ../../modules/system/homebrew

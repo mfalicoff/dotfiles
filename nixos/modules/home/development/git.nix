@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.git;
-in {
+in
+{
   options.development.git = {
     enable = mkEnableOption "Enable Git configuration";
 
@@ -41,7 +43,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
       rm -f ~/.gitconfig
     '';
 

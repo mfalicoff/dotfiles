@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.bootManager;
-in {
+in
+{
   options.bootManager = {
     enable = mkEnableOption "Enable Boot Manager";
   };

@@ -4,9 +4,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wm.hyprland;
-in {
+in
+{
   options.wm.hyprland = {
     enable = mkEnableOption "Enable Hyprland";
   };

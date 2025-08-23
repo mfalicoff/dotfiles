@@ -1,8 +1,10 @@
 {
+  config,
   inputs,
   workerHostname,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.default
     ./hardware-configuration.nix
@@ -43,7 +45,15 @@
 
   # Custom
   styling.stylix.enable = true;
+  smb.enable = true;
   bootManager.enable = true;
-  reverseProxy.enable = true;
   sshServer.enable = true;
+
+  homelab = {
+    enable = true;
+    backups.enable = true;
+    services.enable = true;
+    monitoring.enable = true;
+    reverseProxy.enable = true;
+  };
 }

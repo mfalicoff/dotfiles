@@ -1,0 +1,7 @@
+name: "byparr"
+services:
+    byparr:
+        shm_size: 2gb
+        ports:
+            - 8191:8191
+        image: ghcr.io/thephaseless/byparr:v1.2.1

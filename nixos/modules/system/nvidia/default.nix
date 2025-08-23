@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.hardware.graphics.nvidia;
-in {
+in
+{
   options.hardware.graphics.nvidia = {
     enable = mkEnableOption "NVIDIA graphics drivers and custom settings";
 
@@ -91,7 +93,7 @@ in {
   config = mkIf cfg.enable {
     hardware.graphics.enable = true;
 
-    services.xserver.videoDrivers = ["nvidia"];
+    services.xserver.videoDrivers = [ "nvidia" ];
 
     hardware.nvidia = {
       modesetting.enable = cfg.enableModesetting;

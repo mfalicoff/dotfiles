@@ -4,12 +4,36 @@
   pkgs,
   ...
 }:
-with lib; let
-  cfg = config.reverseProxy;
+# todo make a backup
+with lib;
+let
+  cfg = config.homelab.reverseProxy;
   unraid = "100.94.140.88";
   homeassistant = "100.118.232.49";
-in {
-  options.reverseProxy = {
+
+  mkCaddyVirtualHost =
+    {
+      service,
+      port,
+      subdomain ? service,
+      domain ? "caddy.mazilious.org",
+      targetHost ? "100.104.27.77",
+      dnsProvider ? "cloudflare",
+      envVar ? "CF_API_TOKEN",
+    }:
+    {
+      "${subdomain}.${domain}" = {
+        extraConfig = ''
+          reverse_proxy http://${targetHost}:${toString port}
+          tls {
+            dns ${dnsProvider} {env.${envVar}}
+          }
+        '';
+      };
+    };
+in
+{
+  options.homelab.reverseProxy = {
     enable = mkEnableOption "Enable Caddy";
   };
 
@@ -17,14 +41,13 @@ in {
     services.caddy = {
       enable = true;
       package = pkgs.caddy.withPlugins {
-        plugins = ["github.com/caddy-dns/cloudflare@v0.2.1"];
-        hash = "sha256-2D7dnG50CwtCho+U+iHmSj2w14zllQXPjmTHr6lJZ/A=";
+        plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
+        hash = "sha256-S1JN7brvH2KIu7DaDOH1zij3j8hWLLc0HdnUc+L89uU=";
       };
       logDir = "/var/log/caddy";
       dataDir = "/var/lib/caddy";
 
       virtualHosts = {
-
         "affine.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:3210
@@ -73,6 +96,15 @@ in {
         "daawarich.local.mazilious.org" = {
           extraConfig = ''
             reverse_proxy http://${unraid}:3008
+            tls {
+              dns cloudflare {env.CF_API_TOKEN}
+            }
+          '';
+        };
+
+        "excalidraw.local.mazilious.org" = {
+          extraConfig = ''
+            reverse_proxy http://${unraid}:5432
             tls {
               dns cloudflare {env.CF_API_TOKEN}
             }
@@ -261,6 +293,10 @@ in {
       };
     };
 
-    systemd.services.caddy.serviceConfig.EnvironmentFile = ["/home/mazilious/dotfiles/nixos/modules/system/caddy/.env"];
+    systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets.caddy.path;
+
+    _module.args = {
+      mkCaddyVirtualHost = mkCaddyVirtualHost;
+    };
   };
 }

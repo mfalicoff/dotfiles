@@ -4,9 +4,11 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.sshServer;
-in {
+in
+{
   options.sshServer = {
     enable = mkEnableOption "Enable ssh server";
   };
@@ -14,7 +16,7 @@ in {
   config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
-      ports = [22];
+      ports = [ 22 ];
       settings = {
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;

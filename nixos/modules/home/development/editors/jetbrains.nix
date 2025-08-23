@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.development.editors.jetbrains;
-in {
+in
+{
   options.development.editors.jetbrains = {
     enable = mkEnableOption "Enable JetBrains IDEs";
     rider = mkEnableOption "Enable JetBrains Rider";
@@ -21,7 +23,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs.jetbrains;
+    home.packages =
+      with pkgs.jetbrains;
       (optional cfg.rider rider)
       ++ (optional cfg.webstorm webstorm)
       ++ (optional cfg.intellij idea-ultimate)

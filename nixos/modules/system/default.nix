@@ -1,13 +1,15 @@
-{...}: {
+{ ... }:
+{
   imports = [
     ./boot
-    ./caddy
     ./calibre
     ./gaming
     ./greetd
+    ./homelab
     ./hyprland
     ./nvidia
     ./password-manager
+    ./secrets
     ./smb
     ./ssh
     ./stylix

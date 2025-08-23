@@ -3,9 +3,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.windowManager;
-in {
+in
+{
   imports = [
     ./aerospace
     ./hyprland

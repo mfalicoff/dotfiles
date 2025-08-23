@@ -1,0 +1,17 @@
+name: "strava-statistics"
+services:
+  app:
+    image: robiningelbrecht/strava-statistics:3.2.5
+    container_name: statistics-for-strava
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - /mnt/user/appdata/strava/config:/var/www/config/app
+      - /mnt/user/appdata/strava/build:/var/www/build
+      - /mnt/user/appdata/strava/storage/database:/var/www/storage/database
+      - /mnt/user/appdata/strava/storage/files:/var/www/storage/files
+      - /mnt/user/appdata/strava/refresh.sh:/bin/refresh.sh
+    env_file: .env
+    ports:
+      - 8480:8080
