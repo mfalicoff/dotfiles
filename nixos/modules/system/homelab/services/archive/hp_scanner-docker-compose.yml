@@ -1,0 +1,15 @@
+name: "hp-scanner"
+services:
+  hp_scanner:
+    image: manuc66/node-hp-scan-to
+    container_name: hp-scanner
+    environment:
+      - IP=192.168.2.56
+      - LABEL=scan
+      - PATTERN="scan"_dd.mm.yyyy_hh:MM:ss
+      - PGID=1000
+      - PUID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/user/appdata/paperless/consume:/scan
+    restart: always

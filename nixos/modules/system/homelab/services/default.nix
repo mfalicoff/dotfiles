@@ -14,6 +14,7 @@ in
     ./byparr.nix
     ./glance.nix
     ./jellyseerr.nix
+    ./hp_scanner.nix
     ./karakeep.nix
     ./miniflux.nix
     ./opencloud.nix
@@ -43,6 +44,10 @@ in
       glance = {
         enable = true;
         port = 5678;
+      };
+      hp_scanner = {
+        enable = true;
+        port = 4005;
       };
       jellyseerr = {
         enable = true;
