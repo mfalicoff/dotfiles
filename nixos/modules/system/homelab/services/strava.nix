@@ -45,7 +45,7 @@ in
     ];
 
     virtualisation.oci-containers.containers."statistics-for-strava" = {
-      image = "robiningelbrecht/strava-statistics:v3.2.5";
+      image = "robiningelbrecht/strava-statistics:v3.2.7";
       environmentFiles = [ config.sops.secrets.strava.path ];
       volumes = [
         "/var/lib/strava/build:/var/www/build"

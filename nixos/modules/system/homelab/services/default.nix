@@ -16,6 +16,7 @@ in
     ./jellyseerr.nix
     ./karakeep.nix
     ./miniflux.nix
+    ./opencloud.nix
     ./ownfoil.nix
     ./paperless.nix
     ./prowlarr.nix
@@ -54,6 +55,10 @@ in
       miniflux = {
         enable = true;
         port = 8900;
+      };
+      opencloud = {
+        enable = true;
+        port = 8976;
       };
       ownfoil = {
         enable = true;
@@ -106,23 +111,8 @@ in
           domain = "local.mazilious.org";
         })
         (mkGlanceMonitor {
-          service = "navidrome";
-          icon = "di:navidrome";
-          domain = "local.mazilious.org";
-        })
-        (mkGlanceMonitor {
           service = "affine";
           icon = "di:affine";
-          domain = "local.mazilious.org";
-        })
-        (mkGlanceMonitor {
-          service = "owncloud";
-          icon = "di:owncloud";
-          domain = "local.mazilious.org";
-        })
-        (mkGlanceMonitor {
-          service = "paperless";
-          icon = "di:paperless";
           domain = "local.mazilious.org";
         })
         (mkGlanceMonitor {
@@ -133,6 +123,26 @@ in
         (mkGlanceMonitor {
           service = "unraid";
           icon = "di:unraid";
+          domain = "local.mazilious.org";
+        })
+        (mkGlanceMonitor {
+          service = "code";
+          icon = "di:vscode";
+          domain = "local.mazilious.org";
+        })
+        (mkGlanceMonitor {
+          service = "excalidraw";
+          icon = "di:excalidraw";
+          domain = "local.mazilious.org";
+        })
+        (mkGlanceMonitor {
+          service = "excalidraw";
+          icon = "di:excalidraw";
+          domain = "local.mazilious.org";
+        })
+        (mkGlanceMonitor {
+          service = "daawarich";
+          icon = "di:daawarich";
           domain = "local.mazilious.org";
         })
       ];
