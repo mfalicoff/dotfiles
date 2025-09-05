@@ -108,6 +108,7 @@ in
       (mkGlanceMonitor {
         service = "scanner";
         icon = "di:printer";
+        path = "health";
       })
     ];
 
