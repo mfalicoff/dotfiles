@@ -27,7 +27,7 @@ in
       enable = true;
       port = cfg.port;
       address = "0.0.0.0";
-      domain = "https://paperless.caddy.mazilious.org";
+      domain = "paperless.caddy.mazilious.org";
       database.createLocally = true;
       consumptionDir = "${config.smb.paths.documents}/paperless/consume";
       mediaDir = "${config.smb.paths.documents}/paperless/media";

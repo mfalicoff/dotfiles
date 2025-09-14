@@ -16,7 +16,7 @@ in
   config = mkIf cfg.enable {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
       terminal = "${pkgs.alacritty}/bin/alacritty";
 
       extraConfig = {
