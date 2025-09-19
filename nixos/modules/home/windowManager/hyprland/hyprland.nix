@@ -120,9 +120,9 @@ in
         };
 
         # Gesture settings
-        gestures = {
-          workspace_swipe = false;
-        };
+        # gestures = {
+        #   workspace_swipe = false;
+        # };
 
         # Device-specific settings
         device = {
