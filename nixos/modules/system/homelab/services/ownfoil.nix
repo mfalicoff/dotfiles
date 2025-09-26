@@ -41,7 +41,7 @@ in
 
     # Containers
     virtualisation.oci-containers.containers."ownfoil" = {
-      image = "a1ex4/ownfoil:2.1.2";
+      image = "a1ex4/ownfoil:2.1.3";
       volumes = [
         "/var/lib/ownfoil/config:/app/config"
         "/mnt/media/games/bios/switch:/bios"

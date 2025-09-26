@@ -22,7 +22,9 @@
   };
 
   home.packages = with pkgs; [
-    affine
+    (pkgs.affine.override {
+      electron_35 = pkgs.electron;
+    })
     insync
     insync-nautilus
     vlc

@@ -26,7 +26,7 @@ in
   config = mkIf cfg.enable {
     # Containers
     virtualisation.oci-containers.containers."byparr-byparr" = {
-      image = "ghcr.io/thephaseless/byparr:camoufox";
+      image = "ghcr.io/thephaseless/byparr:2.0.1";
       ports = [ "${toString cfg.port}:8191/tcp" ];
       log-driver = "journald";
       extraOptions = [
