@@ -39,7 +39,6 @@
     enable = true;
     firefox.enable = true;
     chrome.enable = true;
-    zen.enable = true;
   };
 
   rofi.enable = true;
