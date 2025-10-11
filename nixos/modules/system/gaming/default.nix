@@ -19,6 +19,7 @@ in
       (lutris.override {
         extraPkgs = pkgs: [ ];
       })
+      pcsx2
     ];
 
     programs.steam.enable = true;

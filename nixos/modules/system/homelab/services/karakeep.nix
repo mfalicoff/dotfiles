@@ -35,7 +35,7 @@ in
       environmentFile = config.sops.secrets.karakeep-oauth2.path;
     };
 
-    # services.meilisearch.package = pkgs.meilisearch;
+    services.meilisearch.package = pkgs.meilisearch;
     services.meilisearch.enable = mkDefault false;
 
     homelab.services.glance.monitorSites = [
