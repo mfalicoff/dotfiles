@@ -36,7 +36,7 @@ in
     };
 
     services.meilisearch.package = pkgs.meilisearch;
-    services.meilisearch.enable = mkDefault false;
+    # services.meilisearch.enable = mkDefault false;
 
     homelab.services.glance.monitorSites = [
       (mkGlanceMonitor {
