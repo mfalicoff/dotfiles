@@ -5,34 +5,30 @@
   ...
 }:
 # todo make a backup
-with lib;
-let
+with lib; let
   cfg = config.homelab.reverseProxy;
   unraid = "100.94.140.88";
   homeassistant = "100.118.232.49";
 
-  mkCaddyVirtualHost =
-    {
-      service,
-      port,
-      subdomain ? service,
-      domain ? "caddy.mazilious.org",
-      targetHost ? "100.104.27.77",
-      dnsProvider ? "cloudflare",
-      envVar ? "CF_API_TOKEN",
-    }:
-    {
-      "${subdomain}.${domain}" = {
-        extraConfig = ''
-          reverse_proxy http://${targetHost}:${toString port}
-          tls {
-            dns ${dnsProvider} {env.${envVar}}
-          }
-        '';
-      };
+  mkCaddyVirtualHost = {
+    service,
+    port,
+    subdomain ? service,
+    domain ? "caddy.mazilious.org",
+    targetHost ? "100.104.27.77",
+    dnsProvider ? "cloudflare",
+    envVar ? "CF_API_TOKEN",
+  }: {
+    "${subdomain}.${domain}" = {
+      extraConfig = ''
+        reverse_proxy http://${targetHost}:${toString port}
+        tls {
+          dns ${dnsProvider} {env.${envVar}}
+        }
+      '';
     };
-in
-{
+  };
+in {
   options.homelab.reverseProxy = {
     enable = mkEnableOption "Enable Caddy";
   };
@@ -41,8 +37,8 @@ in
     services.caddy = {
       enable = true;
       package = pkgs.caddy.withPlugins {
-        plugins = [ "github.com/caddy-dns/cloudflare@v0.2.1" ];
-        hash = "sha256-XwZ0Hkeh2FpQL/fInaSq+/3rCLmQRVvwBM0Y1G1FZNU";
+        plugins = ["github.com/caddy-dns/cloudflare@v0.2.1"];
+        hash = "sha256-iRzpN9awuEFsc7hqKzOMNiCFFEv833xhd4LM+VFQedI";
       };
       logDir = "/var/log/caddy";
       dataDir = "/var/lib/caddy";
