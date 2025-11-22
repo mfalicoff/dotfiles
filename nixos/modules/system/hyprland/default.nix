@@ -4,11 +4,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.wm.hyprland;
-in
-{
+in {
   options.wm.hyprland = {
     enable = mkEnableOption "Enable Hyprland";
   };
@@ -20,6 +18,7 @@ in
       swaylock
       hyprshot
       wlr-randr
+      clipse
     ];
 
     xdg.portal = {

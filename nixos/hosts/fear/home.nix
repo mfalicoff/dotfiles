@@ -3,8 +3,7 @@
   pkgs,
   username,
   ...
-}:
-{
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
     ../../modules/home
@@ -23,7 +22,7 @@
 
   home.packages = with pkgs; [
     (pkgs.affine.override {
-      electron_35 = pkgs.electron;
+      # electron_35 = pkgs.electron;
     })
     insync
     insync-nautilus
@@ -32,7 +31,7 @@
     spotify-player
     tauon
     strawberry
-    owncloud-client
+    opencloud-desktop
   ];
 
   browsers = {
@@ -62,6 +61,7 @@
         ];
         exec-once = [
           "hyprctl dispatch dpms off DP-2"
+          "clipse -listen"
         ];
       };
 

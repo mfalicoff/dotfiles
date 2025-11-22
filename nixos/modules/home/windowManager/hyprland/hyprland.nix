@@ -3,21 +3,19 @@
   lib,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.windowManager.wayland.hyprland;
-in
-{
+in {
   options.windowManager.wayland.hyprland = {
     enable = mkEnableOption "Enable Hyprland window manager configuration";
     monitors = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = "Monitor configuration";
     };
     exec-once = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = "Exec once";
     };
   };
@@ -131,7 +129,11 @@ in
         };
 
         # Window rules
-        windowrulev2 = "suppressevent maximize, class:.*";
+        windowrulev2 = [
+          "suppressevent maximize, class:.*"
+          "float,class:(clipse)"
+          "size 622 652,class:(clipse)"
+        ];
 
         # Binds
         binds = {
@@ -216,6 +218,9 @@ in
           "$mainMod, F1, exec, set-normal"
           "$mainMod, F2, exec, set-1440"
           "$mainMod, F3, exec, set-1080"
+
+          # Clipboard
+          "$mainMod SHIFT, V, exec, kitty --class clipse -e 'clipse'"
         ];
 
         # Workspace rules

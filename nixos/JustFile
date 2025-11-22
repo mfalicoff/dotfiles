@@ -25,6 +25,10 @@ darwin-debug hostname=hostname:
     nix build .#darwinConfigurations.{{hostname}}.system --show-trace --verbose {{nix_flags}}
     ./result/sw/bin/darwin-rebuild switch --flake .#{{hostname}} --show-trace --verbose
 
+# Deploy NixOS configuration to remote host
+deploy flake host:
+    nh os switch ~/dotfiles/nixos#{{flake}} -H {{host}} --ask
+
 # Update all flake inputs
 update:
     nix flake update
@@ -86,4 +90,3 @@ edit-secret file:
 
 update-keys file:
     nix-shell -p sops --run "sops updatekeys secrets/secrets.{{file}}.yaml"
-
