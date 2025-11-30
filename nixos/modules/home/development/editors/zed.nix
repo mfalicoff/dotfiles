@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.development.editors.zed;
-in
-{
+in {
   options.development.editors.zed = {
     enable = mkEnableOption "Enable Zed Editor";
     extensions = mkOption {
@@ -37,7 +35,7 @@ in
     programs.zed-editor = {
       enable = true;
       extensions = cfg.extensions;
-      extraPackages = [ ];
+      extraPackages = [];
       ## everything inside of these brackets are Zed options.
       userSettings = {
         assistant = {
@@ -66,7 +64,7 @@ in
             };
           };
           env = {
-            TERM = "alacritty";
+            TERM = "kitty";
           };
           font_family = "FiraCode Nerd Font";
           font_features = null;
@@ -138,7 +136,7 @@ in
             };
           };
           Nix = {
-            language_servers = [ "nixd" ];
+            language_servers = ["nixd"];
             formatter = {
               external = {
                 command = "alejandra";

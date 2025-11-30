@@ -3,10 +3,10 @@
   pkgs,
   username,
   ...
-}:
-{
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
+    inputs.mac-app-util.homeManagerModules.default
     ../../modules/home
   ];
 
@@ -19,16 +19,18 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  programs.nh = {
+    enable = true;
+  };
+
   home.packages = with pkgs; [
-    raycast
-    discord
     spotify-player
   ];
 
   browsers = {
     enable = true;
     firefox.enable = false; # using brew because it can integrate with 1password
-    chrome.enable = true;
+    chrome.enable = false;
   };
 
   shellOptions = {
@@ -50,7 +52,7 @@
       enable = false;
     };
     editors = {
-      zed.enable = true;
+      zed.enable = false;
       vscode.enable = true;
     };
   };

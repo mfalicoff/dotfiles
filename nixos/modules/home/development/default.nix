@@ -3,11 +3,9 @@
   lib,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.development;
-in
-{
+in {
   imports = [
     ./editors
     ./git.nix

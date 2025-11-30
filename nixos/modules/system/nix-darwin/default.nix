@@ -40,17 +40,8 @@
     defaults = {
       # customize dock
       dock = {
-        autohide = false;
+        autohide = true;
         show-recents = false; # disable recent apps
-
-        persistent-apps = [
-          "/Applications/Firefox.app"
-          "/Users/mazilious/Applications/Nix Trampolines/Kitty.app"
-          "/Applications/Gitkraken.app"
-          "/Users/mazilious/Applications/Rider.app"
-          "/Users/mazilious/Applications/Nix Trampolines/Zed.app"
-          "/Applications/Yaak.app"
-        ];
       };
 
       # customize finder

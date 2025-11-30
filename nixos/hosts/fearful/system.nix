@@ -1,5 +1,4 @@
-{ darwinHostname, ... }:
-{
+{darwinHostname, ...}: {
   imports = [
     ../../modules/system/stylix
     ../../modules/system/homebrew
@@ -29,28 +28,63 @@
       "go"
     ];
     casks = [
+      # Security & Authentication
       "1password"
       "1password-cli"
-      "calibre"
+      "yubico-authenticator"
+
+      # Browsers
       "firefox"
       "google-chrome"
-      "only-switch"
+      "zen"
+
+      # Productivity & Notes
+      "affine"
+      "raycast"
+
+      # Media & Entertainment
+      "calibre"
+      "discord"
+      "spotify"
+
+      # Cloud Storage & Sync
+      "insync"
+      "opencloud"
       "proton-mail"
+
+      # System Utilities
+      "only-switch"
       "stats"
+      "android-file-transfer"
+
+      # Virtualization
       "vmware-fusion"
 
-      # dev
+      # Fitness & Health
+      "garmin-express"
+
+      # Development Tools
       "dotnet-sdk"
+      "ghostty"
       "gitkraken"
       "jetbrains-toolbox"
       "orbstack"
       "yaak"
+      "zed"
+      "mongodb-compass"
     ];
     appStoreApps = {
+      # Productivity
       Amphetamine = 937984704;
-      Tailscale = 1475387142;
-      Infuse = 1136220934;
       AutoMounter = 1160435653;
+
+      # Networking
+      Tailscale = 1475387142;
+
+      # Media
+      Infuse = 1136220934;
+
+      # Remote Desktop
       WindowsApp = 1295203466;
     };
   };
