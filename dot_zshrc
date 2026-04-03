@@ -51,7 +51,6 @@ HISTFILE="$HOME/.local/share/zsh/history"
 alias k="kubectl"
 alias ll="eza -l --icons=auto --git"
 alias ls="eza --icons=auto"
-alias ndev="nix develop --command zsh"
 
 # ─────────────────────────────────────────────
 # TOOLS
