@@ -28,8 +28,12 @@ source $ZSH/oh-my-zsh.sh
 # ─────────────────────────────────────────────
 # PROMPT — Pure
 # ─────────────────────────────────────────────
-autoload -U promptinit; promptinit
-prompt pure
+# PROMPT — Pure (loaded directly, without promptinit)
+# PROMPT — Pure (loaded directly, without promptinit)
+fpath+=("$(brew --prefix)/share/zsh/site-functions")
+autoload -U async && async
+autoload -U prompt_pure_setup
+prompt_pure_setup
 
 # ─────────────────────────────────────────────
 # ENVIRONMENT
@@ -51,6 +55,7 @@ HISTFILE="$HOME/.local/share/zsh/history"
 alias k="kubectl"
 alias ll="eza -l --icons=auto --git"
 alias ls="eza --icons=auto"
+alias ndev="nix develop --command zsh"
 
 # ─────────────────────────────────────────────
 # TOOLS
