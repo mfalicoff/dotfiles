@@ -26,6 +26,9 @@
       "mas"
       "node"
       "go"
+      "opencode"
+      "pulumi"
+      "terraform"
     ];
     casks = [
       # Security & Authentication

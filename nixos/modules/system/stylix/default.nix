@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.styling;
-in
-{
+in {
   options.styling.stylix = {
     enable = mkEnableOption "Enable Stylix";
   };
@@ -22,11 +20,11 @@ in
       terminal = 0.9;
     };
 
-    stylix.cursor = {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Ice";
-      size = 20;
-    };
+    # stylix.cursor = {
+    #   package = pkgs.bibata-cursors;
+    #   name = "Bibata-Modern-Ice";
+    #   size = 20;
+    # };
 
     stylix.fonts = {
       monospace = {
@@ -44,7 +42,7 @@ in
     };
 
     fonts = {
-      enableDefaultPackages = true;
+      # enableDefaultPackages = true;
       packages = with pkgs; [
         nerd-fonts.fira-code
         nerd-fonts.jetbrains-mono
