@@ -120,10 +120,7 @@ brew bundle --file=~/path/to/Brewfile
 
 | Formula | Purpose |
 |---|---|
-| `node` | Node.js |
-| `go` | Go language |
-| `bun` | Fast JS runtime & package manager |
-| `uv` | Fast Python package manager |
+| `bun` | Fast JS runtime & package manager (via `oven-sh/bun` tap) |
 | `dotnet-sdk` | .NET (via cask) |
 
 ### Formulae — Infrastructure & Cloud
@@ -131,17 +128,12 @@ brew bundle --file=~/path/to/Brewfile
 | Formula | Purpose |
 |---|---|
 | `terraform` | HashiCorp IaC |
-| `pulumi` | IaC with real languages |
 | `azure-cli` | Azure cloud CLI |
-| `kubectl` | Kubernetes CLI |
-| `k9s` | Kubernetes TUI |
-| `kubeseal` | Sealed Secrets CLI |
 
 ### Formulae — Dev Tools
 
 | Formula | Purpose |
 |---|---|
-| `git` | Git (latest) |
 | `git-delta` | Beautiful diff viewer (side-by-side) |
 | `git-lfs` | Git Large File Storage |
 | `git-filter-repo` | Fast git history rewriting |
@@ -172,25 +164,25 @@ brew bundle --file=~/path/to/Brewfile
 ### Casks — GUI Apps
 
 **Security**
-`1password`, `1password-cli`, `yubico-authenticator`
+`yubico-authenticator`
 
 **Browsers**
 `firefox`, `google-chrome`, `zen`
 
 **Productivity**
-`raycast`, `affine`
+`raycast`
 
 **Development**
-`ghostty`, `zed`, `jetbrains-toolbox`, `orbstack`, `gitkraken`, `mongodb-compass`, `yaak`, `bruno`
+`ghostty`, `zed`, `visual-studio-code`, `jetbrains-toolbox`, `orbstack`, `gitkraken`, `mongodb-compass`, `bruno`, `claude-code`
 
 **Communication & Media**
-`discord`, `proton-mail`, `spotify`, `calibre`
+`discord`, `proton-mail`, `spotify`
 
 **Cloud & Sync**
-`insync`, `opencloud`
+`insync`
 
 **System Utilities**
-`only-switch`, `stats`, `android-file-transfer`, `vmware-fusion`, `garmin-express`
+`wallspace`
 
 ### App Store Apps (via `mas`)
 
@@ -200,7 +192,6 @@ brew bundle --file=~/path/to/Brewfile
 | AutoMounter | 1160435653 |
 | Tailscale | 1475387142 |
 | Infuse | 1136220934 |
-| Windows App (RDP) | 1295203466 |
 
 ---
 
