@@ -1,0 +1,40 @@
+# Example cross-brew config. In real use this lives in your chezmoi source
+# state as .chezmoidata/packages.toml (cross-brew reads it via `chezmoi data`).
+
+[global]
+# Sources: Copr projects on Fedora, taps on macOS, PPAs on Debian/Ubuntu.
+# Use overrides when the identifier differs per OS; pacman has no sources
+# and skips them.
+sources = [
+  { name = "atim/lazygit", overrides = { macos = "jesseduffield/lazygit" } },
+  { name = "scottames/ghostty" }
+]
+
+packages = [
+  "zsh",
+  "git",
+  "golang",
+  "tmux",
+  "lazygit",
+  "ghostty",
+
+  # Different package name per OS
+#   { name = "neovim", overrides = { arch = "nvim" } },
+
+  # Version pin (dnf/apt honor it; brew/pacman install latest with a warning)
+#   { name = "lazygit", version = "0.44.1" },
+
+  # Install from URL — sha256 is required so installs stay deterministic
+  { name = "jetbrains-toolbox",
+    url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-3.5.0.84344-arm64.tar.gz",
+    sha256 = "fa418df9a47e0d638f86f46cbbbc032d7b7bb55937e4ff12308d14fb3fc51307",
+    strip_components = 1,
+    bin = "bin/jetbrains-toolbox" },
+
+]
+
+# Machine-specific packages, keyed by hostname (as chezmoi reports it).
+# A machine entry with the same name as a global one shadows it, so a single
+# machine can pin a different version.
+[machines.fearful]
+packages = ["tailscale"]

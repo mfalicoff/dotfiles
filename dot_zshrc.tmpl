@@ -1,11 +1,4 @@
-# ~/.zshrc — fearful (Maximiliano Falicoff)
-# Migrated from home-manager shell.nix, April 2026
 # Managed by chezmoi
-
-# ─────────────────────────────────────────────
-# PATH — Homebrew (Apple Silicon)
-# ─────────────────────────────────────────────
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # ─────────────────────────────────────────────
 # OH MY ZSH
@@ -20,26 +13,29 @@ plugins=(
   fzf
   zsh-autosuggestions
   zsh-syntax-highlighting
-  zsh-autocomplete
 )
 
 source $ZSH/oh-my-zsh.sh
+export PATH="$HOME/.local/bin:$PATH"
 
 # ─────────────────────────────────────────────
 # PROMPT — Pure
 # ─────────────────────────────────────────────
-# PROMPT — Pure (loaded directly, without promptinit)
-# PROMPT — Pure (loaded directly, without promptinit)
-fpath+=("$(brew --prefix)/share/zsh/site-functions")
 autoload -U async && async
 autoload -U prompt_pure_setup
 prompt_pure_setup
 
 # ─────────────────────────────────────────────
-# ENVIRONMENT
+# ENVIRONMENT & COMPLETION FIXES
 # ─────────────────────────────────────────────
 export EDITOR="nvim"
 export XDG_PICTURES_DIR="$HOME/screenshots"
+
+# Prevent automatic completion menu popup while typing
+setopt NO_AUTO_LIST
+setopt NO_MENU_COMPLETE
+ZLE_REMOVE_SUFFIX_CHARS=$' \t\n;&|'
+export ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 # ─────────────────────────────────────────────
 # HISTORY
@@ -66,9 +62,7 @@ eval "$(direnv hook zsh)"
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# or if installed via brew:
-source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2>/dev/null
-source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" 2>/dev/null
+export FZF_CTRL_R_OPTS="--bind 'enter:accept'"
 
 # ─────────────────────────────────────────────
 # TMUX — Auto-attach or create session
@@ -76,3 +70,11 @@ source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" 2>/dev/null
 if [[ -z "$TMUX" ]]; then
   tmux attach 2>/dev/null || tmux
 fi
+
+{{ if eq .chezmoi.os "darwin" }}
+# ─────────────────────────────────────────────
+# PATH — Homebrew (Apple Silicon)
+# ─────────────────────────────────────────────
+eval "$(/opt/homebrew/bin/brew shellenv)"
+fpath+=("$(brew --prefix)/share/zsh/site-functions")
+{{ end }}
