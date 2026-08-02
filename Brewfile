@@ -39,9 +39,9 @@ brew "ripgrep"          # fast grep (rg)
 brew "eza"              # modern ls
 brew "yazi"             # TUI file manager
 brew "btop"             # resource monitor
-brew "neofetch"
 brew "tmux"
 brew "pure"
+brew "proton-pass-cli"
 
 # ─────────────────────────────────────────────
 # FONTS

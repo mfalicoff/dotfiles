@@ -19,7 +19,7 @@ sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.serve
 # ─────────────────────────────────────────────
 # DOCK
 # ─────────────────────────────────────────────
-defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide -bool false
 defaults write com.apple.dock show-recents -bool false
 
 # ─────────────────────────────────────────────
