@@ -1,6 +1,7 @@
 
-nixos/result
+*/nixos/result
 **.secrets.*
-*.env
+**.env
+*/nixos/modules/system/smb/smb-secrets
 
-nixos/modules/system/smb/smb-secrets
+**.DS_Store
