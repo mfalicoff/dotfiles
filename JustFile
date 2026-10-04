@@ -1,7 +1,7 @@
 set positional-arguments
 
 # This justfile lives under nix/nixos; the active flake is at the repo root.
-flake := "../.."
+flake := ""
 
 # Default hostname values (matching the root flake.nix)
 hostname := `hostname`

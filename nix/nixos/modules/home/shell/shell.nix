@@ -14,34 +14,26 @@ in
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      pure-prompt
       fzf
       ripgrep
-      neofetch
+      fastfetch
       btop
+      pure-prompt
+      tuios
       zsh-autosuggestions
       zsh-autocomplete
     ];
 
-    programs.alacritty = {
+    programs.ghostty = {
       enable = true;
+      package = pkgs.ghostty-bin;
       settings = {
-        window = {
-          decorations = "Buttonless";
-          blur = true;
-          padding = {
-            x = 10;
-            y = 10;
-          };
-        };
-      };
-    };
-
-    programs.kitty = {
-      enable = true;
-      settings = {
-        confirm_os_window_close = 0;
-        window_padding_width = 10;
+        theme = "Nord";
+        font-size = 15;
+        font-family = "JetBrainsMono Nerd Font";
+        window-padding-x = 10;
+        window-padding-y = 10;
+        background-opacity = 0.95;
       };
     };
 
@@ -64,8 +56,10 @@ in
       initContent = ''
         autoload -U promptinit; promptinit
         prompt pure
-        if [[ -z "$TMUX" ]]; then
-          tmux attach || tmux
+        # TUIOS sets TERM_PROGRAM for shells it starts. Avoid launching a
+        # nested TUIOS instance in every new window.
+        if [[ "$TERM_PROGRAM" != "TUIOS" ]]; then
+          exec tuios
         fi
       '';
 

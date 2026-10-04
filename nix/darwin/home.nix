@@ -1,41 +1,21 @@
-{ config, lib, pkgs, username, ... }:
+{ lib, pkgs, username, ... }:
 {
   home = {
     inherit username;
     homeDirectory = "/Users/${username}";
     stateVersion = "24.11";
-    sessionVariables = {
-      EDITOR = "nvim";
-      XDG_PICTURES_DIR = "$HOME/screenshots";
-      FZF_CTRL_R_OPTS = "--bind 'enter:accept'";
-    };
     packages = with pkgs; [
-      age
       android-tools
       argocd
-      azure-cli
-      btop
       bun
-      delta
       dockutil
-      eza
       flutter
       gh
       git-filter-repo
-      git-lfs
       go
-      just
-      jq
-      k9s
-      kubectl
-      lazydocker
-      lazygit
-      neovim
       nodejs
       opencode
       openjdk
-      pure-prompt
-      ripgrep
       sops
       talosctl
       tailscale
@@ -46,81 +26,60 @@
 
   programs.home-manager.enable = true;
 
-  # Home Manager owns these files. Existing user copies are backed up with
-  # the pre-nix suffix during activation.
-  home.file.".gitconfig".source = ./config/gitconfig;
-  # tmux checks ~/.tmux.conf before the XDG file generated below. Replace the
-  # old TPM configuration with a small redirect to the Home Manager config.
-  home.file.".tmux.conf".text = ''
-    source-file ${config.xdg.configHome}/tmux/tmux.conf
+  # Homebrew is installed outside the Nix profile on Apple Silicon. Restore
+  # its shell environment for login shells without failing if Brew is absent.
+  programs.zsh.profileExtra = ''
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+      eval "$('/opt/homebrew/bin/brew' shellenv)"
+    fi
   '';
-  xdg.configFile."ghostty/config".source = ./config/ghostty/config;
+
   xdg.configFile."television".source = ./config/television;
 
-  programs.zsh = {
+  development = {
     enable = true;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    profileExtra = ''
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-      export PATH="/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$PATH"
-      export PATH="$PATH:$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
-    '';
-    history = {
-      size = 10000;
-      save = 10000;
-      path = "${config.xdg.dataHome}/zsh/history";
-    };
-    oh-my-zsh = {
+    # The Darwin system profile already manages dotnet-sdk through Homebrew.
+    sdk.enable = false;
+    tools = {
       enable = true;
-      plugins = [ "git" "azure" "bun" "docker" "fzf" ];
+      enableCli = true;
+      # GitKraken and the other GUI development apps are managed by Homebrew
+      # on Darwin.
+      enableGui = false;
     };
-    shellAliases = {
-      k = "kubectl";
-      ll = "eza -l --icons=auto --git";
-      ls = "eza --icons=auto";
-      ndev = "nix develop --command zsh";
+    git = {
+      enable = true;
+      enableDelta = false;
+      enableLfs = true;
     };
-    initContent = ''
-      export PATH="$HOME/.local/bin:$PATH"
-      autoload -U promptinit; promptinit
-      prompt pure
-      setopt NO_AUTO_LIST
-      setopt NO_MENU_COMPLETE
-      ZLE_REMOVE_SUFFIX_CHARS=$' \t\n;&|'
-      export ZSH_AUTOSUGGEST_STRATEGY=(history)
-      if [[ -z "$TMUX" ]]; then
-        tmux attach 2>/dev/null || tmux
-      fi
-    '';
+    editors = {
+      enable = false;
+      neovim.enable = false;
+    };
   };
 
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
+  # Keep the additional Git settings from the former Darwin .gitconfig while
+  # letting the shared development module own the generated Git config.
+  programs.git.settings = {
+    user.signingKey = "~/.ssh/id_ed25519.pub";
+    commit.gpgSign = true;
+    gpg.format = "ssh";
+    merge.conflictstyle = "diff3";
+    diff.colorMoved = "default";
+    core.pager = "delta";
+    interactive.diffFilter = "delta --color-only";
   };
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
+
+  programs.delta.options = {
+    navigate = true;
+    light = false;
   };
-  programs.yazi = {
+
+  shellOptions = {
     enable = true;
-    enableZshIntegration = true;
-  };
-  programs.tmux = {
-    enable = true;
-    baseIndex = 1;
-    mouse = true;
-    plugins = with pkgs.tmuxPlugins; [
-      nord
-      vim-tmux-navigator
-      weather
-    ];
-    extraConfig = ''
-      setw -g pane-base-index 1
-      set -g default-terminal "screen-256color"
-    '';
+    shell = {
+      tmux.enable = false;
+    };
   };
 
   home.activation.showLibrary = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

@@ -15,10 +15,11 @@
   time.timeZone = "America/Toronto";
 
   # Nix manages available packages; Homebrew covers vendor apps and packages
-  # without a suitable Darwin build. Keep existing installations on activation.
+  # without a suitable Darwin build. Removed declarations are uninstalled on
+  # activation.
   homebred = {
     enable = true;
-    taps = [ "homebrew/services" ];
+    taps = [ "kartax/tap" "skyhook-io/tap" ];
     brews = [
       "proton-pass-cli"
     ];
@@ -29,18 +30,17 @@
       "discord"
       "dotnet-sdk"
       "firefox"
-      "ghostty"
       "github"
       "gitkraken"
       "google-chrome"
       "homebrew-app"
-      "immich-desktop"
+      "kartax/tap/immich-desktop"
       "insync"
       "jetbrains-toolbox"
       "mongodb-compass"
       "orbstack"
       "proton-mail"
-      "radar-desktop"
+      "skyhook-io/tap/radar-desktop"
       "raycast"
       "spotify"
       "wallspace"

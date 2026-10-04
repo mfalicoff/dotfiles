@@ -42,7 +42,10 @@ in
       onActivation = {
         autoUpdate = true;
         upgrade = false;
-        cleanup = "none";
+        # Homebrew disabled the deprecated --cleanup switch. Pass the
+        # supported cleanup flag directly through nix-darwin.
+        cleanup = "zap";
+        # extraFlags = [ "--force-cleanup" ];
       };
       masApps = cfg.appStoreApps;
       taps = cfg.taps;

@@ -18,11 +18,11 @@ the macOS settings in `nix/darwin/home.nix`.
   the App Store apps. Zed uses its prebuilt Homebrew cask because this pinned
   Nix package has no Apple Silicon binary substitute and takes a long time to
   compile. Homebrew must already be installed.
-- Home Manager owns the shell, Git, tmux, Ghostty, and television settings.
-  The Git, Ghostty, and television source files live under `nix/darwin/config`.
+- Home Manager owns the shell, Git, Ghostty, and television settings. Shared
+  development tools and Git configuration come from `nix/nixos/modules/home/development`,
+  while the Ghostty and television source files remain under `nix/darwin/config`.
   On the first switch, existing target files are renamed with a `.pre-nix`
-  suffix. A later switch also backs up the old `.zprofile` and `.tmux.conf`
-  before Home Manager takes them over.
+  suffix.
 - nix-darwin's built-in application activation makes Nix-installed `.app`
   bundles available in `/Applications/Nix Apps`; Homebrew casks install their
   app bundles in `/Applications`. The old custom app copier is not imported.
@@ -44,9 +44,9 @@ If a Nix GUI package fails to build or launch, move that entry from
 to `homebred.casks` in `nix/nixos/hosts/fearful/system.nix` and rebuild.
 
 After a successful switch, verify the Nix versions of CLI tools, fonts, and VS
-Code before uninstalling their old Homebrew copies. The Homebrew
-activation setting uses `cleanup = "none"`, so existing Brew installs are not
-removed automatically. Keep the fallback brews, casks, and App Store apps
+Code before uninstalling their old Homebrew copies. Homebrew activation uses
+the supported `--force-cleanup` flag, so removed brews and casks are
+uninstalled automatically. Keep the fallback brews, casks, and App Store apps
 declared in `nix/nixos/hosts/fearful/system.nix`.
 
 ## NixOS
