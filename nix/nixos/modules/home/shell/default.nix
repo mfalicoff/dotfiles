@@ -19,8 +19,8 @@ in
 
   config = mkIf cfg.enable {
     shellOptions.shell = {
-      enable = true;
-      tmux.enable = false;
+      enable = mkDefault true;
+      tmux.enable = mkDefault false;
     };
   };
 }

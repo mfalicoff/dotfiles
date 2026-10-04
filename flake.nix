@@ -55,6 +55,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -182,6 +188,8 @@
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./nix/nixos/hosts/fearful/home.nix;
         }
+        # Make the same curated Firefox add-ons available to Zen on macOS.
+        { nixpkgs.overlays = [ inputs.nur.overlays.default ]; }
       ];
     };
   };

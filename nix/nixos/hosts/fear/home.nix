@@ -37,8 +37,10 @@
   browsers = {
     enable = true;
     firefox.enable = true;
+    zen.enable = true;
     chrome.enable = true;
   };
+  stylix.targets.zen-browser.enable = false;
 
   rofi.enable = true;
 
@@ -97,8 +99,6 @@
     };
     tools = {
       enable = true;
-      enableCli = true;
-      enableGui = true;
     };
     git.enable = true;
     editors = {

@@ -14,6 +14,8 @@
   system.defaults.smb.NetBIOSName = darwinHostname;
   time.timeZone = "America/Toronto";
 
+  services.tailscale.enable = true;
+
   # Nix manages available packages; Homebrew covers vendor apps and packages
   # without a suitable Darwin build. Removed declarations are uninstalled on
   # activation.
@@ -22,21 +24,20 @@
     taps = [ "kartax/tap" "skyhook-io/tap" ];
     brews = [
       "proton-pass-cli"
+      "mole"
     ];
     casks = [
-      "bruno"
       "chatgpt"
       "claude-code"
       "discord"
       "dotnet-sdk"
       "firefox"
-      "github"
       "gitkraken"
       "google-chrome"
       "homebrew-app"
       "kartax/tap/immich-desktop"
       "insync"
-      "jetbrains-toolbox"
+      # "jetbrains-toolbox"
       "mongodb-compass"
       "orbstack"
       "proton-mail"
@@ -46,13 +47,11 @@
       "wallspace"
       "whatsapp"
       "yubico-authenticator"
+      # "vorsaint"
       "zed"
-      "zen"
     ];
     appStoreApps = {
-      Amphetamine = 937984704;
       AutoMounter = 1160435653;
-      Tailscale = 1475387142;
       "Infuse 7" = 1136220934;
     };
   };

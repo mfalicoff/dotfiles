@@ -10,6 +10,7 @@ in
 {
   imports = [
     ./firefox.nix
+    ./zen.nix
     ./chrome.nix
   ];
 
@@ -19,6 +20,7 @@ in
 
   config = mkIf cfg.enable {
     browsers.firefox.enable = mkDefault false;
+    browsers.zen.enable = mkDefault false;
     browsers.chrome.enable = mkDefault false;
   };
 }

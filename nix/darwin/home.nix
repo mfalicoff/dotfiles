@@ -18,7 +18,6 @@
       openjdk
       sops
       talosctl
-      tailscale
       television
       terraform
     ];
@@ -36,16 +35,29 @@
 
   xdg.configFile."television".source = ./config/television;
 
+  browsers = {
+    enable = true;
+    zen = {
+      enable = true;
+      extensions = {
+        ublockOrigin = true;
+        protonpass = true;
+        karakeep = true;
+      };
+    };
+  };
+  stylix.targets.zen-browser.enable = false;
+
   development = {
     enable = true;
     # The Darwin system profile already manages dotnet-sdk through Homebrew.
     sdk.enable = false;
     tools = {
       enable = true;
-      enableCli = true;
-      # GitKraken and the other GUI development apps are managed by Homebrew
-      # on Darwin.
-      enableGui = false;
+      packages = {
+        # GitKraken is managed by Homebrew on Darwin.
+        gitkraken = false;
+      };
     };
     git = {
       enable = true;
@@ -53,9 +65,18 @@
       enableLfs = true;
     };
     editors = {
-      enable = false;
+      enable = true;
+      jetbrains = {
+        enable = true;
+        rider = true;
+      };
       neovim.enable = false;
     };
+  };
+
+  programs.omniwm = {
+    enable = true;
+    settings = ./config/omniwm/omniwm-settings.toml;
   };
 
   # Keep the additional Git settings from the former Darwin .gitconfig while

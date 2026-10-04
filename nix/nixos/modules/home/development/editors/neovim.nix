@@ -13,7 +13,7 @@ in
     enable = mkEnableOption "Enable Neovim";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.development.enable && config.development.editors.enable && cfg.enable) {
     programs.nixvim = {
       enable = true;
 

@@ -26,7 +26,7 @@
 
         desktopAndDock = {
           dock = {
-            automaticallyHideAndShowTheDock.enabled = false;
+            automaticallyHideAndShowTheDock.enabled = true;
             showSuggestedAndRecentAppsInDock = false;
           };
           desktopAndStageManager = {

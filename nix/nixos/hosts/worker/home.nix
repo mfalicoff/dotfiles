@@ -33,8 +33,10 @@
     enable = true;
     tools = {
       enable = true;
-      enableCli = true;
-      enableGui = false;
+      packages = {
+        gitkraken = false;
+        yaak = false;
+      };
     };
     git.enable = true;
     editors = {

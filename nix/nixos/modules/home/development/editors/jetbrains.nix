@@ -22,7 +22,7 @@ in
     goland = mkEnableOption "Enable JetBrains GoLand";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.development.enable && config.development.editors.enable && cfg.enable) {
     home.packages =
       with pkgs.jetbrains;
       (optional cfg.rider rider)

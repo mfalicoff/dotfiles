@@ -42,7 +42,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.development.enable && cfg.enable) {
     home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
       rm -f ~/.gitconfig
     '';

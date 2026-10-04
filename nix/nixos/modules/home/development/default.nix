@@ -18,7 +18,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    development.editors.enable = mkDefault false;
+    development.editors.enable = mkDefault true;
     development.sdk.enable = mkDefault false;
     development.tools.enable = mkDefault true;
     development.git.enable = mkDefault true;
