@@ -17,6 +17,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-plist-manager = {
+      url = "github:sushydev/nix-plist-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Linux-specific inputs
     hyprland.url = "github:hyprwm/Hyprland";
 
@@ -164,6 +169,7 @@
       specialArgs = sharedSpecialArgs;
       modules = [
         inputs.stylix.darwinModules.stylix
+        inputs.nix-plist-manager.darwinModules.default
         ./nix/nixos/nix-core.nix
         ./nix/nixos/hosts/fearful/system.nix
         # home manager
@@ -172,6 +178,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "pre-nix";
+          home-manager.sharedModules = [ inputs.nix-plist-manager.homeManagerModules.default ];
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./nix/nixos/hosts/fearful/home.nix;
         }
