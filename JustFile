@@ -1,0 +1,94 @@
+set positional-arguments
+
+# This justfile lives under nix/nixos; the active flake is at the repo root.
+flake := "../.."
+
+# Default hostname values (matching the root flake.nix)
+hostname := `hostname`
+
+# Common Nix flags
+nix_flags := "--extra-experimental-features 'nix-command flakes'"
+
+# Build and switch to NixOS configuration
+nixos host=hostname:
+    nh os switch -H {{host}} {{flake}} -- --impure
+
+# Build and switch to Darwin configuration
+darwin hostname=hostname:
+    sudo darwin-rebuild switch --flake {{flake}}#{{hostname}}
+
+# Debug build for NixOS
+nixos-debug hostname=hostname:
+    sudo nix build {{flake}}#nixosConfigurations.{{hostname}}.system --show-trace --verbose {{nix_flags}}
+    sudo ./result/bin/switch-to-configuration switch --show-trace --verbose
+
+# Debug build for Darwin
+darwin-debug hostname=hostname:
+    nix build {{flake}}#darwinConfigurations.{{hostname}}.system --show-trace --verbose {{nix_flags}}
+    sudo darwin-rebuild switch --flake {{flake}}#{{hostname}} --show-trace --verbose
+
+# Deploy NixOS configuration to remote host
+deploy configuration host:
+    nh os switch {{flake}}#{{configuration}} -H {{host}} --ask
+
+# Update all flake inputs
+update:
+    nix flake update {{flake}}
+
+# Update specific flake input
+update-input input:
+    nix flake lock --update-input {{input}} {{flake}}
+
+# Check NixOS configuration
+check-nixos hostname=hostname:
+    nix eval --raw {{flake}}#nixosConfigurations.{{hostname}}.config.system.build.toplevel.drvPath
+
+# Check Darwin configuration
+check-darwin hostname=hostname:
+    nix eval --raw {{flake}}#darwinConfigurations.{{hostname}}.system.drvPath
+
+# Clean up old generations
+clean:
+    #!/usr/bin/env bash
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sudo nix-env -p /nix/var/nix/profiles/system --delete-generations old
+        sudo /run/current-system/sw/bin/darwin-rebuild boot
+    else
+        sudo nix-env -p /nix/var/nix/profiles/system --delete-generations old
+        sudo /run/current-system/bin/switch-to-configuration boot
+    fi
+
+# List all available generations
+generations:
+    #!/usr/bin/env bash
+    if [[ "$(uname)" == "Darwin" ]]; then
+        sudo nix-env -p /nix/var/nix/profiles/system --list-generations
+    else
+        sudo nix-env -p /nix/var/nix/profiles/system --list-generations
+    fi
+
+# Garbage collect old store paths
+gc:
+    nix-collect-garbage -d
+
+# Format all Nix files in the repository
+fmt:
+    nix fmt
+
+
+# SOPS secrets management commands
+
+# Decrypt and view a secrets file
+decrypt-secret file:
+    nix-shell -p sops --run "sops -d secrets/secrets.{{file}}.yaml"
+
+# Create a new encrypted secrets file
+create-secret file:
+    nix-shell -p sops --run "sops secrets/secrets.{{file}}.yaml"
+
+# Edit/modify an existing encrypted secrets file
+edit-secret file:
+    nix-shell -p sops --run "sops secrets/secrets.{{file}}.yaml"
+
+update-keys file:
+    nix-shell -p sops --run "sops updatekeys secrets/secrets.{{file}}.yaml"

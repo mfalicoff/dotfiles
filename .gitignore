@@ -1,5 +1,5 @@
 
-*/nixos/result
+result
 **.secrets.*
 **.env
 */nixos/modules/system/smb/smb-secrets
