@@ -14,7 +14,7 @@ in
       extension: _:
       lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = true;
         description = "Install the bundled ${extension} ${name} extension";
       }
     ) bundledExtensions;

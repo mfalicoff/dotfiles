@@ -1,0 +1,42 @@
+name: Flake builds
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nixos:
+    name: NixOS / ${{ matrix.host }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [fear]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build system closure
+        env:
+          HOST: ${{ matrix.host }}
+        run: nix build --locked --no-link --print-build-logs ".#nixosConfigurations.${HOST}.config.system.build.toplevel"
+
+  darwin:
+    name: Darwin / fearful
+    runs-on: macos-27
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v6
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build system closure
+        run: nix build --locked --no-link --print-build-logs '.#darwinConfigurations.fearful.system'

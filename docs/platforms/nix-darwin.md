@@ -8,7 +8,7 @@ The root flake exposes `darwinConfigurations.fearful` for an Apple Silicon (`aar
 2. Install the [Nix package manager](https://nix.dev/install-nix) and [Homebrew](https://docs.brew.sh/Installation). Homebrew must be available before the first switch because the host enables `homebred` and declares brews, casks, and App Store apps. Sign in to the App Store for those apps. The Nix installer command for macOS is:
 
    ```sh
-   curl -L https://nixos.org/nix/install | sh
+    curl -sSf -L https://install.lix.systems/lix | sh -s -- install
    ```
 3. Enable `nix-command` and `flakes` in `/etc/nix/nix.conf` if the Nix installer has not already done so:
 

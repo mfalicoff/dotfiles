@@ -37,14 +37,7 @@
 
   browsers = {
     enable = true;
-    zen = {
-      enable = true;
-      extensions = {
-        ublockOrigin = true;
-        protonpass = true;
-        karakeep = true;
-      };
-    };
+    zen.enable = true;
   };
   stylix.targets.zen-browser.enable = false;
 

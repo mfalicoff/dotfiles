@@ -47,7 +47,7 @@
       "wallspace"
       "whatsapp"
       "yubico-authenticator"
-      # "vorsaint"
+      "vorssaint"
       "zed"
     ];
     appStoreApps = {

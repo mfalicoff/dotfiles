@@ -18,14 +18,14 @@ For example, within a host Home Manager module:
   development.editors.zed.settings.vimMode = true;
   shellOptions.shell.features.launchTuios = false;
   shellOptions.shell.tmux.plugins.weather = false;
-  browsers.firefox.extensions.ublockOrigin = true;
+  browsers.firefox.extensions.ublockOrigin = false;
   browsers.zen.settings.trackingProtection = true;
   browsers.chrome.settings.startMaximized = true;
 }
 ```
 
-Development tools and shell packages use named switches for their bundled items, which start enabled when the corresponding module is enabled. Firefox and Zen extensions and optional settings start disabled. Selecting one creates a managed `default` profile. The curated add-ons come from the pinned NUR overlay and may require browser approval after installation. Firefox and Zen have separate `extensions`, `settings`, and `advanced` options.
+Bundled development tools, shell packages and plugins, editor extensions, and Firefox and Zen extensions start enabled when their component is enabled. These defaults are shared across platforms. Set an individual switch to `false` to leave it out. Optional browser settings still start disabled. Browser extensions create a managed `default` profile. The curated add-ons come from the pinned NUR overlay and may require browser approval after installation. Firefox and Zen have separate `extensions`, `settings`, and `advanced` options.
 
 Each module also exposes `advanced` settings for items outside the curated list: `development.tools.advanced.extraPackages`, editor extensions and settings, `shellOptions.shell.advanced.shellAliases`, and browser profile settings. Advanced settings override bundled values for the same key. Chrome accepts `browsers.chrome.advanced.commandLineArgs`.
 
-Zen is enabled on `fear` and `fearful`. Linux gets it from the pinned [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake). Both hosts disable `stylix.targets.zen-browser`; to style a managed profile, enable that target and set its `profileNames` to `[ "default" ]`.
+Zen is enabled on `fear` and `fearful` using the pinned [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake). On macOS, Home Manager copies `profiles.ini` to a writable file so Zen can complete profile setup. Both hosts disable `stylix.targets.zen-browser`; to style a managed profile, enable that target and set its `profileNames` to `[ "default" ]`.
