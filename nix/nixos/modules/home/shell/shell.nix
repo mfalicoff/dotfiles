@@ -89,7 +89,7 @@ in
 
     programs.ghostty = lib.mkIf cfg.features.ghostty {
       enable = true;
-      package = pkgs.ghostty-bin;
+      package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
       settings = lib.recursiveUpdate (
         {
           font-size = 15;
