@@ -4,8 +4,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.development.editors.zed;
   bundledExtensions = {
     nix = "nix";
@@ -16,18 +15,19 @@ let
     catppuccinIcons = "catppuccin-icons";
     just = "just";
   };
-in
-{
+in {
   options.development.editors.zed = {
     enable = mkEnableOption "Enable Zed Editor";
-    extensions = builtins.mapAttrs (
-      name: _:
-      mkOption {
-        type = types.bool;
-        default = true;
-        description = "Install the bundled ${name} Zed extension";
-      }
-    ) bundledExtensions;
+    extensions =
+      builtins.mapAttrs (
+        name: _:
+          mkOption {
+            type = types.bool;
+            default = true;
+            description = "Install the bundled ${name} Zed extension";
+          }
+      )
+      bundledExtensions;
     settings = {
       assistant = mkOption {
         type = types.bool;
@@ -48,12 +48,12 @@ in
     advanced = {
       extensions = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [];
         description = "Additional Zed extension IDs";
       };
       settings = mkOption {
         type = types.attrsOf types.anything;
-        default = { };
+        default = {};
         description = "Additional or overriding Zed user settings";
       };
     };
@@ -72,7 +72,7 @@ in
       extensions =
         builtins.attrValues (lib.filterAttrs (name: _: cfg.extensions.${name}) bundledExtensions)
         ++ cfg.advanced.extensions;
-      extraPackages = [ ];
+      extraPackages = [];
       ## everything inside of these brackets are Zed options.
       userSettings =
         (lib.recursiveUpdate {
@@ -83,7 +83,9 @@ in
             path = lib.getExe pkgs.nodejs;
             npm_path = lib.getExe' pkgs.nodejs "npm";
           };
-          hour_format = "hour24";
+          journal = {
+            hour_format = "hour24";
+          };
           auto_update = cfg.settings.autoUpdate;
           terminal = {
             alternate_scroll = "off";
@@ -102,7 +104,7 @@ in
               };
             };
             env = {
-              TERM = "kitty";
+              TERM = "ghostty";
             };
             font_family = "FiraCode Nerd Font";
             font_features = null;
@@ -112,25 +114,12 @@ in
             button = false;
             shell = "system";
             toolbar = {
-              title = true;
+              breadcrumbs = true;
             };
             working_directory = "current_project_directory";
           };
           lsp = {
-            rust-analyzer = {
-              binary = {
-                path_lookup = true;
-              };
-            };
-            nix = {
-              binary = {
-                path_lookup = true;
-              };
-            };
             elixir-ls = {
-              binary = {
-                path_lookup = true;
-              };
               settings = {
                 dialyzerEnabled = true;
               };
@@ -143,7 +132,8 @@ in
                 "elixir-ls"
                 "!next-ls"
               ];
-              format_on_save = {
+              format_on_save = "on";
+              formatter = {
                 external = {
                   command = "mix";
                   arguments = [
@@ -155,13 +145,14 @@ in
                 };
               };
             };
-            "HEEX" = {
+            "HEEx" = {
               language_servers = [
                 "!lexical"
                 "elixir-ls"
                 "!next-ls"
               ];
-              format_on_save = {
+              format_on_save = "on";
+              formatter = {
                 external = {
                   command = "mix";
                   arguments = [
@@ -174,7 +165,8 @@ in
               };
             };
             Nix = {
-              language_servers = [ "nixd" ];
+              language_servers = ["nixd"];
+              format_on_save = "on";
               formatter = {
                 external = {
                   command = "alejandra";
@@ -190,18 +182,17 @@ in
           load_direnv = "shell_hook";
           base_keymap = "JetBrains";
           show_whitespaces = "all";
-          files = {
-            excludeDirs = [
-              ".cargo"
-              ".direnv"
-              ".git"
-              "node_modules"
-              "target"
-              "bin"
-              "obj"
-            ];
-          };
-        } (builtins.removeAttrs cfg.advanced.settings [ "icon_theme" ]))
+          file_scan_exclusions = [
+            "..."
+            "**/.cargo"
+            "**/.direnv"
+            "**/.git"
+            "**/node_modules"
+            "**/target"
+            "**/bin"
+            "**/obj"
+          ];
+        } (removeAttrs cfg.advanced.settings ["icon_theme"]))
         // {
           icon_theme = mkForce (cfg.advanced.settings.icon_theme or "Catppuccin Frappé");
         };

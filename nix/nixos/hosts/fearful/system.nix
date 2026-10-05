@@ -1,5 +1,4 @@
-{ darwinHostname, ... }:
-{
+{darwinHostname, ...}: {
   imports = [
     ./host-users.nix
     ../../modules/system/stylix
@@ -39,8 +38,6 @@
     ];
     casks = [
       "chatgpt"
-      "firefox"
-      "google-chrome"
       "kartax/tap/immich-desktop"
       "insync"
       "mongodb-compass"
@@ -53,7 +50,6 @@
       "whatsapp"
       "yubico-authenticator"
       "vorssaint"
-      "zed"
     ];
     appStoreApps = {
       AutoMounter = 1160435653;

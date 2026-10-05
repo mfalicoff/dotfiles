@@ -3,8 +3,7 @@
   config,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.shellOptions;
   bundledPlugins = {
     catppuccin = {
@@ -17,8 +16,7 @@ let
     vimNavigator = pkgs.tmuxPlugins.vim-tmux-navigator;
     weather = pkgs.tmuxPlugins.weather;
   };
-in
-{
+in {
   options.shellOptions.tmux = {
     enable = lib.mkEnableOption "tmux";
     tmuxinator = lib.mkOption {
@@ -26,18 +24,20 @@ in
       default = true;
       description = "Install tmuxinator and set its configuration directory";
     };
-    plugins = builtins.mapAttrs (
-      name: _:
-      lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable the bundled ${name} tmux plugin";
-      }
-    ) bundledPlugins;
+    plugins =
+      builtins.mapAttrs (
+        name: _:
+          lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Enable the bundled ${name} tmux plugin";
+          }
+      )
+      bundledPlugins;
     advanced = {
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
+        default = [];
         description = "Additional tmux plugin packages";
       };
       extraConfig = lib.mkOption {
@@ -62,40 +62,41 @@ in
       mouse = true;
       terminal = "tmux-256color";
       sensibleOnTop = true;
-      extraConfig = ''
-        set -as terminal-overrides ",xterm*:Tc"
-        set -g focus-events on
-        set -g renumber-windows on
-        setw -g pane-base-index 1
-        set -g status-position top
+      extraConfig =
+        ''
+          set -as terminal-overrides ",xterm*:Tc"
+          set -g focus-events on
+          set -g renumber-windows on
+          setw -g pane-base-index 1
+          set -g status-position top
 
-        # Vim-style pane navigation.
-        bind h select-pane -L
-        bind j select-pane -D
-        bind k select-pane -U
-        bind l select-pane -R
+          # Vim-style pane navigation.
+          bind h select-pane -L
+          bind j select-pane -D
+          bind k select-pane -U
+          bind l select-pane -R
 
-        # Navigate panes and windows without the prefix key.
-        bind -n M-Left select-pane -L
-        bind -n M-Right select-pane -R
-        bind -n M-Up select-pane -U
-        bind -n M-Down select-pane -D
-        bind -n S-Left previous-window
-        bind -n S-Right next-window
-        bind -n M-H previous-window
-        bind -n M-L next-window
+          # Navigate panes and windows without the prefix key.
+          bind -n M-Left select-pane -L
+          bind -n M-Right select-pane -R
+          bind -n M-Up select-pane -U
+          bind -n M-Down select-pane -D
+          bind -n S-Left previous-window
+          bind -n S-Right next-window
+          bind -n M-H previous-window
+          bind -n M-L next-window
 
-        # Keep new panes in the current directory.
-        bind '"' split-window -v -c "#{pane_current_path}"
-        bind % split-window -h -c "#{pane_current_path}"
+          # Keep new panes in the current directory.
+          bind '"' split-window -v -c "#{pane_current_path}"
+          bind % split-window -h -c "#{pane_current_path}"
 
-        # Vi-style copy mode with OSC 52 clipboard integration.
-        set -s set-clipboard on
-        bind-key -T copy-mode-vi v send-keys -X begin-selection
-        bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
-        bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
-      ''
-      + cfg.tmux.advanced.extraConfig;
+          # Vi-style copy mode with OSC 52 clipboard integration.
+          set -s set-clipboard on
+          bind-key -T copy-mode-vi v send-keys -X begin-selection
+          bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
+          bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
+        ''
+        + cfg.tmux.advanced.extraConfig;
     };
 
     programs.zsh.initContent = lib.mkIf cfg.zsh.enable ''

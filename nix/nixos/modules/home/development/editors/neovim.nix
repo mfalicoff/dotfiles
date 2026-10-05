@@ -1,14 +1,11 @@
 {
   config,
-  inputs,
   lib,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.development.editors.neovim;
-in
-{
+in {
   options.development.editors.neovim = {
     enable = mkEnableOption "Enable Neovim";
   };
@@ -98,7 +95,7 @@ in
               theme = "catppuccin";
             };
             sections = {
-              lualine_a = [ "mode" ];
+              lualine_a = ["mode"];
               lualine_b = [
                 "branch"
                 "diff"
@@ -115,15 +112,15 @@ in
                 "fileformat"
                 "filetype"
               ];
-              lualine_y = [ "progress" ];
-              lualine_z = [ "location" ];
+              lualine_y = ["progress"];
+              lualine_z = ["location"];
             };
           };
         };
 
         mini = {
           enable = true;
-          modules.icons = { };
+          modules.icons = {};
           mockDevIcons = true;
         };
 
@@ -198,11 +195,11 @@ in
             };
             snippet.expand = "luasnip";
             sources = [
-              { name = "nvim_lsp"; }
-              { name = "luasnip"; }
-              { name = "path"; }
-              { name = "buffer"; }
-              { name = "nvim_lua"; }
+              {name = "nvim_lsp";}
+              {name = "luasnip";}
+              {name = "path";}
+              {name = "buffer";}
+              {name = "nvim_lua";}
             ];
           };
         };
@@ -362,7 +359,7 @@ in
         # UI improvements
         which-key = {
           enable = true;
-          settings.spec = [ ];
+          settings.spec = [];
         };
 
         #   # Git UI
@@ -436,7 +433,7 @@ in
         project-nvim = {
           enable = true;
           settings = {
-            detection_methods = [ "pattern" ];
+            detection_methods = ["pattern"];
             patterns = [
               ".git"
               "*.sln"

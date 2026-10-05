@@ -3,27 +3,20 @@
   pkgs,
   username,
   ...
-}:
-{
+}: {
   home = {
     inherit username;
     homeDirectory = "/Users/${username}";
     stateVersion = "24.11";
     packages = with pkgs; [
-      android-tools
-      argocd
       bun
       dockutil
-      flutter
       gh
       git-filter-repo
       go
       nodejs
       opencode
       openjdk
-      sops
-      talosctl
-      terraform
     ];
   };
 
@@ -49,7 +42,10 @@
   programs.nh = {
     enable = true;
   };
-  stylix.targets.zen-browser.enable = true;
+  stylix.targets.zen-browser = {
+    enable = true;
+    profileNames = ["default"];
+  };
 
   development = {
     enable = true;
@@ -66,6 +62,7 @@
     tools.enable = true;
     desktop.enable = true;
     environment.enable = true;
+    mobile.enable = true;
     languages = {
       c.enable = true;
       python.enable = true;
@@ -77,6 +74,7 @@
         enable = true;
         rider = true;
       };
+      zed.enable = true;
       neovim.enable = false;
     };
   };
@@ -115,7 +113,7 @@
     tmux.enable = true;
   };
 
-  home.activation.showLibrary = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.showLibrary = lib.hm.dag.entryAfter ["writeBoundary"] ''
     /usr/bin/chflags nohidden "$HOME/Library"
   '';
 }

@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.development.git;
-in
-{
+in {
   options.development.git = {
     enable = mkEnableOption "Enable Git configuration";
 
@@ -44,9 +42,9 @@ in
   };
 
   config = mkIf (config.development.enable && cfg.enable) {
-    home.packages = [ pkgs.lazygit ];
+    home.packages = [pkgs.lazygit pkgs.gitkraken];
 
-    home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
       rm -f ~/.gitconfig
     '';
 

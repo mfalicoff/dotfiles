@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   imports = [
     ./editors
     ./git.nix
@@ -11,7 +10,7 @@
     ./nix.nix
     ./secrets.nix
     ./tools.nix
-    ./desktop.nix
+    ./mobile.nix
   ];
 
   options.development.enable = lib.mkEnableOption "development configuration";
