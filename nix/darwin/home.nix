@@ -25,11 +25,14 @@
 
   programs.home-manager.enable = true;
 
-  # Homebrew is installed outside the Nix profile on Apple Silicon. Restore
-  # its shell environment for login shells without failing if Brew is absent.
-  programs.zsh.profileExtra = ''
+  # Homebrew is installed outside the Nix profile. Restore its shell
+  # environment for every Zsh session, including non-login terminal shells,
+  # without failing if Brew is absent.
+  programs.zsh.envExtra = ''
     if [[ -x /opt/homebrew/bin/brew ]]; then
       eval "$('/opt/homebrew/bin/brew' shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+      eval "$('/usr/local/bin/brew' shellenv)"
     fi
   '';
 
@@ -38,6 +41,9 @@
   browsers = {
     enable = true;
     zen.enable = true;
+  };
+  programs.nh = {
+    enable = true;
   };
   stylix.targets.zen-browser.enable = false;
 
@@ -92,7 +98,7 @@
   shellOptions = {
     enable = true;
     shell = {
-      tmux.enable = false;
+      tmux.enable = true;
     };
   };
 

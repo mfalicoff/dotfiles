@@ -12,7 +12,6 @@ let
     fastfetch = pkgs.fastfetch;
     btop = pkgs.btop;
     purePrompt = pkgs.pure-prompt;
-    tuios = pkgs.tuios;
     zshAutosuggestions = pkgs.zsh-autosuggestions;
     zshAutocomplete = pkgs.zsh-autocomplete;
   };
@@ -41,7 +40,6 @@ in
       eza = toggle "eza";
       yazi = toggle "Yazi";
       skim = toggle "Skim";
-      launchTuios = toggle "TUIOS startup";
     };
     zshPlugins = builtins.listToAttrs (
       map (name: {
@@ -89,7 +87,7 @@ in
 
     programs.ghostty = lib.mkIf cfg.features.ghostty {
       enable = true;
-      package = pkgs.ghostty-bin;
+      package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
       settings = lib.recursiveUpdate (
         {
           font-size = 15;
@@ -128,13 +126,6 @@ in
         (lib.optionalString cfg.packages.purePrompt ''
           autoload -U promptinit; promptinit
           prompt pure
-        '')
-        + (lib.optionalString (cfg.features.launchTuios && cfg.packages.tuios) ''
-          # TUIOS sets TERM_PROGRAM for shells it starts. Avoid launching a
-          # nested TUIOS instance in every new window.
-          if [[ "$TERM_PROGRAM" != "TUIOS" ]]; then
-            exec tuios
-          fi
         '')
         + cfg.advanced.zshInit;
 

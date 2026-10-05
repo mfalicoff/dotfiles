@@ -1,6 +1,5 @@
 {
   inputs,
-  config,
   pkgs,
   desktopHostname,
   ...
@@ -19,6 +18,7 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.graphics.enable = true;
   services.tailscale.enable = true;
 
   #Locales
@@ -55,14 +55,6 @@
   virt.enable = true;
   wm.hyprland.enable = true;
   calibre.enable = true;
-
-  hardware.graphics.nvidia = {
-    enable = true;
-    driverPackage = config.boot.kernelPackages.nvidiaPackages.beta;
-    useOpenSource = false;
-    enableModesetting = true;
-    enableSettings = true;
-  };
 
   environment.systemPackages = with pkgs; [
     polkit_gnome

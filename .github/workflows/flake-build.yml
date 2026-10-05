@@ -2,8 +2,6 @@ name: Flake builds
 
 on:
   pull_request:
-  push:
-    branches: [master]
   merge_group:
   workflow_dispatch:
 
@@ -27,11 +25,11 @@ jobs:
       - name: Build system closure
         env:
           HOST: ${{ matrix.host }}
-        run: nix build --locked --no-link --print-build-logs ".#nixosConfigurations.${HOST}.config.system.build.toplevel"
+        run: nix build --no-update-lock-file --no-link --print-build-logs ".#nixosConfigurations.${HOST}.config.system.build.toplevel"
 
   darwin:
     name: Darwin / fearful
-    runs-on: macos-27
+    runs-on: macos-26
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v6
@@ -39,4 +37,4 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build system closure
-        run: nix build --locked --no-link --print-build-logs '.#darwinConfigurations.fearful.system'
+        run: nix build --no-update-lock-file --no-link --print-build-logs '.#darwinConfigurations.fearful.system'

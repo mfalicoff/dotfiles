@@ -15,7 +15,7 @@ nixos host=hostname:
 
 # Build and switch to Darwin configuration
 darwin hostname=hostname:
-    sudo darwin-rebuild switch --flake {{flake}}#{{hostname}}
+    nh darwin switch . -H {{hostname}}
 
 # Debug build for NixOS
 nixos-debug hostname=hostname:
