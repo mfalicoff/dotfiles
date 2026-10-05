@@ -60,7 +60,6 @@
     nix.enable = true;
     secrets.enable = true;
     tools.enable = true;
-    desktop.enable = true;
     environment.enable = true;
     mobile.enable = true;
     languages = {

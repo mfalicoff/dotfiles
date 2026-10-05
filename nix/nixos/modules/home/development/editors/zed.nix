@@ -182,6 +182,10 @@ in {
           load_direnv = "shell_hook";
           base_keymap = "JetBrains";
           show_whitespaces = "all";
+          project_panel = {
+            dock = "left";
+            starts_open = true;
+          };
           file_scan_exclusions = [
             "..."
             "**/.cargo"
