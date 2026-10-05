@@ -14,7 +14,6 @@ The [`modules/system/default.nix`](../../nix/nixos/modules/system/default.nix) i
 | Login | `loginManager.enable` | [greetd](../../nix/nixos/modules/system/greetd/default.nix) |
 | Homelab | `homelab.enable` and child options; [guide](homelab.md) | [homelab](../../nix/nixos/modules/system/homelab/default.nix) |
 | Hyprland system | `wm.hyprland.enable` | [hyprland](../../nix/nixos/modules/system/hyprland/default.nix) |
-| NVIDIA | `hardware.graphics.nvidia.enable` | [nvidia](../../nix/nixos/modules/system/nvidia/default.nix) |
 | Password manager | `passwordManager.enable` | [password-manager](../../nix/nixos/modules/system/password-manager/default.nix) |
 | Secrets | sops-nix file and age key settings | [secrets](../../nix/nixos/modules/system/secrets/default.nix) |
 | SMB | `smb.enable`, `smb.server`, `smb.shares` | [smb](../../nix/nixos/modules/system/smb/default.nix) |

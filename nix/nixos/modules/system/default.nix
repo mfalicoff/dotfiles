@@ -7,7 +7,6 @@
     ./greetd
     ./homelab
     ./hyprland
-    ./nvidia
     ./password-manager
     ./secrets
     ./smb

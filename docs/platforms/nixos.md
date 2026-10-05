@@ -4,7 +4,7 @@ The root flake exposes `nixosConfigurations.fear`, `.laptop`, and `.worker`. All
 
 | Host | Role | Host files |
 | --- | --- | --- |
-| `fear` | Desktop, NVIDIA, gaming, Hyprland | [`nix/nixos/hosts/fear`](../../nix/nixos/hosts/fear) |
+| `fear` | Desktop, gaming, Hyprland | [`nix/nixos/hosts/fear`](../../nix/nixos/hosts/fear) |
 | `laptop` | Laptop, Hyprland | [`nix/nixos/hosts/laptop`](../../nix/nixos/hosts/laptop) |
 | `worker` | Homelab services | [`nix/nixos/hosts/worker`](../../nix/nixos/hosts/worker) |
 
