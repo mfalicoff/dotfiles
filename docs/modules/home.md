@@ -16,7 +16,6 @@ For example, within a host Home Manager module:
   development.tools.packages.azureCli = false;
   development.editors.vscode.extensions.zig = false;
   development.editors.zed.settings.vimMode = true;
-  shellOptions.shell.features.launchTuios = false;
   shellOptions.shell.tmux.plugins.weather = false;
   browsers.firefox.extensions.ublockOrigin = false;
   browsers.zen.settings.trackingProtection = true;
