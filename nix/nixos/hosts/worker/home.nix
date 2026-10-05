@@ -22,24 +22,33 @@
 
   shellOptions = {
     enable = true;
-    shell = {
-      tmux.enable = true;
-    };
+    zsh.enable = true;
+    terminal.enable = true;
+    navigation.enable = true;
+    monitoring.enable = true;
+    tmux.enable = true;
   };
 
   # Settings for this machine
   browsers.enable = false;
   development = {
     enable = true;
-    tools = {
-      enable = true;
-      packages = {
-        gitkraken = false;
-        yaak = false;
-      };
-    };
     git.enable = true;
+    cloud.enable = true;
+    containers.enable = true;
+    kubernetes.enable = true;
+    nix.enable = true;
+    secrets.enable = true;
+    tools.enable = true;
+    desktop.enable = false;
+    environment.enable = true;
+    languages = {
+      c.enable = true;
+      python.enable = true;
+      dotnet.enable = false;
+    };
     editors = {
+      enable = true;
       neovim.enable = true;
     };
   };

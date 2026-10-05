@@ -3,7 +3,8 @@
   pkgs,
   username,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nixvim.homeModules.nixvim
     ../../modules/home
@@ -46,13 +47,16 @@
 
   shellOptions = {
     enable = true;
-    shell = {
-      tmux.enable = true;
-    };
+    zsh.enable = true;
+    terminal.enable = true;
+    navigation.enable = true;
+    monitoring.enable = true;
+    tmux.enable = true;
   };
 
   # Settings for this machine
   windowManager = {
+    enable = true;
     wayland = {
       enable = true;
 
@@ -94,14 +98,22 @@
 
   development = {
     enable = true;
-    sdk = {
-      enable = true;
-    };
-    tools = {
-      enable = true;
-    };
     git.enable = true;
+    cloud.enable = true;
+    containers.enable = true;
+    kubernetes.enable = true;
+    nix.enable = true;
+    secrets.enable = true;
+    tools.enable = true;
+    desktop.enable = true;
+    environment.enable = true;
+    languages = {
+      c.enable = true;
+      python.enable = true;
+      dotnet.enable = true;
+    };
     editors = {
+      enable = true;
       zed.enable = true;
       vscode.enable = true;
       neovim.enable = true;

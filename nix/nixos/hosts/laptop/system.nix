@@ -67,7 +67,11 @@
   fonts.enableDefaultPackages = true;
 
   loginManager.enable = true;
-  wm.hyprland.enable = true;
+  wm.hyprland = {
+    enable = true;
+    tools.enable = true;
+    portals.enable = true;
+  };
 
   services.tlp = {
     enable = true;

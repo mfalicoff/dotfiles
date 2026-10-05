@@ -1,26 +1,17 @@
-{
-  config,
-  lib,
-  ...
-}:
-with lib;
-let
-  cfg = config.shellOptions;
-in
+{ config, lib, ... }:
 {
   imports = [
-    ./shell.nix
+    ./zsh.nix
+    ./terminal.nix
+    ./navigation.nix
+    ./monitoring.nix
     ./tmux.nix
   ];
-
-  options.shellOptions = {
-    enable = mkEnableOption "Enable Shell";
-  };
-
-  config = mkIf cfg.enable {
-    shellOptions.shell = {
-      enable = mkDefault true;
-      tmux.enable = mkDefault false;
+  options.shellOptions.enable = lib.mkEnableOption "shell configuration";
+  config = lib.mkIf config.shellOptions.enable {
+    home.sessionVariables = {
+      EDITOR = "nvim";
+      XDG_PICTURES_DIR = "~/screenshots";
     };
   };
 }

@@ -9,7 +9,7 @@ The root [flake](flake.nix) configures three NixOS machines and one Apple Silico
 | `worker` | NixOS homelab | [NixOS setup](docs/platforms/nixos.md) |
 | `fearful` | nix-darwin on Apple Silicon | [macOS setup](docs/platforms/nix-darwin.md) |
 
-Start with the platform guide for a fresh install or rebuild. The [module index](docs/modules/README.md) shows where each reusable feature lives; the [Home Manager guide](docs/modules/home.md) explains its feature switches, and the [homelab guide](docs/modules/homelab.md) covers services and secrets.
+Start with the platform guide for a fresh install or rebuild. The [NixOS guide](docs/platforms/nixos.md) covers both the graphical installer and a complete terminal-only installation from the minimal ISO. The [module index](docs/modules/README.md) shows where each reusable feature lives; the [Home Manager guide](docs/modules/home.md) explains its feature switches, and the [homelab guide](docs/modules/homelab.md) covers services and secrets.
 
 From the repository root, after reviewing the matching platform guide:
 

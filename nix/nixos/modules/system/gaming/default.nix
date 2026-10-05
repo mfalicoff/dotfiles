@@ -1,35 +1,10 @@
+{ lib, ... }:
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-with lib;
-let
-  cfg = config.gaming;
-in
-{
-  options.gaming = {
-    enable = mkEnableOption "Enable Gaming";
-  };
-
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      ryubing
-      (lutris.override {
-        extraPkgs = pkgs: [ ];
-      })
-      pcsx2
-    ];
-
-    programs.steam.enable = true;
-    programs.gamemode.enable = true;
-
-    services.sunshine = {
-      enable = true;
-      autoStart = true;
-      capSysAdmin = true;
-      openFirewall = true;
-    };
-  };
+  imports = [
+    ./launchers.nix
+    ./emulation.nix
+    ./performance.nix
+    ./streaming.nix
+  ];
+  options.gaming.enable = lib.mkEnableOption "gaming";
 }

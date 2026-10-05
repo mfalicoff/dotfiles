@@ -23,6 +23,9 @@
     };
 
     # Linux-specific inputs
+    # Keep the provider's own nixpkgs pin to match its prebuilt kernels.
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+
     hyprland.url = "github:hyprwm/Hyprland";
 
     hyprpanel = {

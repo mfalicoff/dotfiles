@@ -19,7 +19,7 @@ let
   };
 in
 {
-  options.shellOptions.shell.tmux = {
+  options.shellOptions.tmux = {
     enable = lib.mkEnableOption "tmux";
     tmuxinator = lib.mkOption {
       type = lib.types.bool;
@@ -48,14 +48,14 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && cfg.shell.enable && cfg.shell.tmux.enable) {
-    home.packages = lib.optional cfg.shell.tmux.tmuxinator pkgs.tmuxinator;
+  config = lib.mkIf (cfg.enable && cfg.tmux.enable) {
+    home.packages = lib.optional cfg.tmux.tmuxinator pkgs.tmuxinator;
 
     programs.tmux = {
       enable = true;
       plugins =
-        builtins.attrValues (lib.filterAttrs (name: _: cfg.shell.tmux.plugins.${name}) bundledPlugins)
-        ++ cfg.shell.tmux.advanced.plugins;
+        builtins.attrValues (lib.filterAttrs (name: _: cfg.tmux.plugins.${name}) bundledPlugins)
+        ++ cfg.tmux.advanced.plugins;
       baseIndex = 1;
       prefix = "C-Space";
       keyMode = "vi";
@@ -95,17 +95,17 @@ in
         bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
         bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
       ''
-      + cfg.shell.tmux.advanced.extraConfig;
+      + cfg.tmux.advanced.extraConfig;
     };
 
-    programs.zsh.initContent = ''
+    programs.zsh.initContent = lib.mkIf cfg.zsh.enable ''
       # Reuse an existing tmux session or create one for interactive shells.
       if [[ -o interactive && -t 1 && -z "$TMUX" ]]; then
         tmux attach-session 2>/dev/null || tmux new-session
       fi
     '';
 
-    home.sessionVariables = lib.optionalAttrs cfg.shell.tmux.tmuxinator {
+    home.sessionVariables = lib.optionalAttrs cfg.tmux.tmuxinator {
       TMUXINATOR_CONFIG = "${config.home.homeDirectory}/configuration/tmuxinator";
     };
   };

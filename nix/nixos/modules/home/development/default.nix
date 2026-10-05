@@ -1,26 +1,18 @@
+{ lib, ... }:
 {
-  config,
-  lib,
-  ...
-}:
-with lib; let
-  cfg = config.development;
-in {
   imports = [
     ./editors
     ./git.nix
-    ./sdk.nix
+    ./languages
+    ./environment.nix
+    ./cloud.nix
+    ./containers.nix
+    ./kubernetes.nix
+    ./nix.nix
+    ./secrets.nix
     ./tools.nix
+    ./desktop.nix
   ];
 
-  options.development = {
-    enable = mkEnableOption "Enable Developer tools";
-  };
-
-  config = mkIf cfg.enable {
-    development.editors.enable = mkDefault true;
-    development.sdk.enable = mkDefault false;
-    development.tools.enable = mkDefault true;
-    development.git.enable = mkDefault true;
-  };
+  options.development.enable = lib.mkEnableOption "development configuration";
 }

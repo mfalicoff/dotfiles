@@ -51,7 +51,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.windowManager.enable && config.windowManager.wayland.enable && cfg.enable) {
     programs.waybar = {
       enable = true;
       systemd = {

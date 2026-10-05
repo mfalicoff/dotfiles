@@ -11,17 +11,19 @@ let
 in
 {
   options.passwordManager = {
-    enable = mkEnableOption "Enable 1password";
+    enable = mkEnableOption "password management";
+    onePassword.enable = mkEnableOption "1Password CLI and desktop app";
+    desktopIntegration.enable = mkEnableOption "desktop authentication agent and keyring integration";
   };
 
   config = mkIf cfg.enable {
-    programs._1password.enable = true;
-    programs._1password-gui = {
+    programs._1password.enable = cfg.onePassword.enable;
+    programs._1password-gui = mkIf cfg.onePassword.enable {
       enable = true;
       polkitPolicyOwners = [ "${username}" ];
     };
 
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    systemd.user.services.polkit-gnome-authentication-agent-1 = mkIf cfg.desktopIntegration.enable {
       description = "polkit-gnome-authentication-agent-1";
       wantedBy = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
@@ -35,7 +37,7 @@ in
       };
     };
 
-    services.gnome.gnome-keyring.enable = true;
-    security.pam.services.hyprland.enableGnomeKeyring = true;
+    services.gnome.gnome-keyring.enable = cfg.desktopIntegration.enable;
+    security.pam.services.hyprland.enableGnomeKeyring = cfg.desktopIntegration.enable;
   };
 }

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
@@ -43,6 +44,8 @@ in
   };
 
   config = mkIf (config.development.enable && cfg.enable) {
+    home.packages = [ pkgs.lazygit ];
+
     home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
       rm -f ~/.gitconfig
     '';

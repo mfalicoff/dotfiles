@@ -9,6 +9,14 @@
 
   styling.stylix.enable = true;
 
+  macos = {
+    enable = true;
+    keyboard.enable = true;
+    login.enable = true;
+    desktop.enable = true;
+    security.enable = true;
+  };
+
   networking.hostName = darwinHostname;
   networking.computerName = darwinHostname;
   system.defaults.smb.NetBIOSName = darwinHostname;
@@ -21,15 +29,16 @@
   # activation.
   homebred = {
     enable = true;
-    taps = [ "kartax/tap" "skyhook-io/tap" ];
+    taps = [
+      "kartax/tap"
+      "skyhook-io/tap"
+    ];
     brews = [
       "proton-pass-cli"
       "mole"
     ];
     casks = [
       "chatgpt"
-      # "discord"
-      "dotnet-sdk"
       "firefox"
       "google-chrome"
       "kartax/tap/immich-desktop"

@@ -1,4 +1,9 @@
-{ lib, pkgs, username, ... }:
+{
+  lib,
+  pkgs,
+  username,
+  ...
+}:
 {
   home = {
     inherit username;
@@ -18,7 +23,6 @@
       openjdk
       sops
       talosctl
-      television
       terraform
     ];
   };
@@ -49,15 +53,23 @@
 
   development = {
     enable = true;
-    # The Darwin system profile already manages dotnet-sdk through Homebrew.
-    sdk.enable = false;
-    tools = {
-      enable = true;
-    };
     git = {
       enable = true;
       enableDelta = false;
       enableLfs = true;
+    };
+    cloud.enable = true;
+    containers.enable = true;
+    kubernetes.enable = true;
+    nix.enable = true;
+    secrets.enable = true;
+    tools.enable = true;
+    desktop.enable = true;
+    environment.enable = true;
+    languages = {
+      c.enable = true;
+      python.enable = true;
+      dotnet.enable = true;
     };
     editors = {
       enable = true;
@@ -96,9 +108,11 @@
 
   shellOptions = {
     enable = true;
-    shell = {
-      tmux.enable = true;
-    };
+    zsh.enable = true;
+    terminal.enable = true;
+    navigation.enable = true;
+    monitoring.enable = true;
+    tmux.enable = true;
   };
 
   home.activation.showLibrary = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

@@ -1,30 +1,90 @@
-# Home Manager options
+# Home Manager bundles
 
-The shared Home Manager modules live in [`nix/nixos/modules/home`](../../nix/nixos/modules/home). Set their options in a host's `home.nix`; macOS also sets shared options in [`nix/darwin/home.nix`](../../nix/darwin/home.nix). Parent `enable` switches must be on for child settings to take effect.
+The shared modules live in [`nix/nixos/modules/home`](../../nix/nixos/modules/home). Hosts select bundles in `home.nix`; macOS selects them in [`nix/darwin/home.nix`](../../nix/darwin/home.nix).
 
-| Module | Common child switches | Defaults after enabling parent |
-| --- | --- | --- |
-| [`browsers`](../../nix/nixos/modules/home/browsers/default.nix) | `firefox`, `zen`, `chrome` | Each browser off |
-| [`development`](../../nix/nixos/modules/home/development/default.nix) | `editors`, `sdk`, `tools`, `git` | Editors, tools, Git on; SDK off |
-| [`shellOptions`](../../nix/nixos/modules/home/shell/default.nix) | `shell`, `shell.tmux` | Shell on; tmux off |
-| [`windowManager`](../../nix/nixos/modules/home/windowManager/default.nix) | `wayland.hyprland`, `wayland.bar.waybar`, `aerospace` | Children off |
+A bundle owns its package list and sensible program settings. Enabling it selects the entire bundle. Adding a tool to an existing bundle takes one edit in that module; hosts already using the bundle receive it automatically. Host-specific extra packages can still go in `home.packages`, and native Home Manager options remain available for exceptional overrides.
 
-For example, within a host Home Manager module:
+Parent switches gate their children. Enabling `development`, `shellOptions`, `browsers`, or `windowManager` does not select their child bundles automatically.
+
+## Development
 
 ```nix
 {
-  development.tools.packages.azureCli = false;
-  development.editors.vscode.extensions.zig = false;
-  development.editors.zed.settings.vimMode = true;
-  shellOptions.shell.tmux.plugins.weather = false;
-  browsers.firefox.extensions.ublockOrigin = false;
-  browsers.zen.settings.trackingProtection = true;
-  browsers.chrome.settings.startMaximized = true;
+  development = {
+    enable = true;
+    git.enable = true;
+    tools.enable = true;
+    cloud.enable = true;
+    containers.enable = true;
+    kubernetes.enable = true;
+    nix.enable = true;
+    secrets.enable = true;
+    environment.enable = true;
+    desktop.enable = false;
+    languages = {
+      c.enable = true;
+      python.enable = true;
+      dotnet.enable = false;
+    };
+    editors = {
+      enable = true;
+      neovim.enable = true;
+    };
+  };
 }
 ```
 
-Bundled development tools, shell packages and plugins, editor extensions, and Firefox and Zen extensions start enabled when their component is enabled. These defaults are shared across platforms. Set an individual switch to `false` to leave it out. Optional browser settings still start disabled. Browser extensions create a managed `default` profile. The curated add-ons come from the pinned NUR overlay and may require browser approval after installation. Firefox and Zen have separate `extensions`, `settings`, and `advanced` options.
+| Bundle under `development` | Contents |
+| --- | --- |
+| `git` | Git configuration, lazygit; existing Delta and LFS defaults |
+| `tools` | Just, jq, killport |
+| `cloud` | Azure CLI |
+| `containers` | compose2nix, lazydocker |
+| `kubernetes` | kubectl, k9s, kubeseal |
+| `nix` | nixfmt, nixd, Alejandra |
+| `secrets` | age |
+| `environment` | direnv with Zsh integration |
+| `desktop` | GitKraken, Yaak; omit on headless hosts |
+| `languages.c` | GCC |
+| `languages.python` | uv |
+| `languages.dotnet` | .NET 10 SDK |
+| `editors` | Select Zed, Neovim, VS Code, or JetBrains separately |
 
-Each module also exposes `advanced` settings for items outside the curated list: `development.tools.advanced.extraPackages`, editor extensions and settings, `shellOptions.shell.advanced.shellAliases`, and browser profile settings. Advanced settings override bundled values for the same key. Chrome accepts `browsers.chrome.advanced.commandLineArgs`.
+Each area lives in its own file under [`development`](../../nix/nixos/modules/home/development). Language bundles live in `development/languages`. The old `development.sdk.enable` is now `development.languages.dotnet.enable`; the old mixed `development.tools` package selection is replaced by the bundles above.
 
-Zen is enabled on `fear` and `fearful` using the pinned [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake). On macOS, Home Manager copies `profiles.ini` to a writable file so Zen can complete profile setup. Both hosts disable `stylix.targets.zen-browser`; to style a managed profile, enable that target and set its `profileNames` to `[ "default" ]`.
+Editors keep their existing presets. For example, `editors.vscode.enable = true` includes its curated extensions, and `editors.neovim.enable = true` includes its plugins and language servers. You do not need to list them in every host. Existing Zed and VS Code `extensions`, `settings`, and `advanced` options remain available for exceptions. JetBrains still uses `jetbrains.enable` plus IDE choices such as `rider = true`.
+
+## Shell
+
+```nix
+{
+  shellOptions = {
+    enable = true;
+    zsh.enable = true;
+    terminal.enable = true;
+    navigation.enable = true;
+    monitoring.enable = true;
+    tmux.enable = true;
+  };
+}
+```
+
+| Bundle under `shellOptions` | Contents |
+| --- | --- |
+| `zsh` | Zsh, completion, autosuggestions, highlighting, Pure prompt, Oh My Zsh plugins |
+| `terminal` | Ghostty and its existing appearance settings |
+| `navigation` | fzf, ripgrep, eza, Yazi, Skim |
+| `monitoring` | fastfetch, btop |
+| `tmux` | tmux, tmuxinator, curated plugins and key bindings |
+
+These replace the former `shellOptions.shell` bundle. tmux, navigation, and the terminal can be selected independently of Zsh. tmux auto-attaches only when the Zsh bundle is also enabled.
+
+Zsh exposes `extraPlugins`, `shellAliases`, and `initContent` for host-specific additions. The existing tmux options move from `shellOptions.shell.tmux` to `shellOptions.tmux`, including `plugins.weather`, `tmuxinator`, and `advanced.extraConfig`.
+
+## Browsers and window managers
+
+Browsers already form separate bundles: enable `browsers.enable` and then `firefox.enable`, `zen.enable`, or `chrome.enable`. Firefox and Zen keep their curated extensions enabled by default. Their `extensions`, `settings`, and `advanced` options remain available; Chrome retains `settings` and `advanced.commandLineArgs`.
+
+Zen uses the pinned [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake). On macOS, Home Manager makes `profiles.ini` writable for profile setup. Stylix profile targeting remains a host setting.
+
+Window managers require `windowManager.enable`. Wayland components additionally require `windowManager.wayland.enable`; then select `hyprland.enable` and/or `bar.waybar.enable`. AeroSpace uses `windowManager.aerospace.enable`. Existing monitor, startup command, and bar settings remain configurable.

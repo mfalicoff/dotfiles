@@ -45,15 +45,36 @@
   system.stateVersion = "24.11";
 
   # Custom Modules
-  bootManager.enable = true;
-  gaming.enable = true;
+  bootManager = {
+    enable = true;
+    kernel = "cachyos";
+  };
+  gaming = {
+    enable = true;
+    launchers.enable = true;
+    emulation.enable = true;
+    performance.enable = true;
+    streaming.enable = true;
+  };
   loginManager.enable = true;
-  passwordManager.enable = true;
+  passwordManager = {
+    enable = true;
+    onePassword.enable = true;
+    desktopIntegration.enable = true;
+  };
   smb.enable = true;
   sshServer.enable = true;
   styling.stylix.enable = true;
-  virt.enable = true;
-  wm.hyprland.enable = true;
+  virt = {
+    enable = true;
+    virtualMachines.enable = true;
+    containers.enable = true;
+  };
+  wm.hyprland = {
+    enable = true;
+    tools.enable = true;
+    portals.enable = true;
+  };
   calibre.enable = true;
 
   environment.systemPackages = with pkgs; [
