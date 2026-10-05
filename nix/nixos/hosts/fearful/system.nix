@@ -28,16 +28,12 @@
     ];
     casks = [
       "chatgpt"
-      "claude-code"
-      "discord"
+      # "discord"
       "dotnet-sdk"
       "firefox"
-      "gitkraken"
       "google-chrome"
-      "homebrew-app"
       "kartax/tap/immich-desktop"
       "insync"
-      # "jetbrains-toolbox"
       "mongodb-compass"
       "orbstack"
       "proton-mail"

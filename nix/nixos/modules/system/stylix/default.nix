@@ -14,7 +14,7 @@ in {
   config = mkIf cfg.stylix.enable {
     stylix.enable = true;
     stylix.image = ./ico.png;
-    stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/da-one-sea.yaml";
+    stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
     stylix.opacity = {
       desktop = 0.0;
       terminal = 0.9;

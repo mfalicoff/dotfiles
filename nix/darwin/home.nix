@@ -45,7 +45,7 @@
   programs.nh = {
     enable = true;
   };
-  stylix.targets.zen-browser.enable = false;
+  stylix.targets.zen-browser.enable = true;
 
   development = {
     enable = true;
@@ -53,10 +53,6 @@
     sdk.enable = false;
     tools = {
       enable = true;
-      packages = {
-        # GitKraken is managed by Homebrew on Darwin.
-        gitkraken = false;
-      };
     };
     git = {
       enable = true;
@@ -72,6 +68,9 @@
       neovim.enable = false;
     };
   };
+
+  programs.codex.enable = true;
+  programs.discord.enable = true;
 
   programs.omniwm = {
     enable = true;
