@@ -1,0 +1,33 @@
+# Managed by Home Manager. Edit this repository file, then rebuild nix-darwin.
+theme = "dotfiles"
+pinned = []
+
+[general]
+max_results = 20
+matching = "fuzzy"
+ranking = "frecency"
+background_new_instance = false
+
+[sources]
+apps = true
+scripts = true
+system_settings = true
+
+[scripts]
+dirs = ["~/.config/aerofi/scripts"]
+
+[apps]
+ignore_names = ["Uninstall*", "Installer"]
+# Aerofi scans one directory level, so the Home Manager app folder must
+# be included explicitly rather than relying on ~/Applications.
+extra_dirs = [
+  "/Applications/Nix Apps",
+  "~/Applications/Home Manager Apps",
+  "~/.nix-profile/Applications",
+]
+
+[bindings]
+toggle = "cmd+d"
+
+[bindings.launcher]
+"cmd+r" = "Reload Configuration"

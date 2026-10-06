@@ -1,0 +1,115 @@
+# Managed by Home Manager as ~/.config/aerofi/themes/dotfiles.toml.
+# Catppuccin Mocha matches this host's Stylix palette.
+name = "Dotfiles Mocha"
+
+[colors]
+bg = "#1e1e2e"
+surface = "#313244"
+surface2 = "#45475a"
+border = "#585b7066"
+text = "#cdd6f4"
+subtle = "#a6adc8"
+accent = "#89b4fa"
+green = "#a6e3a1"
+urgent = "#f38ba8"
+
+[font]
+family = "JetBrainsMono Nerd Font Mono"
+size = 14.0
+weight = "400"
+
+[window]
+width = 720.0
+height = 480.0
+# Custom widget layouts require a fixed height to avoid clipping.
+auto_height = false
+padding = 16.0
+background = "$bg"
+blur = true
+background_opacity = 0.94
+corner_radius = 16.0
+border_width = 1.0
+border_color = "$border"
+
+[mainbox]
+orientation = "vertical"
+children = ["InputBar", "ListView", "footer"]
+
+[inputbar]
+height = 46.0
+padding = [10.0, 14.0]
+margin = [0.0, 0.0, 10.0, 0.0]
+background = "$surface"
+text_color = "$text"
+placeholder = "Search apps, scripts, or commands…"
+placeholder_color = "$subtle"
+corner_radius = 10.0
+icon = "❯"
+icon_color = "$accent"
+
+[listview]
+columns = 1
+spacing = 4.0
+empty_text = "No matching results"
+empty_text_color = "$subtle"
+highlight_matches = true
+
+[listview.category_badge]
+color = "$subtle"
+
+[element]
+padding = [8.0, 12.0]
+corner_radius = 8.0
+text_color = "$text"
+description_color = "$subtle"
+show_icons = true
+icon_size = 32.0
+layout = ["icon", "name", "spacer", "category_badge", "shortcut"]
+
+[element.selected]
+background = "$surface2"
+text_color = "$text"
+description_color = "$accent"
+
+[status_colors]
+accent = "$accent"
+muted = "$subtle"
+urgent_background = "$urgent"
+urgent_text = "$bg"
+urgent_row_background = "#f38ba822"
+active_background = "$green"
+active_text = "$bg"
+active_row_background = "#a6e3a122"
+
+[toast]
+running_dot = "$accent"
+success_dot = "$green"
+error_dot = "$urgent"
+
+[widgets.footer]
+type = "box"
+orientation = "horizontal"
+padding = [8.0, 4.0]
+children = ["help", "spacer", "reload"]
+
+[widgets.help]
+type = "text"
+text = "↵ Open · Esc Close"
+color = "$subtle"
+font_size = 11.0
+
+[widgets.spacer]
+type = "spacer"
+
+[widgets.reload]
+type = "button"
+text = "Reload"
+action = "Reload Configuration"
+hotkey = "cmd+r"
+close = false
+color = "$text"
+background = "$surface"
+hover_background = "$surface2"
+radius = 6.0
+padding = [4.0, 8.0]
+font_size = 11.0

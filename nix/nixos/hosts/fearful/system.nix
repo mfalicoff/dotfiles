@@ -29,6 +29,7 @@
   homebred = {
     enable = true;
     taps = [
+      "frostymur/tap"
       "kartax/tap"
       "skyhook-io/tap"
     ];
@@ -44,7 +45,6 @@
       "orbstack"
       "proton-mail"
       "skyhook-io/tap/radar-desktop"
-      "raycast"
       "spotify"
       "wallspace"
       "whatsapp"
@@ -56,4 +56,13 @@
       "Infuse 7" = 1136220934;
     };
   };
+
+  # Aerofi needs a running user service to handle its global launcher hotkey.
+  homebrew.brews = [
+    {
+      name = "frostymur/tap/aerofi";
+      start_service = true;
+      restart_service = "changed";
+    }
+  ];
 }

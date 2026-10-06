@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   username,
@@ -34,6 +35,14 @@
   '';
 
   xdg.configFile."television".source = ./config/television;
+  xdg.configFile."aerofi/config.toml".source = ./config/aerofi/config.toml;
+  xdg.configFile."aerofi/themes/dotfiles.toml".source = ./config/aerofi/theme.toml;
+
+  # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
+  home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run ${lib.getExe pkgs.python3} ${./config/aerofi/cache-icons.py} \
+      "${config.xdg.configHome}/aerofi/config.toml"
+  '';
 
   browsers = {
     enable = true;
@@ -45,6 +54,10 @@
   stylix.targets.zen-browser = {
     enable = true;
     profileNames = ["default"];
+  };
+  windowManager = {
+    enable = true;
+    omniwm.enable = true;
   };
 
   development = {
@@ -80,11 +93,6 @@
 
   programs.codex.enable = true;
   programs.discord.enable = true;
-
-  programs.omniwm = {
-    enable = true;
-    settings = ./config/omniwm/omniwm-settings.toml;
-  };
 
   # Keep the additional Git settings from the former Darwin .gitconfig while
   # letting the shared development module own the generated Git config.

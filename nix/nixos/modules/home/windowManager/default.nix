@@ -1,7 +1,6 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   imports = [
-    ./aerospace
+    ./omniwm
     ./hyprland
   ];
   options.windowManager.enable = lib.mkEnableOption "windowManager configuration";
