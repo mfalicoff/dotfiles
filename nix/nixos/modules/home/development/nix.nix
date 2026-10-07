@@ -13,7 +13,8 @@
   flakeExpr = "builtins.getFlake ${builtins.toJSON cfg.completion.flakePath}";
   systemExpr = "(${flakeExpr}).${configurationSet}.${builtins.toJSON cfg.completion.hostName}";
   nixdSettings = {
-    nixpkgs.expr = "import (${flakeExpr}).inputs.nixpkgs { system = ${builtins.toJSON pkgs.stdenv.hostPlatform.system}; config.allowUnfree = true; }";
+    # Use the host's package set so completion includes NUR and other overlays.
+    nixpkgs.expr = "${systemExpr}.pkgs";
     formatting.command = ["alejandra" "-q"];
     options = {
       system.expr = "${systemExpr}.options";
