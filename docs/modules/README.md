@@ -116,3 +116,22 @@ nix eval --impure --json --expr '
 These checks exercise actual Home Manager and NixOS modules, including parent gating and independent bundle selection. System evaluation remains available through `just check-nixos <host>` and `just check-darwin fearful`.
 
 Kernel selection checks use the same command with `./tests/kernels.nix` in place of `./tests/bundles.nix`. They cover all four choices, cache scoping, disabled boot configuration, and invalid selections.
+
+Language/editor integration checks use the same command with `./tests/development.nix`. They cover automatic extensions and Neovim support, all JetBrains mappings, parent gating, extension opt-outs, and language/formatter setting overrides.
+
+Run Neovim's runtime checks on macOS without activating the system configuration:
+
+```sh
+neovim_check_dir=$(mktemp -d)
+nix build --out-link "$neovim_check_dir/package" \
+  .#darwinConfigurations.fearful.config.home-manager.users.mazilious.programs.nixvim.build.package
+"$neovim_check_dir/package/bin/nixvim-print-init" > "$neovim_check_dir/init.lua"
+XDG_CONFIG_HOME="$neovim_check_dir/config" \
+XDG_DATA_HOME="$neovim_check_dir/data" \
+XDG_STATE_HOME="$neovim_check_dir/state" \
+XDG_CACHE_HOME="$neovim_check_dir/cache" \
+  "$neovim_check_dir/package/bin/nvim" --headless -u "$neovim_check_dir/init.lua" \
+  '+luafile tests/neovim.lua'
+```
+
+These check startup, completion capabilities, keybindings after LSP attachment, project-root dispatch, picker/explorer windows, Treesitter highlighting, and actual formatting with save toggles. The isolated XDG directories keep the checks separate from live editor sessions.

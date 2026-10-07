@@ -7,9 +7,7 @@
 with lib; let
   cfg = config.development.editors.zed;
   bundledExtensions = {
-    nix = "nix";
     toml = "toml";
-    elixir = "elixir";
     make = "make";
     catppuccin = "catppuccin";
     catppuccinIcons = "catppuccin-icons";
@@ -60,13 +58,6 @@ in {
   };
 
   config = mkIf (config.development.enable && config.development.editors.enable && cfg.enable) {
-    home.packages = with pkgs; [
-      nil
-      nixd
-      alejandra
-      omnisharp-roslyn
-    ];
-
     programs.zed-editor = {
       enable = true;
       extensions =
@@ -117,66 +108,6 @@ in {
               breadcrumbs = true;
             };
             working_directory = "current_project_directory";
-          };
-          lsp = {
-            elixir-ls = {
-              settings = {
-                dialyzerEnabled = true;
-              };
-            };
-          };
-          languages = {
-            "Elixir" = {
-              language_servers = [
-                "!lexical"
-                "elixir-ls"
-                "!next-ls"
-              ];
-              format_on_save = "on";
-              formatter = {
-                external = {
-                  command = "mix";
-                  arguments = [
-                    "format"
-                    "--stdin-filename"
-                    "{buffer_path}"
-                    "-"
-                  ];
-                };
-              };
-            };
-            "HEEx" = {
-              language_servers = [
-                "!lexical"
-                "elixir-ls"
-                "!next-ls"
-              ];
-              format_on_save = "on";
-              formatter = {
-                external = {
-                  command = "mix";
-                  arguments = [
-                    "format"
-                    "--stdin-filename"
-                    "{buffer_path}"
-                    "-"
-                  ];
-                };
-              };
-            };
-            Nix = {
-              language_servers = ["nixd"];
-              format_on_save = "on";
-              formatter = {
-                external = {
-                  command = "alejandra";
-                  arguments = [
-                    "-q"
-                    "-"
-                  ];
-                };
-              };
-            };
           };
           vim_mode = cfg.settings.vimMode;
           load_direnv = "shell_hook";

@@ -78,16 +78,15 @@
     languages = {
       c.enable = true;
       python.enable = true;
-      dotnet.enable = true;
+      dotnet = {
+        enable = true;
+        rider.enable = true;
+      };
     };
     editors = {
       enable = true;
-      jetbrains = {
-        enable = true;
-        rider = true;
-      };
       zed.enable = true;
-      neovim.enable = false;
+      neovim.enable = true;
     };
   };
 

@@ -1,606 +1,519 @@
 {
   config,
   lib,
+  pkgs,
+  options,
   ...
-}:
-with lib; let
+}: let
   cfg = config.development.editors.neovim;
 in {
-  options.development.editors.neovim = {
-    enable = mkEnableOption "Enable Neovim";
-  };
+  options.development.editors.neovim.enable = lib.mkEnableOption "Neovim";
 
-  config = mkIf (config.development.enable && config.development.editors.enable && cfg.enable) {
-    programs.nixvim = {
-      enable = true;
-
-      # Basic vim options
-      viAlias = true;
-      vimAlias = true;
-
-      # # General settings
-      # clipboard.register = "unnamedplus";
-      # mouse = "a";
-      # updatetime = 100;
-      # swapfile = false;
-      # undofile = true;
-      # completeopt = ["menu" "menuone" "noselect"];
-
-      # # UI settings
-      opts = {
-        number = true; # Show line numbers
-        relativenumber = true; # Show relative line numbers
-        shiftwidth = 2; # Tab width should be 2
-        termguicolors = true;
-      };
-      # relativenumber = true;
-      # cursorline = true;
-      # signcolumn = "yes";
-      # colorcolumn = ["80" "120"];
-      # scrolloff = 8;
-      # wrap = false;
-
-      # # Tab settings
-      # tabstop = 4;
-      # shiftwidth = 4;
-      # expandtab = true;
-      # autoindent = true;
-      # smartindent = true;
-
-      # # Search settings
-      # hlsearch = true;
-      # ignorecase = true;
-      # smartcase = true;
-
-      # # Split settings
-      # splitbelow = true;
-      # splitright = true;
-
-      # # Backup settings
-      # backup = false;
-      # writebackup = false;
-
-      # Global options
-      globals = {
-        mapleader = " ";
-        maplocalleader = " ";
-      };
-
-      # Theme
-      colorschemes.catppuccin = {
+  config = lib.mkIf (config.development.enable && config.development.editors.enable && cfg.enable) (lib.mkMerge [
+    {
+      programs.nixvim = {
         enable = true;
-        settings = {
-          integrations = {
-            cmp = true;
+        viAlias = true;
+        vimAlias = true;
+        extraPackages = [pkgs.ripgrep pkgs.fd pkgs.git];
+        globals = {
+          mapleader = " ";
+          maplocalleader = "\\";
+          autoformat = true;
+        };
+        clipboard.register = "unnamedplus";
+        opts = {
+          number = true;
+          relativenumber = true;
+          termguicolors = true;
+          cursorline = true;
+          signcolumn = "yes";
+          scrolloff = 4;
+          sidescrolloff = 8;
+          wrap = false;
+          mouse = "a";
+          tabstop = 2;
+          shiftwidth = 2;
+          softtabstop = 2;
+          expandtab = true;
+          smartindent = true;
+          ignorecase = true;
+          smartcase = true;
+          splitbelow = true;
+          splitright = true;
+          splitkeep = "screen";
+          undofile = true;
+          updatetime = 200;
+          timeoutlen = 300;
+          completeopt = "menu,menuone,noselect";
+          pumheight = 10;
+          laststatus = 3;
+          conceallevel = 2;
+          inccommand = "nosplit";
+          wildmode = "longest:full,full";
+          fillchars = "eob: ,fold: ,foldopen:,foldsep: ,foldclose:";
+          winborder = "rounded";
+        };
+        diagnostic.settings = {
+          severity_sort = true;
+          underline = true;
+          update_in_insert = false;
+          virtual_text = {
+            spacing = 4;
+            prefix = "●";
+          };
+          float.border = "rounded";
+          signs.text.__raw = "{ [vim.diagnostic.severity.ERROR] = ' ', [vim.diagnostic.severity.WARN] = ' ', [vim.diagnostic.severity.INFO] = ' ', [vim.diagnostic.severity.HINT] = '󰌵 ' }";
+        };
+        colorschemes.catppuccin = {
+          enable = true;
+          settings = {
+            flavour = "mocha";
+            transparent_background = false;
+            show_end_of_buffer = false;
+            styles = {
+              comments = ["italic"];
+              keywords = ["italic"];
+            };
+            custom_highlights.__raw = ''
+              function(c)
+                return {
+                  NormalFloat = { bg = c.mantle },
+                  FloatBorder = { fg = c.surface2, bg = c.mantle },
+                  FloatTitle = { fg = c.lavender, bg = c.mantle, bold = true },
+                  WinSeparator = { fg = c.surface0 },
+                  CursorLineNr = { fg = c.lavender, bold = true },
+                  SnacksDashboardHeader = { fg = c.lavender },
+                  SnacksDashboardTitle = { fg = c.mauve, bold = true },
+                  SnacksDashboardIcon = { fg = c.lavender },
+                  SnacksDashboardKey = { fg = c.peach, bold = true },
+                  SnacksDashboardDesc = { fg = c.text },
+                  SnacksDashboardFooter = { fg = c.overlay1, italic = true },
+                  SnacksIndent = { fg = c.surface0 },
+                  SnacksIndentScope = { fg = c.lavender },
+                  SnacksPickerBorder = { fg = c.surface2, bg = c.mantle },
+                  SnacksPickerTitle = { fg = c.lavender, bold = true },
+                  SnacksPickerMatch = { fg = c.peach, bold = true },
+                  SnacksPickerDir = { fg = c.overlay1 },
+                  BlinkCmpMenu = { bg = c.mantle },
+                  BlinkCmpMenuBorder = { fg = c.surface2, bg = c.mantle },
+                  BlinkCmpDoc = { bg = c.mantle },
+                  BlinkCmpDocBorder = { fg = c.surface2, bg = c.mantle },
+                }
+              end
+            '';
+          };
+          settings.integrations = {
+            blink_cmp = true;
             gitsigns = true;
-            nvimtree = true;
             treesitter = true;
-            notify = true;
             mini.enabled = true;
             native_lsp.enabled = true;
-            telescope.enabled = true;
             which_key = true;
+            noice = true;
+            lualine = {
+              mocha.__raw = "function(c) return { normal = { a = { bg = c.lavender }, b = { fg = c.lavender } } } end";
+            };
+            snacks.enabled = true;
+            bufferline = true;
           };
         };
-      };
-
-      # # Essential plugins
-      plugins = {
-        # Lua line - status line
-        lualine = {
-          enable = true;
-          settings = {
-            options = {
-              globalstatus = true;
-              theme = "catppuccin";
+        plugins = {
+          mini = {
+            enable = true;
+            mockDevIcons = true;
+            modules = {
+              icons = {};
+              ai.n_lines = 500;
+              pairs = {};
             };
-            sections = {
-              lualine_a = ["mode"];
-              lualine_b = [
-                "branch"
-                "diff"
-              ];
-              lualine_c = [
-                {
-                  filename = {
+          };
+          lualine = {
+            enable = true;
+            settings = {
+              options = {
+                globalstatus = true;
+                theme = "catppuccin-nvim";
+                component_separators = {
+                  left = "";
+                  right = "";
+                };
+                section_separators = {
+                  left = "";
+                  right = "";
+                };
+                disabled_filetypes.statusline = ["snacks_dashboard"];
+              };
+              sections = {
+                lualine_a = [
+                  {
+                    "__unkeyed-1" = "mode";
+                    icon = "";
+                  }
+                ];
+                lualine_b = [
+                  {
+                    "__unkeyed-1" = "branch";
+                    icon = "";
+                  }
+                  "diff"
+                ];
+                lualine_c = [
+                  {
+                    "__unkeyed-1" = "filename";
                     path = 1;
-                  };
+                    symbols = {
+                      modified = "●";
+                      readonly = "";
+                      unnamed = "Untitled";
+                    };
+                  }
+                  {
+                    "__unkeyed-1" = "diagnostics";
+                    symbols = {
+                      error = " ";
+                      warn = " ";
+                      info = " ";
+                      hint = "󰌵 ";
+                    };
+                  }
+                ];
+                lualine_x = ["filetype"];
+                lualine_y = ["progress"];
+                lualine_z = ["location"];
+              };
+            };
+          };
+          bufferline = {
+            enable = true;
+            settings.highlights.__raw = "require('catppuccin.special.bufferline').get_theme()";
+            settings.options = {
+              diagnostics = "nvim_lsp";
+              always_show_bufferline = false;
+              show_close_icon = false;
+              separator_style = "thin";
+              indicator.style = "icon";
+              modified_icon = "●";
+              buffer_close_icon = "󰅖";
+              offsets = [
+                {
+                  filetype = "snacks_layout_box";
+                  text = "Explorer";
+                  text_align = "left";
                 }
               ];
-              lualine_x = [
-                "encoding"
-                "fileformat"
-                "filetype"
-              ];
-              lualine_y = ["progress"];
-              lualine_z = ["location"];
             };
           };
-        };
-
-        mini = {
-          enable = true;
-          modules.icons = {};
-          mockDevIcons = true;
-        };
-
-        # LSP
-        lsp = {
-          enable = true;
-          inlayHints = false;
-          servers = {
-            csharp_ls.enable = true;
-            nixd.enable = true;
-            html.enable = true;
-            cssls.enable = true;
-            jsonls.enable = true;
-            lua_ls.enable = true;
-          };
-
-          # LSP Keymaps
-          keymaps = {
-            lspBuf = {
-              "<leader>ca" = "code_action";
-              "<leader>cr" = "rename";
-              "gd" = "definition";
-              "gD" = "declaration";
-              "gi" = "implementation";
-              "gr" = "references";
-              "K" = "hover";
-              "<C-k>" = "signature_help";
-              "<leader>D" = "type_definition";
-              "<leader>ff" = "format";
+          lsp = {
+            enable = true;
+            inlayHints = true;
+            servers = {
+              jsonls.enable = true;
+              lua_ls = {
+                enable = true;
+                settings.Lua = {
+                  diagnostics.globals = ["vim" "Snacks"];
+                  workspace.checkThirdParty = false;
+                  codeLens.enable = true;
+                };
+              };
             };
-            diagnostic = {
-              "<leader>e" = "open_float";
-              "[d" = "goto_prev";
-              "]d" = "goto_next";
-              "<leader>q" = "setloclist";
-            };
-          };
-        };
-
-        # LSP handlers
-        lsp-format.enable = true;
-
-        # LSP UI improvements
-        lspkind = {
-          enable = true;
-          settings = {
-            cmp = {
-              enable = true;
-              menu = {
-                nvim_lsp = "[LSP]";
-                nvim_lua = "[Lua]";
-                path = "[Path]";
-                luasnip = "[Snippet]";
-                buffer = "[Buffer]";
+            # Buffer-local actions must not shadow file/explorer/window shortcuts.
+            keymaps.lspBuf = {
+              "<leader>ca" = {
+                action = "code_action";
+                desc = "Code Action";
+              };
+              "<leader>cr" = {
+                action = "rename";
+                desc = "Rename";
+              };
+              "gd" = {
+                action = "definition";
+                desc = "Goto Definition";
+              };
+              "gD" = {
+                action = "declaration";
+                desc = "Goto Declaration";
+              };
+              "gI" = {
+                action = "implementation";
+                desc = "Goto Implementation";
+              };
+              "gr" = {
+                action = "references";
+                desc = "References";
+              };
+              "gy" = {
+                action = "type_definition";
+                desc = "Goto Type Definition";
+              };
+              "K" = {
+                action = "hover";
+                desc = "Hover";
+              };
+              "gK" = {
+                action = "signature_help";
+                desc = "Signature Help";
               };
             };
           };
-        };
-
-        # Completions
-        cmp = {
-          enable = true;
-          settings = {
-            mapping = {
-              "<C-Space>" = "cmp.mapping.complete()";
-              "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-              "<C-e>" = "cmp.mapping.close()";
-              "<C-f>" = "cmp.mapping.scroll_docs(4)";
-              "<CR>" = "cmp.mapping.confirm({ select = true })";
-              "<S-Tab>" = "cmp.mapping.select_prev_item()";
-              "<Tab>" = "cmp.mapping.select_next_item()";
+          blink-cmp = {
+            enable = true;
+            settings = {
+              keymap = {
+                preset = "enter";
+                "<C-y>" = ["select_and_accept"];
+                "<Tab>" = ["snippet_forward" "fallback"];
+                "<S-Tab>" = ["snippet_backward" "fallback"];
+              };
+              appearance.nerd_font_variant = "mono";
+              completion = {
+                accept.auto_brackets.enabled = true;
+                documentation = {
+                  auto_show = true;
+                  auto_show_delay_ms = 200;
+                  window.border = "rounded";
+                };
+                menu.border = "rounded";
+                menu.draw.treesitter = ["lsp"];
+              };
+              sources.default = ["lsp" "path" "snippets" "buffer"];
+              snippets.preset = "default";
             };
-            snippet.expand = "luasnip";
-            sources = [
-              {name = "nvim_lsp";}
-              {name = "luasnip";}
-              {name = "path";}
-              {name = "buffer";}
-              {name = "nvim_lua";}
-            ];
           };
-        };
-
-        # Snippets
-        luasnip.enable = true;
-        friendly-snippets.enable = true;
-
-        # Treesitter for syntax highlighting
-        treesitter = {
-          enable = true;
-          nixGrammars = true;
-          settings = {
-            ensure_installed = [
-              "c_sharp"
-              "html"
-              "css"
-              "json"
-              "xml"
-              "yaml"
-              "markdown"
-              "lua"
-              "vim"
-              "vimdoc"
-              "regex"
-              "bash"
-            ];
-          };
-        };
-
-        # Code actions
-        trouble = {
-          enable = true;
-          settings = {
-            auto_open = false;
-            auto_close = true;
-          };
-        };
-
-        # File explorer
-        nvim-tree = {
-          enable = true;
-          settings = {
-            disable_netrw = true;
-            hijack_netrw = true;
-            hijack_cursor = true;
-            sync_root_with_cwd = true;
-            respect_buf_cwd = true;
-            update_focused_file = {
-              enable = true;
-            };
-            diagnostics = {
-              enable = true;
-            };
-            git = {
-              enable = true;
-            };
-            renderer = {
-              highlight_git = true;
-              icons = {
-                git_placement = "before";
+          friendly-snippets.enable = true;
+          conform-nvim = {
+            enable = true;
+            # Resolve configured formatter binaries from Nix, rather than Mason.
+            autoInstall.enable = true;
+            settings = {
+              default_format_opts = {
+                lsp_format = "fallback";
+                timeout_ms = 3000;
+              };
+              format_on_save = ''
+                function(bufnr)
+                  if not vim.g.autoformat or vim.b[bufnr].autoformat == false then
+                    return
+                  end
+                  return { timeout_ms = 3000, lsp_format = "fallback" }
+                end
+              '';
+              formatters_by_ft = {
+                lua = ["stylua"];
+                sh = ["shfmt"];
+                bash = ["shfmt"];
+                json = ["prettier"];
+                jsonc = ["prettier"];
+                yaml = ["prettier"];
+                markdown = ["prettier"];
               };
             };
           };
-        };
-
-        #   # Git integration
-        #   gitsigns = {
-        #     enable = true;
-        #     settings = {
-        #       signs = {
-        #         add = { text = "▎"; };
-        #         change = { text = "▎"; };
-        #         delete = { text = "▎"; };
-        #         topdelete = { text = "▎"; };
-        #         changedelete = { text = "▎"; };
-        #       };
-        #       current_line_blame = true;
-        #       on_attach = ''
-        #         function(bufnr)
-        #           local gs = package.loaded.gitsigns
-        #           local function map(mode, l, r, opts)
-        #             opts = opts or {}
-        #             opts.buffer = bufnr
-        #             vim.keymap.set(mode, l, r, opts)
-        #           end
-
-        #           -- Navigation
-        #           map('n', ']c', function()
-        #             if vim.wo.diff then return ']c' end
-        #             vim.schedule(function() gs.next_hunk() end)
-        #             return '<Ignore>'
-        #           end, {expr=true})
-
-        #           map('n', '[c', function()
-        #             if vim.wo.diff then return '[c' end
-        #             vim.schedule(function() gs.prev_hunk() end)
-        #             return '<Ignore>'
-        #           end, {expr=true})
-
-        #           -- Actions
-        #           map('n', '<leader>hs', gs.stage_hunk)
-        #           map('n', '<leader>hr', gs.reset_hunk)
-        #           map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
-        #           map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
-        #           map('n', '<leader>hS', gs.stage_buffer)
-        #           map('n', '<leader>hu', gs.undo_stage_hunk)
-        #           map('n', '<leader>hR', gs.reset_buffer)
-        #           map('n', '<leader>hp', gs.preview_hunk)
-        #           map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-        #           map('n', '<leader>tb', gs.toggle_current_line_blame)
-        #           map('n', '<leader>hd', gs.diffthis)
-        #           map('n', '<leader>hD', function() gs.diffthis('~') end)
-        #           map('n', '<leader>td', gs.toggle_deleted)
-        #         end
-        #       '';
-        #     };
-        #   };
-
-        #   # Autopairing
-        #   nvim-autopairs = {
-        #     enable = true;
-        #     checkTs = true;
-        #   };
-
-        #   # Comments
-        #   comment-nvim = {
-        #     enable = true;
-        #     settings.sticky = true;
-        #   };
-
-        #   # Terminal integration
-        #   toggleterm = {
-        #     enable = true;
-        #     direction = "float";
-        #     openMapping = "<C-t>";
-        #     insertMapping = "<C-t>";
-        #   };
-
-        # Fuzzy finding
-        telescope = {
-          enable = true;
-          extensions = {
-            fzf-native.enable = true;
+          treesitter = {
+            enable = true;
+            nixGrammars = true;
+            highlight.enable = true;
+            indent.enable = true;
+            settings.ensure_installed = ["json" "xml" "yaml" "markdown" "markdown_inline" "lua" "vim" "vimdoc" "regex" "bash"];
           };
-          keymaps = {
-            "<leader>fb" = "buffers";
-            "<leader>ff" = "find_files";
-            "<leader>fg" = "live_grep";
-            "<leader>fh" = "help_tags";
-            "<leader>fr" = "oldfiles";
-            "<leader>fc" = "commands";
-            "<leader>fs" = "lsp_document_symbols";
+          ts-comments.enable = true;
+          flash.enable = true;
+          gitsigns = {
+            enable = true;
+            settings.signs = {
+              add.text = "▎";
+              change.text = "▎";
+              delete.text = "";
+              topdelete.text = "";
+              changedelete.text = "▎";
+              untracked.text = "▎";
+            };
           };
-        };
-
-        # UI improvements
-        which-key = {
-          enable = true;
-          settings.spec = [];
-        };
-
-        #   # Git UI
-        #   diffview.enable = true;
-
-        #   # Indent guides
-        #   indent-blankline = {
-        #     enable = true;
-        #     settings = {
-        #       indent = {
-        #         char = "│";
-        #       };
-        #       scope = {
-        #         enabled = true;
-        #         show_start = true;
-        #         show_end = true;
-        #       };
-        #     };
-        #   };
-
-        #   # Code actions lightbulb
-        #   nvim-lightbulb = {
-        #     enable = true;
-        #     settings = {
-        #       autocmd = {
-        #         enabled = true;
-        #       };
-        #     };
-        #   };
-
-        #   # Debug
-        #   dap = {
-        #     enable = true;
-        #     extensions = {
-        #       dap-ui.enable = true;
-        #       dap-virtual-text.enable = true;
-        #     };
-        #   };
-
-        #   # Additional C# support
-        #   netcoredbg = {
-        #     enable = true;
-        #   };
-
-        # Buffer and statusline
-        bufferline = {
-          enable = true;
-          settings = {
-            options = {
-              diagnostics = "nvim_lsp";
-              separator_style = "slant";
-              show_buffer_close_icons = true;
-              show_close_icon = false;
+          trouble = {
+            enable = true;
+            settings = {
+              auto_close = true;
+              focus = false;
+            };
+          };
+          persistence.enable = true;
+          grug-far.enable = true;
+          todo-comments.enable = true;
+          noice = {
+            enable = true;
+            settings = {
+              # Snacks owns vim.notify; Noice handles command-line and LSP UI.
+              notify.enabled = false;
+              lsp.override = {
+                "vim.lsp.util.convert_input_to_markdown_lines" = true;
+                "vim.lsp.util.stylize_markdown" = true;
+              };
+              presets = {
+                bottom_search = true;
+                command_palette = true;
+                long_message_to_split = true;
+              };
+              views = {
+                cmdline_popup.border.style = "rounded";
+                popupmenu.border.style = "rounded";
+                mini.win_options.winblend = 0;
+              };
+            };
+          };
+          snacks = {
+            enable = true;
+            settings = {
+              bigfile.enabled = true;
+              quickfile.enabled = true;
+              picker = {
+                enabled = true;
+                layout = {
+                  preset = "default";
+                  layout = {
+                    width = 0.85;
+                    min_width = 80;
+                    height = 0.8;
+                  };
+                };
+                win = {
+                  input.border = "rounded";
+                  list.border = "rounded";
+                  preview.border = "rounded";
+                };
+              };
+              explorer.enabled = true;
+              input.enabled = true;
+              notifier = {
+                enabled = true;
+                style = "compact";
+                timeout = 2500;
+              };
+              indent = {
+                enabled = true;
+                indent.char = "┊";
+                scope.char = "│";
+                animate.enabled = false;
+              };
+              scope.enabled = true;
+              words.enabled = true;
+              statuscolumn.enabled = true;
+              dashboard = {
+                enabled = true;
+                width = 60;
+                preset = {
+                  header = ''
+                    ███╗   ██╗██╗██╗  ██╗██╗   ██╗██╗███╗   ███╗
+                    ████╗  ██║██║╚██╗██╔╝██║   ██║██║████╗ ████║
+                    ██╔██╗ ██║██║ ╚███╔╝ ██║   ██║██║██╔████╔██║
+                    ██║╚██╗██║██║ ██╔██╗ ╚██╗ ██╔╝██║██║╚██╔╝██║
+                    ██║ ╚████║██║██╔╝ ██╗ ╚████╔╝ ██║██║ ╚═╝ ██║
+                    ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝  ╚═══╝ ╚═╝╚═╝     ╚═╝
+                  '';
+                  keys = [
+                    {
+                      icon = " ";
+                      key = "f";
+                      desc = "Find File";
+                      action = ":lua Snacks.picker.files()";
+                    }
+                    {
+                      icon = " ";
+                      key = "n";
+                      desc = "New File";
+                      action = ":ene | startinsert";
+                    }
+                    {
+                      icon = " ";
+                      key = "g";
+                      desc = "Find Text";
+                      action = ":lua Snacks.picker.grep()";
+                    }
+                    {
+                      icon = " ";
+                      key = "r";
+                      desc = "Recent Files";
+                      action = ":lua Snacks.picker.recent()";
+                    }
+                    {
+                      icon = " ";
+                      key = "s";
+                      desc = "Restore Session";
+                      action = ":lua require('persistence').load()";
+                    }
+                    {
+                      icon = " ";
+                      key = "q";
+                      desc = "Quit";
+                      action = ":qa";
+                    }
+                  ];
+                };
+                sections = [
+                  {
+                    section = "header";
+                    padding = 1;
+                  }
+                  {
+                    text = "N E O V I M";
+                    align = "center";
+                    hl = "SnacksDashboardFooter";
+                    padding = 1;
+                  }
+                  {
+                    section = "keys";
+                    gap = 1;
+                    padding = 1;
+                  }
+                  {
+                    section = "recent_files";
+                    title = "Recent files";
+                    icon = " ";
+                    limit = 4;
+                    indent = 2;
+                    padding = 1;
+                  }
+                  {
+                    text = "Space ff  ·  find files       Space ?  ·  shortcuts";
+                    align = "center";
+                    hl = "SnacksDashboardFooter";
+                  }
+                ];
+              };
+            };
+          };
+          which-key = {
+            enable = true;
+            settings = {
+              preset = "helix";
+              win.border = "rounded";
+              spec =
+                map (entry: {
+                  "__unkeyed-1" = builtins.elemAt entry 0;
+                  group = builtins.elemAt entry 1;
+                }) [
+                  ["<leader>b" "buffer"]
+                  ["<leader>c" "code"]
+                  ["<leader>f" "file/find"]
+                  ["<leader>g" "git"]
+                  ["<leader>gh" "hunks"]
+                  ["<leader>q" "quit/session"]
+                  ["<leader>s" "search"]
+                  ["<leader>u" "ui"]
+                  ["<leader>w" "windows"]
+                  ["<leader>x" "diagnostics/quickfix"]
+                  ["<leader><tab>" "tabs"]
+                ];
             };
           };
         };
-
-        #   # Quick navigation
-        #   leap.enable = true;
-
-        # Startup screen
-        alpha = {
-          enable = true;
-          theme = "dashboard";
-        };
-
-        #   # Highlighting for TODO comments
-        #   todo-comments.enable = true;
-
-        # Project management
-        project-nvim = {
-          enable = true;
-          settings = {
-            detection_methods = ["pattern"];
-            patterns = [
-              ".git"
-              "*.sln"
-              "*.csproj"
-            ];
-          };
-        };
+        extraConfigLua = builtins.readFile ./neovim/keymaps.lua;
       };
-
-      #   # Extra configuration using Lua
-      #   extraConfigLua = ''
-      #     -- Configure netcoredbg for C# debugging
-      #     local dap = require('dap')
-      #     dap.adapters.coreclr = {
-      #       type = 'executable',
-      #       command = '${pkgs.netcoredbg}/bin/netcoredbg',
-      #       args = {'--interpreter=vscode'}
-      #     }
-
-      #     dap.configurations.cs = {
-      #       {
-      #         type = "coreclr",
-      #         name = "launch - netcoredbg",
-      #         request = "launch",
-      #         program = function()
-      #           local cwd = vim.fn.getcwd()
-      #           local function find_dll()
-      #             local dll_path = vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-      #             return dll_path
-      #           end
-      #           return find_dll()
-      #         end,
-      #       }
-      #     }
-
-      #     -- Add keymappings for debug
-      #   vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
-      #   vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
-      #  vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
-      #  vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
-      # vim.keymap.set('n', '<leader>db', function() require('dap').toggle_breakpoint() end)
-      #vim.keymap.set('n', '<leader>dB', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end)
-      #vim.keymap.set('n', '<leader>dl', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
-      #vim.keymap.set('n', '<leader>dr', function() require('dap').repl.open() end)
-      #vim.keymap.set('n', '<leader>du', function() require('dapui').toggle() end)
-
-      #     -- Setup C# custom commands
-      #     vim.api.nvim_create_user_command('DotnetBuild', function()
-      #       vim.cmd('!dotnet build')
-      #     end, {})
-
-      #     vim.api.nvim_create_user_command('DotnetRun', function()
-      #       vim.cmd('!dotnet run')
-      #     end, {})
-
-      #     vim.api.nvim_create_user_command('DotnetTest', function()
-      #       vim.cmd('!dotnet test')
-      #     end, {})
-
-      #     -- Solution explorer integration
-      #     local function find_sln()
-      #       local cwd = vim.fn.getcwd()
-      #       local found_files = vim.fn.glob(cwd .. '/**/*.sln', false, true)
-      #       if #found_files > 0 then
-      #         return found_files[1]
-      #       end
-      #       return nil
-      #     end
-
-      #     vim.api.nvim_create_user_command('OpenSolution', function()
-      #       local sln_file = find_sln()
-      #       if sln_file then
-      #         vim.cmd('e ' .. sln_file)
-      #       else
-      #         vim.notify('No solution file found', vim.log.levels.ERROR)
-      #       end
-      #     end, {})
-
-      #     -- Additional keymappings for C# development
-      #     vim.keymap.set('n', '<leader>cs', ':OpenSolution<CR>', { silent = true })
-      #     vim.keymap.set('n', '<leader>cb', ':DotnetBuild<CR>', { silent = true })
-      #     vim.keymap.set('n', '<leader>cr', ':DotnetRun<CR>', { silent = true })
-      #     vim.keymap.set('n', '<leader>ct', ':DotnetTest<CR>', { silent = true })
-
-      #     -- Format on save for C# files
-      #     vim.api.nvim_create_autocmd("BufWritePre", {
-      #       pattern = "*.cs",
-      #       callback = function()
-      #         vim.lsp.buf.format()
-      #       end,
-      #     })
-
-      #     -- Configure file associations
-      #     vim.filetype.add({
-      #       extension = {
-      #         ['cshtml'] = 'html',
-      #         ['razor'] = 'razor',
-      #         ['csproj'] = 'xml',
-      #         ['sln'] = 'xml',
-      #       },
-      #     })
-
-      #     -- Improve diagnostics display
-      #     vim.diagnostic.config({
-      #       virtual_text = {
-      #         prefix = '●',
-      #         source = "if_many",
-      #       },
-      #       float = {
-      #         source = "always",
-      #         border = "rounded",
-      #       },
-      #       signs = true,
-      #       underline = true,
-      #       update_in_insert = false,
-      #       severity_sort = true,
-      #     })
-      #   '';
-
-      # Additional keymaps
-      keymaps = [
-        {
-          mode = "n";
-          key = "<leader>e";
-          action = ":NvimTreeToggle<CR>";
-          options = {
-            silent = true;
-            desc = "Toggle file explorer";
-          };
-        }
-        {
-          mode = "n";
-          key = "<Esc>";
-          action = ":noh<CR>";
-          options = {
-            silent = true;
-            desc = "Clear search highlights";
-          };
-        }
-        {
-          mode = "n";
-          key = "<leader>w";
-          action = ":w<CR>";
-          options = {
-            silent = true;
-            desc = "Save file";
-          };
-        }
-        {
-          mode = "n";
-          key = "<leader>q";
-          action = ":q<CR>";
-          options = {
-            silent = true;
-            desc = "Quit";
-          };
-        }
-        {
-          mode = "n";
-          key = "<leader>tt";
-          action = ":TroubleToggle<CR>";
-          options = {
-            silent = true;
-            desc = "Toggle trouble";
-          };
-        }
-      ];
-    };
-  };
+    }
+    # Keep Stylix's base16 mini module from replacing Catppuccin's highlights.
+    (lib.optionalAttrs (options ? stylix.targets.nixvim.enable) {
+      stylix.targets.nixvim.enable = false;
+    })
+  ]);
 }

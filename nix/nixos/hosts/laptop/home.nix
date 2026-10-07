@@ -2,8 +2,7 @@
   inputs,
   pkgs,
   ...
-}:
-{
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
     ../../modules/home
@@ -50,21 +49,22 @@
     desktop.enable = true;
     environment.enable = true;
     languages = {
+      javascript = {
+        enable = true;
+        webstorm.enable = true;
+      };
       c.enable = true;
       python.enable = true;
-      dotnet.enable = false;
+      dotnet = {
+        enable = false;
+        rider.enable = true;
+      };
     };
     editors = {
       enable = true;
       zed.enable = true;
       vscode.enable = true;
       neovim.enable = true;
-
-      jetbrains = {
-        enable = true;
-        rider = true;
-        webstorm = true;
-      };
     };
   };
 }
