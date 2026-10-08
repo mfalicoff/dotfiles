@@ -9,7 +9,6 @@
   config = lib.mkIf (config.development.enable && config.development.cloud.enable) {
     home.packages = with pkgs; [
       azure-cli
-      terraform
     ];
   };
 }

@@ -66,7 +66,11 @@ in {
           builtins.attrValues
           (lib.filterAttrs (extension: _: editors.zed.extensions.${extension}) zedExtensions);
         extraPackages = zedPackages pkgs;
-        userSettings = lib.mapAttrsRecursive (_: lib.mkDefault) zedSettings;
+        userSettings = lib.mapAttrsRecursive (_: lib.mkDefault) (
+          if lib.isFunction zedSettings
+          then zedSettings pkgs
+          else zedSettings
+        );
       };
     })
     (lib.mkIf (editors.enable && editors.neovim.enable) {

@@ -59,6 +59,7 @@ Parent switches gate their children. Enabling `development`, `shellOptions`, `br
 | `languages.php` | PHP, Composer; optional PhpStorm |
 | `languages.ruby` | Ruby; optional RubyMine |
 | `languages.sql` | SQL editor support; optional DataGrip |
+| `languages.terraform` | Terraform, terraform-ls, TFLint; optional VS Code/Zed/Neovim integration with module-aware LSP |
 | `languages.zig` | Zig |
 | `languages.elixir` | Elixir |
 | `editors` | Select Zed, Neovim, and VS Code separately |

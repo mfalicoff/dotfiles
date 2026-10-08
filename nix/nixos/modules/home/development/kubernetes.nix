@@ -13,6 +13,11 @@
       kubectl
       kubeseal
       talosctl
+      kubelogin
     ];
+
+    programs.sofka = {
+      enable = true;
+    };
   };
 }

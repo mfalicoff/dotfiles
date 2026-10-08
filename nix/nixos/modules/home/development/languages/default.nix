@@ -9,6 +9,7 @@
     ./php.nix
     ./ruby.nix
     ./sql.nix
+    ./terraform.nix
     ./zig.nix
     ./elixir.nix
   ];

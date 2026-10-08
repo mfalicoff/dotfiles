@@ -1,23 +1,22 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.shellOptions.zsh;
-in
-{
+in {
   options.shellOptions.zsh = {
     enable = lib.mkEnableOption "Zsh with completion, plugins, and Pure prompt";
     extraPlugins = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
+      default = [];
       description = "Additional Oh My Zsh plugins";
     };
     shellAliases = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
+      default = {};
       description = "Additional or overriding shell aliases";
     };
     initContent = lib.mkOption {
@@ -41,28 +40,31 @@ in
         size = 10000;
         path = "${config.xdg.dataHome}/zsh/history";
       };
-      initContent = ''
-        autoload -U promptinit; promptinit
-        prompt pure
-      ''
-      + cfg.initContent;
+      initContent =
+        ''
+          autoload -U promptinit; promptinit
+          prompt pure
+        ''
+        + cfg.initContent;
       oh-my-zsh = {
         enable = true;
-        plugins = [
-          "git"
-          "azure"
-          "bun"
-          "docker"
-          "fzf"
-        ]
-        ++ cfg.extraPlugins;
+        plugins =
+          [
+            "git"
+            "azure"
+            "bun"
+            "docker"
+            "fzf"
+          ]
+          ++ cfg.extraPlugins;
       };
-      shellAliases = {
-        k = "kubectl";
-        ll = "ls -l";
-        ndev = "nix develop --command zsh";
-      }
-      // cfg.shellAliases;
+      shellAliases =
+        {
+          k = "kubectl";
+          ll = "ls -l";
+          ndev = "nix develop --command zsh";
+        }
+        // cfg.shellAliases;
     };
   };
 }
