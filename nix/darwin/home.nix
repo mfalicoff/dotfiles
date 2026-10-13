@@ -75,6 +75,7 @@
     cloud.enable = true;
     containers.enable = true;
     containers.desktop.enable = true;
+    desktop.enable = true;
     kubernetes.enable = true;
     nix.enable = true;
     secrets.enable = true;
