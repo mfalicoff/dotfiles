@@ -8,12 +8,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.paperless;
   service = "paperless";
-in
-{
+in {
   options.homelab.services.paperless = {
     enable = mkEnableOption "Enable paperless";
     port = mkOption {
@@ -37,8 +35,8 @@ in
       };
     };
     users.users.paperless.group = "paperless";
-    users.groups.paperless = { };
-    users.users.paperless.extraGroups = [ "users" ];
+    users.groups.paperless = {};
+    users.users.paperless.extraGroups = ["users"];
 
     homelab.services.glance.monitorSites = [
       (mkGlanceMonitor {
@@ -47,7 +45,7 @@ in
       })
     ];
 
-    services.postgresqlBackup.databases = [ "paperless" ];
+    services.postgresqlBackup.databases = ["paperless"];
 
     services.borgbackup.jobs.${service} = mkBorgJob {
       paths = config.services.${service}.dataDir;
@@ -55,7 +53,7 @@ in
     };
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {

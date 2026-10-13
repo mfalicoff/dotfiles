@@ -38,3 +38,51 @@ jobs:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build system closure
         run: nix build --no-update-lock-file --no-link --print-build-logs '.#darwinConfigurations.fearful.system'
+
+  darwin-work-eval:
+    name: Darwin / MFALICOFF-MAC (evaluate)
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Evaluate system closure
+        run: nix eval --no-update-lock-file --raw '.#darwinConfigurations.MFALICOFF-MAC.system.drvPath'
+
+  nixos-eval:
+    name: NixOS / laptop (evaluate)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Evaluate system closure
+        run: nix eval --no-update-lock-file --raw '.#nixosConfigurations.laptop.config.system.build.toplevel.drvPath'
+
+  module-tests:
+    name: Module tests
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run module tests
+        run: nix build --no-update-lock-file --no-link --print-build-logs '.#checks.x86_64-linux.bundles' '.#checks.x86_64-linux.development' '.#checks.x86_64-linux.kernels'
+
+  format:
+    name: Formatting
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check Alejandra formatting
+        run: nix fmt -- --check nix flake.nix tests

@@ -6,23 +6,19 @@
   mkGlanceMonitor,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.homelab.monitoring.grafana;
   monotoringcfg = config.homelab.monitoring;
-  mkMonitoringTarget =
-    {
-      service,
-      subdomain ? service,
-      domain ? "caddy.mazilious.org",
-      targetService ? "arr",
-    }:
-    {
-      target = "https://${subdomain}.${domain}";
-      service = targetService;
-    };
-in
-{
+  mkMonitoringTarget = {
+    service,
+    subdomain ? service,
+    domain ? "caddy.mazilious.org",
+    targetService ? "arr",
+  }: {
+    target = "https://${subdomain}.${domain}";
+    service = targetService;
+  };
+in {
   options.homelab.monitoring.grafana = {
     enable = lib.mkEnableOption "Enable monitoring with Grafana and Prometheus";
     domain = lib.mkOption {
@@ -57,12 +53,12 @@ in
       type = lib.types.listOf (
         lib.types.submodule {
           options = {
-            target = lib.mkOption { type = lib.types.str; };
-            service = lib.mkOption { type = lib.types.str; };
+            target = lib.mkOption {type = lib.types.str;};
+            service = lib.mkOption {type = lib.types.str;};
           };
         }
       );
-      default = [ ];
+      default = [];
       description = "List of monitoring targets";
     };
   };
@@ -85,7 +81,7 @@ in
         exporters = {
           node = {
             enable = true;
-            enabledCollectors = [ "systemd" ];
+            enabledCollectors = ["systemd"];
             port = cfg.prometheusNodePort;
           };
 
@@ -122,7 +118,7 @@ in
             job_name = "worker";
             static_configs = [
               {
-                targets = [ "${cfg.hostAddress}:${toString cfg.prometheusNodePort}" ];
+                targets = ["${cfg.hostAddress}:${toString cfg.prometheusNodePort}"];
               }
             ];
           }
@@ -138,15 +134,15 @@ in
             ];
             metrics_path = "/probe";
             params = {
-              module = [ "http_200" ];
+              module = ["http_200"];
             };
             relabel_configs = [
               {
-                source_labels = [ "__address__" ];
+                source_labels = ["__address__"];
                 target_label = "__param_target";
               }
               {
-                source_labels = [ "__param_target" ];
+                source_labels = ["__param_target"];
                 target_label = "instance";
               }
               {
@@ -178,13 +174,13 @@ in
     };
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = "grafana"; })
-      (mkGlanceMonitor { service = "prometheus"; })
+      (mkGlanceMonitor {service = "grafana";})
+      (mkGlanceMonitor {service = "prometheus";})
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = "grafana"; })
-      (mkMonitoringTarget { service = "prometheus"; })
+      (mkMonitoringTarget {service = "grafana";})
+      (mkMonitoringTarget {service = "prometheus";})
     ];
 
     services.caddy.virtualHosts =

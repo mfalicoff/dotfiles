@@ -8,12 +8,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.karakeep;
   service = "karakeep";
-in
-{
+in {
   options.homelab.services.karakeep = {
     enable = mkEnableOption "Enable Karakeep";
     port = mkOption {
@@ -46,7 +44,7 @@ in
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {
@@ -59,5 +57,4 @@ in
       services = service;
     };
   };
-
 }

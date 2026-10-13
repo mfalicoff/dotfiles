@@ -1,9 +1,11 @@
-{ config, lib, ... }:
-with lib;
-let
-  cfg = config.homelab.monitoring;
-in
 {
+  config,
+  lib,
+  ...
+}:
+with lib; let
+  cfg = config.homelab.monitoring;
+in {
   imports = [
     ./grafana.nix
     ./loki.nix

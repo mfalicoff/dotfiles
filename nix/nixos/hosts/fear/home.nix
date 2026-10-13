@@ -95,34 +95,23 @@
     };
   };
 
+  profiles.devWorkstation.enable = true;
+
   development = {
-    enable = true;
-    git.enable = true;
-    cloud.enable = true;
-    containers.enable = true;
-    kubernetes.enable = true;
-    nix.enable = true;
-    secrets.enable = true;
-    tools.enable = true;
     desktop.enable = true;
-    environment.enable = true;
     languages = {
       javascript = {
         enable = true;
         webstorm.enable = true;
       };
-      c.enable = true;
-      python.enable = true;
       dotnet = {
         enable = true;
         rider.enable = true;
       };
     };
     editors = {
-      enable = true;
       zed.enable = true;
       vscode.enable = true;
-      neovim.enable = true;
     };
   };
 }

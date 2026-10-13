@@ -19,6 +19,7 @@ in {
       default = {};
       description = "Additional or overriding shell aliases";
     };
+    atuin.enable = lib.mkEnableOption "Atuin shell history search and sync";
     initContent = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -26,11 +27,11 @@ in {
     };
   };
   config = lib.mkIf (config.shellOptions.enable && cfg.enable) {
-    home.packages = with pkgs; [
-      pure-prompt
-      zsh-autosuggestions
-      zsh-autocomplete
-    ];
+    home.packages = [pkgs.pure-prompt];
+    programs.atuin = lib.mkIf cfg.atuin.enable {
+      enable = true;
+      enableZshIntegration = true;
+    };
     programs.zsh = {
       enable = true;
       enableCompletion = true;
@@ -49,13 +50,10 @@ in {
       oh-my-zsh = {
         enable = true;
         plugins =
-          [
-            "git"
-            "azure"
-            "bun"
-            "docker"
-            "fzf"
-          ]
+          ["git"]
+          ++ lib.optional (config.development.enable && config.development.containers.enable) "docker"
+          ++ lib.optional (config.development.enable && config.development.cloud.enable) "azure"
+          ++ lib.optional (config.shellOptions.navigation.enable) "fzf"
           ++ cfg.extraPlugins;
       };
       shellAliases =

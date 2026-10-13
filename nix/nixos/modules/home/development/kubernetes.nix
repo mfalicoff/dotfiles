@@ -1,9 +1,12 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
 }: {
+  imports = [inputs.sofka.homeManagerModules.default];
+
   options.development.kubernetes.enable = lib.mkEnableOption "kubernetes development tools";
 
   config = lib.mkIf (config.development.enable && config.development.kubernetes.enable) {

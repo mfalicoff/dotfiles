@@ -31,9 +31,6 @@
       "anomalyco/tap/opencode-v2"
       "chezmoi"
       "docker"
-      "eza"
-      "fd"
-      "fzf"
       "gh"
       "go"
       "k9s"
@@ -45,11 +42,8 @@
       "rtk"
       "rustup"
       "sesh"
-      "television"
-      "tmux"
       "tree-sitter-cli"
       "uv"
-      "zoxide"
     ];
     casks = [
       "dotnet-sdk"

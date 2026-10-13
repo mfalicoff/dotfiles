@@ -7,12 +7,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.opencloud;
   service = "opencloud";
-in
-{
+in {
   options.homelab.services.opencloud = {
     enable = mkEnableOption "Enable opencloud";
     port = mkOption {
@@ -51,7 +49,7 @@ in
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {

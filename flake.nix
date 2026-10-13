@@ -226,5 +226,23 @@
         }
       ];
     };
+
+    formatter = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-darwin"] (
+      system: nixpkgs.legacyPackages.${system}.alejandra
+    );
+
+    # Module regression tests; each asserts at evaluation time and the
+    # derivation only records the results.
+    checks.x86_64-linux = let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      suite = name: file:
+        pkgs.runCommand "${name}-tests" {} ''
+          echo '${builtins.toJSON (import file {inherit inputs;})}' > $out
+        '';
+    in {
+      bundles = suite "bundles" ./tests/bundles.nix;
+      development = suite "development" ./tests/development.nix;
+      kernels = suite "kernels" ./tests/kernels.nix;
+    };
   };
 }

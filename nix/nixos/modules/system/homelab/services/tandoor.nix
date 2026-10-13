@@ -8,12 +8,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.tandoor;
   service = "tandoor-recipes";
-in
-{
+in {
   options.homelab.services.tandoor = {
     enable = mkEnableOption "Enable tandoor";
     port = mkOption {
@@ -31,7 +29,7 @@ in
       database.createLocally = true;
     };
 
-    users.users.paperless.extraGroups = [ "users" ];
+    users.users.paperless.extraGroups = ["users"];
 
     homelab.services.glance.monitorSites = [
       (mkGlanceMonitor {
@@ -40,7 +38,7 @@ in
       })
     ];
 
-    services.postgresqlBackup.databases = [ "tandoor_recipes" ];
+    services.postgresqlBackup.databases = ["tandoor_recipes"];
 
     services.borgbackup.jobs.${service} = mkBorgJob {
       paths = "/var/lib/tandoor-recipes";
@@ -48,7 +46,7 @@ in
     };
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {
@@ -56,5 +54,4 @@ in
       port = cfg.port;
     };
   };
-
 }

@@ -28,8 +28,13 @@ in {
     };
     cleanup = mkOption {
       type = types.enum ["none" "uninstall" "zap"];
-      default = "zap";
+      default = "uninstall";
       description = "What to remove on activation when not declared";
+    };
+    autoUpdate = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Update Homebrew itself on every activation";
     };
     appStoreApps = mkOption {
       type = types.attrsOf types.int;
@@ -43,7 +48,7 @@ in {
     homebrew = {
       enable = true;
       onActivation = {
-        autoUpdate = true;
+        autoUpdate = cfg.autoUpdate;
         upgrade = false;
         # Homebrew disabled the deprecated --cleanup switch. Pass the
         # supported cleanup flag directly through nix-darwin.

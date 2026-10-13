@@ -17,7 +17,7 @@ The [`modules/system/default.nix`](../../nix/nixos/modules/system/default.nix) i
 | Password manager | `passwordManager.enable`; `onePassword` and `desktopIntegration` bundles | [password-manager](../../nix/nixos/modules/system/password-manager/default.nix) |
 | Secrets | sops-nix file and age key settings | [secrets](../../nix/nixos/modules/system/secrets/default.nix) |
 | SMB | `smb.enable`, `smb.server`, `smb.shares` | [smb](../../nix/nixos/modules/system/smb/default.nix) |
-| SSH server | `sshServer.enable` | [ssh](../../nix/nixos/modules/system/ssh/default.nix) |
+| SSH server | `sshServer.enable`, `authorizedKeyFiles`, `fail2ban.enable` (key-only, no root login) | [ssh](../../nix/nixos/modules/system/ssh/default.nix) |
 | Styling | `styling.stylix.enable` | [stylix](../../nix/nixos/modules/system/stylix/default.nix) |
 | User | shared Linux user and groups | [user.nix](../../nix/nixos/modules/system/user.nix) |
 | Virtualization | `virt.enable`; `virtualMachines` and `containers` bundles | [virtualization](../../nix/nixos/modules/system/virtualization/default.nix) |
@@ -28,7 +28,7 @@ The shared [`nix-core.nix`](../../nix/nixos/nix-core.nix) sets Nix features, unf
 
 | Module | Purpose | Source |
 | --- | --- | --- |
-| Homebrew | `homebred.enable`, taps, brews, casks, and `appStoreApps` | [homebrew](../../nix/nixos/modules/system/homebrew/default.nix) |
+| Homebrew | `homebred.enable`, taps, brews, casks, `cleanup` (default `uninstall`), `autoUpdate`, and `appStoreApps` | [homebrew](../../nix/nixos/modules/system/homebrew/default.nix) |
 | macOS defaults | `macos.enable`; `keyboard`, `login`, `desktop`, and `security` preferences | [nix-darwin](../../nix/nixos/modules/system/nix-darwin/default.nix) |
 | Mac user | macOS user and shell | [host-users.nix](../../nix/nixos/hosts/fearful/host-users.nix) |
 | Styling | Shared `styling.stylix.enable` | [stylix](../../nix/nixos/modules/system/stylix/default.nix) |
@@ -115,7 +115,7 @@ nix eval --impure --json --expr '
 
 These checks exercise actual Home Manager and NixOS modules, including parent gating and independent bundle selection. System evaluation remains available through `just check-nixos <host>` and `just check-darwin fearful`.
 
-Kernel selection checks use the same command with `./tests/kernels.nix` in place of `./tests/bundles.nix`. They cover all four choices, cache scoping, disabled boot configuration, and invalid selections.
+The same suites are exposed as `checks.x86_64-linux.{bundles,development,kernels}`, and `just check` runs them together with the formatting check (`just fmt` formats with Alejandra). Kernel selection checks use the same command with `./tests/kernels.nix` in place of `./tests/bundles.nix`. They cover all four choices, cache scoping, disabled boot configuration, and invalid selections.
 
 Language/editor integration checks use the same command with `./tests/development.nix`. They cover automatic extensions and Neovim support, all JetBrains mappings, parent gating, extension opt-outs, and language/formatter setting overrides.
 

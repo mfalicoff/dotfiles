@@ -1,5 +1,4 @@
 # Add this to your NixOS configuration.nix or as a separate module
-
 {
   config,
   lib,
@@ -7,30 +6,31 @@
   mkMonitoringTarget,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.glance;
   service = "glance";
-  mkGlanceMonitor =
-    {
-      service,
-      title ? null,
-      subdomain ? service,
-      domain ? "caddy.mazilious.org",
-      path ? null,
-      icon ? "di:${service}",
-    }:
-    {
-      title =
-        if title != null then
-          title
-        else
-          strings.toUpper (substring 0 1 service) + substring 1 (stringLength service) service;
-      url = "https://${subdomain}.${domain}" + (if path != null then "/${path}" else "");
-      icon = icon;
-    };
-in
-{
+  mkGlanceMonitor = {
+    service,
+    title ? null,
+    subdomain ? service,
+    domain ? "caddy.mazilious.org",
+    path ? null,
+    icon ? "di:${service}",
+  }: {
+    title =
+      if title != null
+      then title
+      else strings.toUpper (substring 0 1 service) + substring 1 (stringLength service) service;
+    url =
+      "https://${subdomain}.${domain}"
+      + (
+        if path != null
+        then "/${path}"
+        else ""
+      );
+    icon = icon;
+  };
+in {
   options.homelab.services.glance = {
     enable = mkEnableOption "Enable glance";
     port = mkOption {
@@ -42,13 +42,13 @@ in
       type = types.listOf (
         types.submodule {
           options = {
-            title = mkOption { type = types.str; };
-            url = mkOption { type = types.str; };
-            icon = mkOption { type = types.str; };
+            title = mkOption {type = types.str;};
+            url = mkOption {type = types.str;};
+            icon = mkOption {type = types.str;};
           };
         }
       );
-      default = [ ];
+      default = [];
       description = "Sites to monitor in the dashboard";
     };
 
@@ -56,13 +56,13 @@ in
       type = types.listOf (
         types.submodule {
           options = {
-            title = mkOption { type = types.str; };
-            url = mkOption { type = types.str; };
-            icon = mkOption { type = types.str; };
+            title = mkOption {type = types.str;};
+            url = mkOption {type = types.str;};
+            icon = mkOption {type = types.str;};
           };
         }
       );
-      default = [ ];
+      default = [];
       description = "Sites to monitor in the dashboard";
     };
   };
@@ -94,13 +94,13 @@ in
                     collapse-after = 3;
                     cache = "3h";
                     feeds = [
-                      { url = "https://ciechanow.ski/atom.xml"; }
+                      {url = "https://ciechanow.ski/atom.xml";}
                       {
                         url = "https://www.joshwcomeau.com/rss.xml";
                         title = "Josh Comeau";
                       }
-                      { url = "https://samwho.dev/rss.xml"; }
-                      { url = "https://awesomekling.github.io/feed.xml"; }
+                      {url = "https://samwho.dev/rss.xml";}
+                      {url = "https://awesomekling.github.io/feed.xml";}
                       {
                         url = "https://ishadeed.com/feed.xml";
                         title = "Ahmad Shadeed";
@@ -218,7 +218,7 @@ in
     };
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {

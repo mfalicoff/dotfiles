@@ -35,7 +35,7 @@ nix build .#darwinConfigurations.fearful.system
 sudo darwin-rebuild switch --flake .#fearful
 ```
 
-Nixpkgs manages CLI tools, fonts, and VS Code. nix-darwin makes Nix-installed app bundles available in `/Applications/Nix Apps`. The `homebred` module owns the Homebrew formulae, casks, and App Store app list in `fearful/system.nix`; its activation uses `cleanup = "zap"`, so review removed entries before a switch. Zed is declared as a Homebrew cask. Home Manager owns shell, Git, Ghostty, and television settings; the television source files are in [`nix/darwin/config`](../../nix/darwin/config). Existing Home Manager target files are backed up with a `.pre-nix` suffix during activation.
+Nixpkgs manages CLI tools, fonts, and (through Home Manager) VS Code. nix-darwin makes Nix-installed app bundles available in `/Applications/Nix Apps`. The `homebred` module owns the Homebrew formulae, casks, and App Store app list in `fearful/system.nix`; its activation defaults to `cleanup = "uninstall"` and does not update Homebrew itself (`autoUpdate = false`); set `cleanup = "zap"` to also delete app data, and review removed entries before a switch. Zed is declared as a Homebrew cask. Home Manager owns shell, Git, Ghostty, and television settings; the television source files are in [`nix/darwin/config`](../../nix/darwin/config). Existing Home Manager target files are backed up with a `.pre-nix` suffix during activation.
 
 After switching, check the installed apps and CLI tools before removing any old manually installed copies. If a Nix GUI package does not build or launch, its declaration can be moved from [`modules/system/nix-darwin/default.nix`](../../nix/nixos/modules/system/nix-darwin/default.nix) to `homebred.casks` in the host's `system.nix`, then rebuilt.
 

@@ -48,7 +48,7 @@ in {
   };
 
   config = mkIf (config.development.enable && cfg.enable) {
-    home.packages = [pkgs.lazygit pkgs.gitkraken pkgs.gh pkgs.git-absorb pkgs.pre-commit pkgs.lefthook];
+    home.packages = [pkgs.lazygit pkgs.gh pkgs.git-absorb pkgs.pre-commit pkgs.lefthook];
 
     programs.delta = mkIf cfg.enableDelta {
       enable = true;

@@ -8,9 +8,9 @@
   home = settings:
     (inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
+      extraSpecialArgs = {inherit inputs;};
       modules = [
         inputs.nixvim.homeModules.nixvim
-        inputs.sofka.homeManagerModules.default
         ../nix/nixos/modules/home/development
         {
           home.username = "test";
@@ -124,6 +124,21 @@
       cloud.enable = true;
       secrets.enable = true;
       environment.enable = true;
+    };
+  };
+  desktopOn = home {
+    development = {
+      enable = true;
+      desktop.enable = true;
+    };
+  };
+  desktopPartial = home {
+    development = {
+      enable = true;
+      desktop = {
+        enable = true;
+        gitkraken.enable = false;
+      };
     };
   };
   ideChoices = {
@@ -270,6 +285,15 @@
       && defaultsOnly.programs.direnv.nix-direnv.enable
       && everythingElse.programs.difftastic.git.enable
       && !everythingElse.programs.delta.enableGitIntegration;
+    desktopToolsAreOptional = let
+      has = c: p: builtins.elem (lib.getName p) (packages c);
+    in
+      has desktopOn pkgs.gitkraken
+      && has desktopOn pkgs.yaak
+      && !has desktopPartial pkgs.gitkraken
+      && has desktopPartial pkgs.yaak
+      && !has defaultsOnly pkgs.gitkraken
+      && !has defaultsOnly pkgs.yaak;
     jetbrainsBelongsToLanguages =
       builtins.all (p: builtins.elem (lib.getName p) (packages idesOnly)) (builtins.attrValues idePackages)
       && !idesOnly.programs.vscode.enable

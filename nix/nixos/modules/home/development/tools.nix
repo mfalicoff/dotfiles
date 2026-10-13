@@ -16,7 +16,6 @@
       watchexec
       tokei
       yq-go
-      yaak
     ];
   };
 }

@@ -4,11 +4,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.wm.hyprland;
-in
-{
+in {
   options.wm.hyprland = {
     enable = mkEnableOption "Hyprland";
     tools.enable = mkEnableOption "Wayland clipboard, locking, screenshot, and display tools";
@@ -16,8 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages =
-      with pkgs;
+    environment.systemPackages = with pkgs;
       optionals cfg.tools.enable [
         wl-clipboard
         swayidle

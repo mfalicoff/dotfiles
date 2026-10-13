@@ -8,12 +8,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.miniflux;
   service = "miniflux";
-in
-{
+in {
   options.homelab.services.miniflux = {
     enable = mkEnableOption "Enable Miniflux";
     port = mkOption {
@@ -33,7 +31,7 @@ in
       };
     };
 
-    services.postgresqlBackup.databases = [ "miniflux" ];
+    services.postgresqlBackup.databases = ["miniflux"];
 
     homelab.services.glance.monitorSites = [
       (mkGlanceMonitor {
@@ -43,7 +41,7 @@ in
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {
@@ -51,5 +49,4 @@ in
       port = cfg.port;
     };
   };
-
 }

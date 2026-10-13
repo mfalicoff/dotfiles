@@ -7,12 +7,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.radarr;
   service = "radarr";
-in
-{
+in {
   options.homelab.services.radarr = {
     enable = mkEnableOption "Enable radarr";
     port = mkOption {
@@ -27,7 +25,7 @@ in
       settings.server.port = cfg.port;
     };
 
-    users.users.${service}.extraGroups = [ "users" ];
+    users.users.${service}.extraGroups = ["users"];
 
     services.borgbackup.jobs.${service} = mkBorgJob {
       paths = config.services.${service}.dataDir;
@@ -35,11 +33,11 @@ in
     };
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = service; })
+      (mkGlanceMonitor {service = service;})
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {

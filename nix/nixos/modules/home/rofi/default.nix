@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.rofi;
-in
-{
+in {
   options.rofi = {
     enable = mkEnableOption "Enable Rofi";
   };
@@ -40,6 +38,6 @@ in
       theme = mkForce ./theme.rafi;
     };
 
-    home.packages = [ pkgs.bemoji ];
+    home.packages = [pkgs.bemoji];
   };
 }

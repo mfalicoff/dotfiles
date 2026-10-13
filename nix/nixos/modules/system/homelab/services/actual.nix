@@ -7,12 +7,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.actual;
   service = "actual";
-in
-{
+in {
   options.homelab.services.actual = {
     enable = mkEnableOption "Enable actual";
     port = mkOption {
@@ -40,7 +38,7 @@ in
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {

@@ -49,7 +49,7 @@ Parent switches gate their children. Enabling `development`, `shellOptions`, `br
 | `nix` | nixfmt, nixd, Alejandra, statix, deadnix |
 | `secrets` | age, sops, ssh-to-age; `gnupg.enable` (off) adds GnuPG |
 | `environment` | direnv with Zsh integration and nix-direnv |
-| `desktop` | GitKraken, Yaak; omit on headless hosts |
+| `desktop` | GitKraken and Yaak (each has its own `enable`); omit on headless hosts |
 | `languages.c` | GCC; optional CLion |
 | `languages.python` | uv, Ruff; optional PyCharm |
 | `languages.dotnet` | .NET 10 SDK, netcoredbg; optional Rider |
@@ -132,15 +132,21 @@ Completion uses Blink's `enter` preset: arrow keys or `Ctrl n/p` select, Enter a
 
 | Bundle under `shellOptions` | Contents |
 | --- | --- |
-| `zsh` | Zsh, completion, autosuggestions, highlighting, Pure prompt, Oh My Zsh plugins |
+| `zsh` | Zsh, completion, autosuggestions, highlighting, Pure prompt, Oh My Zsh plugins; `atuin.enable` (off) adds Atuin history search |
 | `terminal` | Ghostty and its existing appearance settings |
-| `navigation` | fzf, ripgrep, eza, Yazi, Skim |
-| `monitoring` | fastfetch, btop |
-| `tmux` | tmux, tmuxinator, curated plugins and key bindings |
+| `navigation` | fzf, ripgrep, eza, Yazi, zoxide, bat, Television; `skim.enable`, `fd.enable` and `dust.enable` (all off) add more |
+| `monitoring` | fastfetch, btop; `duf.enable` and `procs.enable` (both off) add more |
+| `tmux` | tmux, tmuxinator, curated plugins and key bindings; `autoStart` (on) controls auto-attaching |
+
+`EDITOR` follows the enabled development editor (Neovim, then Zed, then VS Code) and is left unset when none is enabled; set `shellOptions.editor` to override it. The Oh My Zsh plugin list is `git` plus `docker`, `azure` and `fzf` when the containers, cloud and navigation bundles are enabled. tmux auto-start is skipped in VS Code, Zed and JetBrains terminals, and tmuxinator reads projects from `~/.config/tmuxinator`.
 
 These replace the former `shellOptions.shell` bundle. tmux, navigation, and the terminal can be selected independently of Zsh. tmux auto-attaches only when the Zsh bundle is also enabled.
 
 Zsh exposes `extraPlugins`, `shellAliases`, and `initContent` for host-specific additions. The existing tmux options move from `shellOptions.shell.tmux` to `shellOptions.tmux`, including `plugins.weather`, `tmuxinator`, and `advanced.extraConfig`.
+
+## Workstation profile
+
+`profiles.devWorkstation.enable = true` selects the shared development defaults (git, cloud, containers, kubernetes, nix, secrets, tools, environment, the C and Python languages, and Neovim). Every value is a `mkDefault`, so a host overrides only what differs, such as `development.kubernetes.enable = false`. Desktop tools, other languages and the GUI editors stay per host.
 
 ## Browsers and window managers
 

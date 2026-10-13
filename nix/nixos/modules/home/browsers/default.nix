@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   imports = [
     ./firefox.nix
     ./zen.nix

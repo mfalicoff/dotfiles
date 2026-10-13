@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   imports = [
     ./launchers.nix
     ./emulation.nix

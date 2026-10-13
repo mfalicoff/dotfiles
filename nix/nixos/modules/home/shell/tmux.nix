@@ -22,7 +22,12 @@ in {
     tmuxinator = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Install tmuxinator and set its configuration directory";
+      description = "Install tmuxinator (it reads projects from ~/.config/tmuxinator)";
+    };
+    autoStart = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Attach to or create a tmux session in interactive Zsh shells (skipped inside IDE terminals)";
     };
     plugins =
       builtins.mapAttrs (
@@ -99,15 +104,14 @@ in {
         + cfg.tmux.advanced.extraConfig;
     };
 
-    programs.zsh.initContent = lib.mkIf cfg.zsh.enable ''
-      # Reuse an existing tmux session or create one for interactive shells.
-      if [[ -o interactive && -t 1 && -z "$TMUX" ]]; then
+    programs.zsh.initContent = lib.mkIf (cfg.zsh.enable && cfg.tmux.autoStart) ''
+      # Reuse an existing tmux session or create one for interactive shells,
+      # except inside editor terminals, which manage their own panes.
+      if [[ -o interactive && -t 1 && -z "$TMUX" \
+        && "$TERM_PROGRAM" != vscode && -z "$ZED_TERM" \
+        && "$TERMINAL_EMULATOR" != JetBrains-JediTerm ]]; then
         tmux attach-session 2>/dev/null || tmux new-session
       fi
     '';
-
-    home.sessionVariables = lib.optionalAttrs cfg.tmux.tmuxinator {
-      TMUXINATOR_CONFIG = "${config.home.homeDirectory}/configuration/tmuxinator";
-    };
   };
 }

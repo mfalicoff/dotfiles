@@ -8,7 +8,6 @@
 }: {
   imports = [
     inputs.nixvim.homeModules.nixvim
-    inputs.sofka.homeManagerModules.default
 
     ../../../modules/home
   ];
@@ -18,7 +17,9 @@
     homeDirectory = "/Users/${username}";
     stateVersion = "24.11";
     packages = with pkgs; [
-      inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default
+      (inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+        buildFeatures = (old.buildFeatures or [ ]) ++ [ "cover-art" ];
+      }))
     ];
   };
 
@@ -53,7 +54,10 @@
     enable = true;
     zsh.enable = true;
     terminal.enable = true;
-    navigation.enable = true;
+    navigation = {
+      enable = true;
+      fd.enable = true;
+    };
     monitoring.enable = true;
     tmux.enable = true;
   };
@@ -81,6 +85,10 @@
     };
     secrets.enable = false;
     tools.enable = true;
+    desktop = {
+      enable = true;
+      gitkraken.enable = false; # Installed as a Homebrew cask
+    };
     environment.enable = false;
     mobile.enable = false;
     languages = {
