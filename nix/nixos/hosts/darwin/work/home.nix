@@ -18,6 +18,7 @@
     homeDirectory = "/Users/${username}";
     stateVersion = "24.11";
     packages = with pkgs; [
+      inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 

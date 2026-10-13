@@ -69,6 +69,11 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-std.url = "github:chessai/nix-std";
+
+    spotatui = {
+      url = "github:LargeModGames/spotatui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
