@@ -38,16 +38,12 @@
       "mole"
     ];
     casks = [
-      "chatgpt"
       "kartax/tap/immich-desktop"
       "insync"
-      "mongodb-compass"
       "orbstack"
       "proton-mail"
       "skyhook-io/tap/radar-desktop"
-      "spotify"
       "wallspace"
-      "whatsapp"
       "yubico-authenticator"
       "vorssaint"
     ];

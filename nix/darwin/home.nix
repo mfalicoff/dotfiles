@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   username,
@@ -10,14 +11,11 @@
     homeDirectory = "/Users/${username}";
     stateVersion = "24.11";
     packages = with pkgs; [
-      bun
-      dockutil
-      gh
-      git-filter-repo
-      go
-      nodejs
-      opencode
-      openjdk
+      chatgpt
+      whatsapp-for-mac
+      (inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+        buildFeatures = (old.buildFeatures or []) ++ ["cover-art"];
+      }))
     ];
   };
 
