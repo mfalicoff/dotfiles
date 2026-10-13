@@ -4,7 +4,7 @@ import ./support.nix {
   packages = pkgs: [pkgs.elixir];
   vscodeExtensions = pkgs: {elixir = pkgs.vscode-extensions.elixir-lsp.vscode-elixir-ls;};
   zedExtensions.elixir = "elixir";
-  zedSettings = {
+  zedSettings = _: {
     lsp.elixir-ls.settings.dialyzerEnabled = true;
     languages = builtins.listToAttrs (map (name: {
       inherit name;

@@ -44,6 +44,8 @@
     elif [[ -x /usr/local/bin/brew ]]; then
       eval "$('/usr/local/bin/brew' shellenv)"
     fi
+
+    export PATH="$PATH:$HOME/.dotnet/tools"
   '';
 
   shellOptions = {
@@ -77,7 +79,7 @@
       };
     };
     secrets.enable = false;
-    tools.enable = false;
+    tools.enable = true;
     environment.enable = false;
     mobile.enable = false;
     languages = {

@@ -11,6 +11,11 @@
       just
       jq
       killport
+      httpie
+      hyperfine
+      watchexec
+      tokei
+      yq-go
       yaak
     ];
   };

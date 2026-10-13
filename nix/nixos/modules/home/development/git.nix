@@ -34,6 +34,12 @@ in {
       description = "Enable delta diff viewer";
     };
 
+    enableDifftastic = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Use difftastic for structural diffs instead of delta";
+    };
+
     enableLfs = mkOption {
       type = types.bool;
       default = true;
@@ -42,7 +48,18 @@ in {
   };
 
   config = mkIf (config.development.enable && cfg.enable) {
-    home.packages = [pkgs.lazygit pkgs.gitkraken];
+    home.packages = [pkgs.lazygit pkgs.gitkraken pkgs.gh pkgs.git-absorb pkgs.pre-commit pkgs.lefthook];
+
+    programs.delta = mkIf cfg.enableDelta {
+      enable = true;
+      enableGitIntegration = !cfg.enableDifftastic;
+      options.features = "side-by-side";
+    };
+
+    programs.difftastic = mkIf cfg.enableDifftastic {
+      enable = true;
+      git.enable = true;
+    };
 
     home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
       rm -f ~/.gitconfig
@@ -51,33 +68,28 @@ in {
     programs.git = {
       enable = true;
       lfs.enable = cfg.enableLfs;
-      userEmail = cfg.userEmail;
-      userName = cfg.userName;
-      extraConfig = {
+      ignores = [".DS_Store" ".direnv" ".idea" "*.swp"];
+      settings = {
+        user.name = cfg.userName;
+        user.email = cfg.userEmail;
         init.defaultBranch = cfg.defaultBranch;
         push.autoSetupRemote = true;
         pull.rebase = true;
-      };
-      delta = mkIf cfg.enableDelta {
-        enable = true;
-        options = {
-          features = "side-by-side";
+        alias = {
+          # common aliases
+          br = "branch";
+          co = "checkout";
+          st = "status";
+          ls = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate";
+          ll = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate --numstat";
+          cm = "commit -m";
+          ca = "commit -am";
+          dc = "diff --cached";
+          amend = "commit --amend -m";
+          # aliases for submodule
+          update = "submodule update --init --recursive";
+          foreach = "submodule foreach";
         };
-      };
-      aliases = {
-        # common aliases
-        br = "branch";
-        co = "checkout";
-        st = "status";
-        ls = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate";
-        ll = "log --pretty=format:\"%C(yellow)%h%Cred%d\\\\ %Creset%s%Cblue\\\\ [%cn]\" --decorate --numstat";
-        cm = "commit -m";
-        ca = "commit -am";
-        dc = "diff --cached";
-        amend = "commit --amend -m";
-        # aliases for submodule
-        update = "submodule update --init --recursive";
-        foreach = "submodule foreach";
       };
     };
   };

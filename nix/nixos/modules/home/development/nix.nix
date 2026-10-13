@@ -40,16 +40,18 @@ in {
       name = "nix";
       description = "Nix development tools";
       optionPath = ["development" "nix"];
-      packages = pkgs: [pkgs.nixfmt-rfc-style pkgs.nixd pkgs.alejandra];
+      packages = pkgs: [pkgs.nixfmt pkgs.nixd pkgs.alejandra pkgs.statix pkgs.deadnix];
       vscodeExtensions = pkgs: {nix = pkgs.vscode-extensions.jnoortheen.nix-ide;};
       zedExtensions.nix = "nix";
       zedPackages = pkgs: [pkgs.nixd pkgs.alejandra];
-      zedSettings.languages.Nix = {
-        language_servers = ["nixd" "!nil"];
-        format_on_save = "on";
-        formatter.external = {
-          command = "alejandra";
-          arguments = ["-q" "-"];
+      zedSettings = _: {
+        languages.Nix = {
+          language_servers = ["nixd" "!nil"];
+          format_on_save = "on";
+          formatter.external = {
+            command = "alejandra";
+            arguments = ["-q" "-"];
+          };
         };
       };
       neovimServers = ["nixd"];

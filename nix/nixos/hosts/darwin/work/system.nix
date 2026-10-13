@@ -52,7 +52,6 @@
       "zoxide"
     ];
     casks = [
-      "yaak"
       "dotnet-sdk"
       "gitkraken"
       "grishka/grishka/neardrop"
