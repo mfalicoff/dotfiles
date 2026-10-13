@@ -81,11 +81,6 @@ generations:
 gc:
     nix-collect-garbage -d
 
-# Format all Nix files in the repository
-fmt:
-    nix fmt
-
-
 # SOPS secrets management commands
 
 # Decrypt and view a secrets file
@@ -102,3 +97,12 @@ edit-secret file:
 
 update-keys file:
     nix-shell -p sops --run "sops updatekeys secrets/secrets.{{file}}.yaml"
+
+# Format Nix files with Alejandra
+fmt:
+    nix fmt nix flake.nix tests
+
+# Check formatting and run the module regression tests
+check:
+    nix fmt -- --check nix flake.nix tests
+    nix build --no-link --print-build-logs {{flake}}.#checks.x86_64-linux.bundles .#checks.x86_64-linux.development .#checks.x86_64-linux.kernels

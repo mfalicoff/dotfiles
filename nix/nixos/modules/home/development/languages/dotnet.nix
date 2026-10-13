@@ -1,7 +1,10 @@
 import ./support.nix {
   name = "dotnet";
   description = ".NET development tools";
-  packages = pkgs: [(pkgs.dotnetCorePackages.combinePackages [pkgs.dotnetCorePackages.sdk_10_0])];
+  packages = pkgs: [
+    (pkgs.dotnetCorePackages.combinePackages [pkgs.dotnetCorePackages.sdk_10_0])
+    pkgs.netcoredbg
+  ];
   jetbrains.rider = pkgs: pkgs.jetbrains.rider;
   vscodeExtensions = pkgs: {
     csharp = pkgs.vscode-extensions.ms-dotnettools.csharp;

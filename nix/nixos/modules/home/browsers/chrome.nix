@@ -3,11 +3,9 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.browsers.chrome;
-in
-{
+in {
   options.browsers.chrome = {
     enable = lib.mkEnableOption "Google Chrome";
     settings = {
@@ -16,7 +14,7 @@ in
     };
     advanced.commandLineArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
+      default = [];
       description = "Additional Google Chrome command line arguments";
     };
   };

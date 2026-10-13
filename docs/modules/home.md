@@ -41,35 +41,49 @@ Parent switches gate their children. Enabling `development`, `shellOptions`, `br
 
 | Bundle under `development` | Contents |
 | --- | --- |
-| `git` | Git configuration, lazygit; existing Delta and LFS defaults |
-| `tools` | Just, jq, killport |
-| `cloud` | Azure CLI |
-| `containers` | compose2nix, lazydocker |
-| `kubernetes` | kubectl, k9s, kubeseal |
-| `nix` | nixfmt, nixd, Alejandra |
-| `secrets` | age |
-| `environment` | direnv with Zsh integration |
-| `desktop` | GitKraken, Yaak; omit on headless hosts |
+| `git` | Git configuration, lazygit, gh, git-absorb, pre-commit, lefthook, a global ignore list; Delta and LFS defaults. `enableDifftastic` (off) swaps Delta for difftastic |
+| `tools` | Just, jq, yq, killport, httpie, hyperfine, watchexec, tokei |
+| `cloud` | Azure CLI; `aws.enable` and `gcp.enable` (both off) add the AWS and Google Cloud CLIs |
+| `containers` | compose2nix, lazydocker, dive, hadolint, docker-compose |
+| `kubernetes` | kubectl, k9s, kubeseal, Helm, Kustomize, kubectx/kubens, stern, kubeconform, kind |
+| `nix` | nixfmt, nixd, Alejandra, statix, deadnix |
+| `secrets` | age, sops, ssh-to-age; `gnupg.enable` (off) adds GnuPG |
+| `environment` | direnv with Zsh integration and nix-direnv |
+| `desktop` | GitKraken and Yaak (each has its own `enable`); omit on headless hosts |
 | `languages.c` | GCC; optional CLion |
-| `languages.python` | uv; optional PyCharm |
-| `languages.dotnet` | .NET 10 SDK; optional Rider |
-| `languages.javascript` | Node.js, JavaScript/TypeScript support; optional WebStorm |
+| `languages.python` | uv, Ruff; optional PyCharm |
+| `languages.dotnet` | .NET 10 SDK, netcoredbg; optional Rider |
+| `languages.javascript` | Node.js, eslint_d, JavaScript/TypeScript support; optional WebStorm |
 | `languages.java` | JDK; optional IntelliJ IDEA |
-| `languages.go` | Go; optional GoLand |
+| `languages.go` | Go, Delve, golangci-lint; optional GoLand |
 | `languages.php` | PHP, Composer; optional PhpStorm |
 | `languages.ruby` | Ruby; optional RubyMine |
-| `languages.sql` | SQL editor support; optional DataGrip |
+| `languages.sql` | SQL editor support, pgcli, lazysql; optional DataGrip |
+| `languages.terraform` | Terraform, terraform-ls, TFLint, Infracost, tfsec; optional VS Code/Zed/Neovim integration with module-aware LSP |
 | `languages.zig` | Zig |
 | `languages.elixir` | Elixir |
+| `languages.rust` | Cargo, rustc, rustfmt, Clippy, rust-analyzer |
+| `languages.lua` | lua-language-server, StyLua |
+| `languages.dart` | Dart SDK |
+| `languages.kotlin` | Kotlin, kotlin-language-server |
+| `languages.swift` | Editor support only; the toolchain comes from Xcode |
+| `languages.shell` | bash-language-server, ShellCheck, shfmt |
+| `languages.markup` | YAML, TOML, JSON and Dockerfile language servers; hadolint |
 | `editors` | Select Zed, Neovim, and VS Code separately |
 
 Each area lives in its own file under [`development`](../../nix/nixos/modules/home/development). Language bundles live in `development/languages`. The old `development.sdk.enable` is now `development.languages.dotnet.enable`; the old mixed `development.tools` package selection is replaced by the bundles above.
+
+The Rust, Lua, Dart, Kotlin, Swift, shell and markup bundles are new and, like every language, off until enabled.
 
 Language bundles own their toolchains, editor extensions, Neovim language servers and syntax grammars, and optional JetBrains IDEs. For example, `languages.dotnet.enable = true` adds C# and CSharpier to enabled VS Code, the C# extension to enabled Zed, and `csharp_ls` plus the C# grammar to enabled Neovim. `development.nix.enable` supplies the Nix integrations in the same way. Language switches do not enable editors: set `editors.enable` and each desired editor's `enable` switch. Zed's built-in languages (C/C++, Python, JavaScript/TypeScript, and Go) use its built-in support with the corresponding language server packages.
 
 JetBrains switches live under their languages, such as `languages.dotnet.rider.enable`, `languages.python.pycharm.enable`, and `languages.javascript.webstorm.enable`. Both the language and `development.enable` must be enabled; JetBrains IDEs do not require `editors.enable`. The old `editors.jetbrains` options have been removed, and the repository's hosts use the new paths. On `laptop`, .NET remains disabled, so its Rider selection is dormant until .NET is enabled.
 
 Editors keep their shared UI, plugins, and general extensions. Existing Zed and VS Code `extensions`, `settings`, and `advanced` options remain available for exceptions. Language extensions default to the language's enablement and can be disabled individually, for example `editors.vscode.extensions.csharp = false` or `editors.zed.extensions.csharp = false`. These switches apply while the language is enabled. Native Neovim server options can override the defaults, and Zed's `advanced.settings` can override language settings. Zig and Elixir extensions now require their language bundles instead of being installed for every editor user.
+
+### Adding a language
+
+Copy [`_template.nix`](../../nix/nixos/modules/home/development/languages/_template.nix) to `<name>.nix`, trim the fields you do not need, import it from `languages/default.nix`, add the name to `languageNames` in `tests/development.nix`, and add a row to the table above. Every field is documented in [`support.nix`](../../nix/nixos/modules/home/development/languages/support.nix). Anything that refers to packages is a function of `pkgs`; names and IDs are plain data. Neovim linters (`neovimLinters`) run through nvim-lint, and their binaries go in `packages`. Bundles outside `development.languages` (such as `development.nix`) pass `optionPath`.
 
 ## Neovim
 
@@ -140,15 +154,21 @@ Completion uses Blink's `enter` preset: arrow keys or `Ctrl n/p` select, Enter a
 
 | Bundle under `shellOptions` | Contents |
 | --- | --- |
-| `zsh` | Zsh, completion, autosuggestions, highlighting, Pure prompt, Oh My Zsh plugins |
+| `zsh` | Zsh, completion, autosuggestions, highlighting, Pure prompt, Oh My Zsh plugins; `atuin.enable` (off) adds Atuin history search |
 | `terminal` | Ghostty and its existing appearance settings |
-| `navigation` | fzf, ripgrep, eza, Yazi, Skim |
-| `monitoring` | fastfetch, btop |
-| `tmux` | tmux, tmuxinator, curated plugins and key bindings |
+| `navigation` | fzf, ripgrep, eza, Yazi, zoxide, bat, Television; `skim.enable`, `fd.enable` and `dust.enable` (all off) add more |
+| `monitoring` | fastfetch, btop; `duf.enable` and `procs.enable` (both off) add more |
+| `tmux` | tmux, tmuxinator, curated plugins and key bindings; `autoStart` (on) controls auto-attaching |
+
+`EDITOR` follows the enabled development editor (Neovim, then Zed, then VS Code) and is left unset when none is enabled; set `shellOptions.editor` to override it. The Oh My Zsh plugin list is `git` plus `docker`, `azure` and `fzf` when the containers, cloud and navigation bundles are enabled. tmux auto-start is skipped in VS Code, Zed and JetBrains terminals, and tmuxinator reads projects from `~/.config/tmuxinator`.
 
 These replace the former `shellOptions.shell` bundle. tmux, navigation, and the terminal can be selected independently of Zsh. tmux auto-attaches only when the Zsh bundle is also enabled.
 
 Zsh exposes `extraPlugins`, `shellAliases`, and `initContent` for host-specific additions. The existing tmux options move from `shellOptions.shell.tmux` to `shellOptions.tmux`, including `plugins.weather`, `tmuxinator`, and `advanced.extraConfig`.
+
+## Workstation profile
+
+`profiles.devWorkstation.enable = true` selects the shared development defaults (git, cloud, containers, kubernetes, nix, secrets, tools, environment, the C and Python languages, and Neovim). Every value is a `mkDefault`, so a host overrides only what differs, such as `development.kubernetes.enable = false`. Desktop tools, other languages and the GUI editors stay per host.
 
 ## Browsers and window managers
 

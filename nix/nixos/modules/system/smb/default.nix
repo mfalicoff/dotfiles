@@ -4,39 +4,36 @@
   username,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.smb;
 
-  mountSmbShare =
-    {
-      remote,
-      mountPoint,
-    }:
-    {
-      device = remote;
-      fsType = "cifs";
-      options = [
-        "credentials=${config.sops.secrets.smb.path}"
-        "x-systemd.automount"
-        "noauto"
-        "uid=1000"
-        "gid=100"
-        "file_mode=0664"
-        "dir_mode=0775"
-      ];
-    };
+  mountSmbShare = {
+    remote,
+    mountPoint,
+  }: {
+    device = remote;
+    fsType = "cifs";
+    options = [
+      "credentials=${config.sops.secrets.smb.path}"
+      "x-systemd.automount"
+      "noauto"
+      "uid=1000"
+      "gid=100"
+      "file_mode=0664"
+      "dir_mode=0775"
+    ];
+  };
 
-  fileSystems = mapAttrs' (name: share: {
-    name = share.mountPoint;
-    value = mountSmbShare {
-      remote = share.remote;
-      mountPoint = share.mountPoint;
-    };
-  }) cfg.shares;
-
-in
-{
+  fileSystems =
+    mapAttrs' (name: share: {
+      name = share.mountPoint;
+      value = mountSmbShare {
+        remote = share.remote;
+        mountPoint = share.mountPoint;
+      };
+    })
+    cfg.shares;
+in {
   options.smb = {
     enable = mkEnableOption "Enable SMB";
 

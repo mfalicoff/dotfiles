@@ -10,7 +10,8 @@
     if pkgs.stdenv.hostPlatform.isDarwin
     then "darwinConfigurations"
     else "nixosConfigurations";
-  flakeExpr = "builtins.getFlake ${builtins.toJSON cfg.completion.flakePath}";
+  # A plain path makes getFlake copy .git, which fails on git's fsmonitor socket.
+  flakeExpr = "builtins.getFlake ${builtins.toJSON "git+file://${cfg.completion.flakePath}"}";
   systemExpr = "(${flakeExpr}).${configurationSet}.${builtins.toJSON cfg.completion.hostName}";
   nixdSettings = {
     # Use the host's package set so completion includes NUR and other overlays.
@@ -39,16 +40,18 @@ in {
       name = "nix";
       description = "Nix development tools";
       optionPath = ["development" "nix"];
-      packages = pkgs: [pkgs.nixfmt-rfc-style pkgs.nixd pkgs.alejandra];
+      packages = pkgs: [pkgs.nixfmt pkgs.nixd pkgs.alejandra pkgs.statix pkgs.deadnix];
       vscodeExtensions = pkgs: {nix = pkgs.vscode-extensions.jnoortheen.nix-ide;};
       zedExtensions.nix = "nix";
       zedPackages = pkgs: [pkgs.nixd pkgs.alejandra];
-      zedSettings.languages.Nix = {
-        language_servers = ["nixd" "!nil"];
-        format_on_save = "on";
-        formatter.external = {
-          command = "alejandra";
-          arguments = ["-q" "-"];
+      zedSettings = _: {
+        languages.Nix = {
+          language_servers = ["nixd" "!nil"];
+          format_on_save = "on";
+          formatter.external = {
+            command = "alejandra";
+            arguments = ["-q" "-"];
+          };
         };
       };
       neovimServers = ["nixd"];
@@ -70,12 +73,15 @@ in {
     };
     hostName = lib.mkOption {
       type = lib.types.str;
-      default =
-        args.osConfig.networking.hostName or (
-          if pkgs.stdenv.hostPlatform.isDarwin
-          then "fearful"
-          else "fear"
-        );
+      default = let
+        # networking.hostName can exist but be null (e.g. on the work Mac).
+        osHostName = args.osConfig.networking.hostName or null;
+      in
+        if osHostName != null
+        then osHostName
+        else if pkgs.stdenv.hostPlatform.isDarwin
+        then "fearful"
+        else "fear";
       description = "Flake host whose system and Home Manager options nixd completes";
     };
     homeModule = lib.mkOption {

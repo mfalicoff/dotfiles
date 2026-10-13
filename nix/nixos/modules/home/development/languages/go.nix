@@ -1,7 +1,7 @@
 import ./support.nix {
   name = "go";
   description = "Go development tools";
-  packages = pkgs: [pkgs.go];
+  packages = pkgs: [pkgs.go pkgs.delve pkgs.golangci-lint];
   jetbrains.goland = pkgs: pkgs.jetbrains.goland;
   vscodeExtensions = pkgs: {go = pkgs.vscode-extensions.golang.go;};
   # Go support is built into Zed.
@@ -10,5 +10,8 @@ import ./support.nix {
   neovimGrammars = ["go" "gomod" "gosum"];
   neovimFormatters = {
     go = ["goimports" "gofmt"];
+  };
+  neovimLinters = {
+    go = ["golangcilint"];
   };
 }

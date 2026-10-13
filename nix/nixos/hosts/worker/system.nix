@@ -3,8 +3,7 @@
   inputs,
   workerHostname,
   ...
-}:
-{
+}: {
   imports = [
     inputs.home-manager.nixosModules.default
     ./hardware-configuration.nix

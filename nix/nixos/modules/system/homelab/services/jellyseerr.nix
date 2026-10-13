@@ -8,12 +8,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.jellyseerr;
   service = "jellyseerr";
-in
-{
+in {
   options.homelab.services.jellyseerr = {
     enable = mkEnableOption "Enable jellyseerr";
     port = mkOption {
@@ -41,7 +39,7 @@ in
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {
@@ -49,5 +47,4 @@ in
       port = cfg.port;
     };
   };
-
 }

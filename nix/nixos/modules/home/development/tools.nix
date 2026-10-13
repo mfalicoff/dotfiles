@@ -11,7 +11,11 @@
       just
       jq
       killport
-      yaak
+      httpie
+      hyperfine
+      watchexec
+      tokei
+      yq-go
       (pkgs.callPackage ../../../../packages/npm {})
     ];
   };

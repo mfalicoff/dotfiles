@@ -1,16 +1,26 @@
-{ username, ... }:
 {
-  sops = {
-    age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+  config,
+  lib,
+  username,
+  ...
+}: {
+  options.secretsAgeKeyFile = lib.mkOption {
+    type = lib.types.str;
+    default = "${config.users.users.${username}.home}/.config/sops/age/keys.txt";
+    description = "Location of the age key used to decrypt sops secrets";
+  };
+
+  config.sops = {
+    age.keyFile = config.secretsAgeKeyFile;
 
     secrets = {
       caddy = {
         sopsFile = ../../../secrets/secrets.caddy.yaml;
-        restartUnits = [ "caddy.service" ];
+        restartUnits = ["caddy.service"];
       };
       miniflux = {
         sopsFile = ../../../secrets/secrets.miniflux.yaml;
-        restartUnits = [ "miniflux.service" ];
+        restartUnits = ["miniflux.service"];
       };
       karakeep-oauth2 = {
         sopsFile = ../../../secrets/secrets.karakeep.yaml;
@@ -25,7 +35,7 @@
       };
       strava = {
         sopsFile = ../../../secrets/secrets.strava.yaml;
-        restartUnits = [ "podman-statistics-for-strava.service" ];
+        restartUnits = ["podman-statistics-for-strava.service"];
       };
     };
   };

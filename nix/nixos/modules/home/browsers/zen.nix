@@ -4,14 +4,12 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.browsers.zen;
-  shared = import ./firefox-like.nix { inherit lib pkgs; };
+  shared = import ./firefox-like.nix {inherit lib pkgs;};
   profilesIni = "${config.programs.zen-browser.configPath}/profiles.ini";
-in
-{
-  imports = [ inputs.zen-browser.homeModules.beta ];
+in {
+  imports = [inputs.zen-browser.homeModules.beta];
 
   options.browsers.zen = shared.options "Zen Browser";
 
@@ -32,7 +30,7 @@ in
     # Nix store, which leaves Zen at the profile chooser on a fresh install.
     home.file."${profilesIni}".enable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (lib.mkForce false);
     home.activation.zenWritableProfiles = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
-      lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      lib.hm.dag.entryAfter ["linkGeneration"] ''
         profiles_ini=${lib.escapeShellArg profilesIni}
         if [ -L "$profiles_ini" ]; then
           case "$(readlink "$profiles_ini")" in

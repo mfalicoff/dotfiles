@@ -36,6 +36,7 @@
     # Shared inputs
     stylix.url = "github:danth/stylix";
     base16.url = "github:SenchoPens/base16.nix";
+    sofka.url = "github:nklmilojevic/sofka";
 
     # System-specific home-manager versions
     home-manager = {
@@ -69,6 +70,10 @@
 
     nix-std.url = "github:chessai/nix-std";
 
+    spotatui = {
+      url = "github:LargeModGames/spotatui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
@@ -89,6 +94,8 @@
     laptopHostname = "laptop";
     workerHostname = "worker";
     darwinHostname = "fearful";
+    darwinWorkHostname = "MFALICOFF-MAC";
+    workUsername = "mfalicoff";
     isDarwin = system: (builtins.elem system [
       "aarch64-darwin"
       "x86_64-darwin"
@@ -106,6 +113,12 @@
       inherit inputs;
       inherit isDarwin;
     };
+
+    workSpecialArgs =
+      sharedSpecialArgs
+      // {
+        username = workUsername;
+      };
   in {
     # NixOS configuration
     nixosConfigurations.${desktopHostname} = nixpkgs.lib.nixosSystem {
@@ -187,13 +200,49 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "pre-nix";
-          home-manager.sharedModules = [ inputs.nix-plist-manager.homeManagerModules.default ];
+          home-manager.sharedModules = [inputs.nix-plist-manager.homeManagerModules.default];
           home-manager.extraSpecialArgs = sharedSpecialArgs;
           home-manager.users.${username} = import ./nix/nixos/hosts/fearful/home.nix;
         }
         # Make the same curated Firefox add-ons available to Zen on macOS.
-        { nixpkgs.overlays = [ inputs.nur.overlays.default ]; }
+        {nixpkgs.overlays = [inputs.nur.overlays.default];}
       ];
+    };
+
+    darwinConfigurations.${darwinWorkHostname} = nix-darwin.lib.darwinSystem {
+      system = darwinSystem;
+      specialArgs = workSpecialArgs;
+      modules = [
+        inputs.stylix.darwinModules.stylix
+        ./nix/nixos/nix-core.nix
+        ./nix/nixos/hosts/darwin/work/system.nix
+        inputs.home-manager-darwin.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "pre-nix";
+          home-manager.extraSpecialArgs = workSpecialArgs;
+          home-manager.users.${workUsername} = import ./nix/nixos/hosts/darwin/work/home.nix;
+        }
+      ];
+    };
+
+    formatter = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-darwin"] (
+      system: nixpkgs.legacyPackages.${system}.alejandra
+    );
+
+    # Module regression tests; each asserts at evaluation time and the
+    # derivation only records the results.
+    checks.x86_64-linux = let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      suite = name: file:
+        pkgs.runCommand "${name}-tests" {} ''
+          echo '${builtins.toJSON (import file {inherit inputs;})}' > $out
+        '';
+    in {
+      bundles = suite "bundles" ./tests/bundles.nix;
+      development = suite "development" ./tests/development.nix;
+      kernels = suite "kernels" ./tests/kernels.nix;
     };
   };
 }

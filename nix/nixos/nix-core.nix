@@ -2,37 +2,31 @@
   pkgs,
   lib,
   ...
-}:
-{
-  # enable flakes globally
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+}: {
+  nix.settings =
+    {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      warn-dirty = false;
+      extra-substituters = ["https://nix-community.cachix.org"];
+      extra-trusted-public-keys = ["nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
+    }
+    // lib.optionalAttrs (lib.versionAtLeast pkgs.nix.version "2.24") {
+      download-buffer-size = 268435456;
+    };
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # Auto upgrade nix package and the daemon service.
-  # services.nix-daemon.enable = true;
-  # Use this instead of services.nix-daemon.enable if you
-  # don't wan't the daemon service to be managed for you.
-  # nix.useDaemon = true;
 
   nix.package = pkgs.nix;
 
-  # do garbage collection weekly to keep disk usage low
   nix.gc = {
     automatic = lib.mkDefault true;
     options = lib.mkDefault "--delete-older-than 7d";
   };
 
-  # programs.nix-ld.enable = true;
-
-  # Disable auto-optimise-store because of this issue:
-  #   https://github.com/NixOS/nix/issues/7273
-  # "error: cannot link '/nix/store/.tmp-link-xxxxx-xxxxx' to '/nix/store/.links/xxxx': File exists"
-  nix.settings = {
-    auto-optimise-store = false;
-  };
+  # The scheduled optimiser avoids the concurrent-build failure that
+  # auto-optimise-store triggers (https://github.com/NixOS/nix/issues/7273).
+  nix.optimise.automatic = lib.mkDefault true;
 }

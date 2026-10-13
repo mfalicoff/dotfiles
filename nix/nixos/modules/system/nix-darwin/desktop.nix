@@ -3,8 +3,7 @@
   lib,
   username,
   ...
-}:
-{
+}: {
   options.macos.desktop.enable = lib.mkEnableOption "macOS desktop configuration";
   config = lib.mkIf (config.macos.enable && config.macos.desktop.enable) {
     # Settings without equivalent nix-plist-manager options stay with nix-darwin.

@@ -6,6 +6,7 @@
     ./environment.nix
     ./cloud.nix
     ./containers.nix
+    ./desktop.nix
     ./kubernetes.nix
     ./nix.nix
     ./secrets.nix

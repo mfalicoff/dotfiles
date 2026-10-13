@@ -3,8 +3,7 @@
   pkgs,
   desktopHostname,
   ...
-}:
-{
+}: {
   imports = [
     inputs.home-manager.nixosModules.default
     ../../modules/system/user.nix

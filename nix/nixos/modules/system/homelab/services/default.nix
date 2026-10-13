@@ -4,11 +4,9 @@
   mkGlanceMonitor,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services;
-in
-{
+in {
   imports = [
     ./actual.nix
     ./byparr.nix

@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.windowManager.wayland.bar.waybar;
-in
-{
+in {
   options.windowManager.wayland.bar.waybar = {
     enable = mkEnableOption "Enable Waybar configuration";
 

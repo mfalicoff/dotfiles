@@ -5,8 +5,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.bootManager;
   kernels = {
     default = pkgs.linuxPackages;
@@ -14,8 +13,7 @@ let
     zen = pkgs.linuxPackages_zen;
     cachyos = inputs.nix-cachyos-kernel.legacyPackages.x86_64-linux.linuxPackages-cachyos-latest;
   };
-in
-{
+in {
   options.bootManager = {
     enable = mkEnableOption "Enable Boot Manager";
     kernel = mkOption {
@@ -35,8 +33,8 @@ in
     ];
 
     nix.settings = mkIf (cfg.kernel == "cachyos") {
-      substituters = [ "https://attic.xuyh0120.win/lantian" ];
-      trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+      substituters = ["https://attic.xuyh0120.win/lantian"];
+      trusted-public-keys = ["lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="];
     };
 
     # Bootloader.

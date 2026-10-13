@@ -1,17 +1,15 @@
 # Evaluate with the repository's locked inputs; see docs/modules/README.md.
-{ inputs }:
-let
+{inputs}: let
   inherit (inputs.nixpkgs) lib;
   pkgs = import inputs.nixpkgs {
     system = "x86_64-linux";
     config.allowUnfree = true;
-    overlays = [ inputs.nur.overlays.default ];
+    overlays = [inputs.nur.overlays.default];
   };
-  home =
-    settings:
+  home = settings:
     (inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      extraSpecialArgs = { inherit inputs; };
+      extraSpecialArgs = {inherit inputs;};
       modules = [
         inputs.nixvim.homeModules.nixvim
         ../nix/nixos/modules/home
@@ -23,8 +21,7 @@ let
         settings
       ];
     }).config;
-  system =
-    settings:
+  system = settings:
     (lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs.username = "test";
@@ -41,8 +38,8 @@ let
       ];
     }).config;
   packages = c: builtins.sort builtins.lessThan (map lib.getName c.home.packages);
-  empty = home { };
-  developmentOnly = home { development.enable = true; };
+  empty = home {};
+  developmentOnly = home {development.enable = true;};
   tools = home {
     development = {
       enable = true;
@@ -59,7 +56,7 @@ let
     development.tools.enable = true;
     development.git.enable = true;
   };
-  shellOnly = home { shellOptions.enable = true; };
+  shellOnly = home {shellOptions.enable = true;};
   tmuxOnly = home {
     shellOptions = {
       enable = true;
@@ -78,6 +75,70 @@ let
       navigation.enable = true;
     };
   };
+  shellWith = extra: home (lib.recursiveUpdate {shellOptions.enable = true;} extra);
+  zedShell = shellWith {
+    development = {
+      enable = true;
+      editors = {
+        enable = true;
+        zed.enable = true;
+      };
+    };
+  };
+  nvimShell = shellWith {
+    development = {
+      enable = true;
+      editors = {
+        enable = true;
+        neovim.enable = true;
+      };
+    };
+  };
+  editorOverride = shellWith {
+    shellOptions.editor = "hx";
+  };
+  fullZsh = home {
+    shellOptions = {
+      enable = true;
+      zsh.enable = true;
+      navigation = {
+        enable = true;
+        skim.enable = true;
+        fd.enable = true;
+      };
+      monitoring = {
+        enable = true;
+        duf.enable = true;
+      };
+    };
+    development = {
+      enable = true;
+      containers.enable = true;
+      cloud.enable = true;
+    };
+  };
+  minimalZsh = home {
+    shellOptions = {
+      enable = true;
+      zsh.enable = true;
+      tmux = {
+        enable = true;
+        autoStart = false;
+      };
+    };
+  };
+  fullTmux = home {
+    shellOptions = {
+      enable = true;
+      zsh.enable = true;
+      tmux.enable = true;
+    };
+  };
+  workstation = home {profiles.devWorkstation.enable = true;};
+  workstationOverride = home {
+    profiles.devWorkstation.enable = true;
+    development.kubernetes.enable = false;
+  };
   disabledShell = home {
     shellOptions.zsh.enable = true;
     shellOptions.tmux.enable = true;
@@ -86,7 +147,7 @@ let
     development.enable = true;
     development.editors.vscode.enable = true;
   };
-  disabledBrowsers = home { browsers.firefox.enable = true; };
+  disabledBrowsers = home {browsers.firefox.enable = true;};
   disabledWM = home {
     windowManager.wayland = {
       enable = true;
@@ -100,7 +161,7 @@ let
       wayland.hyprland.enable = true;
     };
   };
-  gamingOnly = system { gaming.enable = true; };
+  gamingOnly = system {gaming.enable = true;};
   launchersOnly = system {
     gaming = {
       enable = true;
@@ -113,7 +174,7 @@ let
       streaming.enable = true;
     };
   };
-  disabledGaming = system { gaming.launchers.enable = true; };
+  disabledGaming = system {gaming.launchers.enable = true;};
   containersOnly = system {
     virt = {
       enable = true;
@@ -126,14 +187,14 @@ let
       virtualMachines.enable = true;
     };
   };
-  disabledVirt = system { virt.containers.enable = true; };
+  disabledVirt = system {virt.containers.enable = true;};
   passwordOnly = system {
     passwordManager = {
       enable = true;
       onePassword.enable = true;
     };
   };
-  hyprlandOnly = system { wm.hyprland.enable = true; };
+  hyprlandOnly = system {wm.hyprland.enable = true;};
   checks = {
     developmentParentDoesNotSelectBundles = packages developmentOnly == packages empty;
     toolsBundleIncludesItsTools = builtins.all (name: builtins.elem name (packages tools)) [
@@ -152,7 +213,37 @@ let
     navigationIncludesItsPrograms =
       navigationOnly.programs.eza.enable
       && navigationOnly.programs.yazi.enable
-      && navigationOnly.programs.skim.enable;
+      && navigationOnly.programs.zoxide.enable
+      && !navigationOnly.programs.skim.enable;
+    navigationExtrasAreOptIn =
+      !(builtins.elem "fd" (packages navigationOnly))
+      && builtins.elem "fd" (packages fullZsh)
+      && fullZsh.programs.skim.enable
+      && builtins.elem "duf" (packages fullZsh);
+    editorFollowsEnabledEditor =
+      nvimShell.home.sessionVariables.EDITOR
+      == "nvim"
+      && zedShell.home.sessionVariables.EDITOR == "zeditor --wait"
+      && !(shellOnly.home.sessionVariables ? EDITOR)
+      && editorOverride.home.sessionVariables.EDITOR == "hx";
+    zshPluginsFollowEnabledTools = let
+      plugins = fullZsh.programs.zsh.oh-my-zsh.plugins;
+      minimal = minimalZsh.programs.zsh.oh-my-zsh.plugins;
+    in
+      builtins.all (p: builtins.elem p plugins) ["git" "docker" "azure" "fzf"]
+      && minimal == ["git"]
+      && !(builtins.elem "bun" plugins);
+    tmuxAutoStartIsOptional =
+      lib.hasInfix "tmux attach-session" fullTmux.programs.zsh.initContent
+      && !(lib.hasInfix "tmux attach-session" minimalZsh.programs.zsh.initContent)
+      && lib.hasInfix "ZED_TERM" fullTmux.programs.zsh.initContent;
+    workstationProfileSetsDefaults =
+      workstation.development.kubernetes.enable
+      && workstation.development.languages.python.enable
+      && !workstation.development.languages.dotnet.enable
+      && !workstation.development.desktop.enable
+      && !workstationOverride.development.kubernetes.enable;
+    profileIsOptIn = !empty.development.enable;
     shellChildrenRequireTheirDomain =
       !disabledShell.programs.zsh.enable && !disabledShell.programs.tmux.enable;
     editorsRequireTheirArea = !disabledEditors.programs.vscode.enable;
@@ -186,8 +277,8 @@ let
       && !(builtins.elem "hyprshot" (map lib.getName hyprlandOnly.environment.systemPackages));
   };
 in
-lib.mapAttrs (
-  name: passed:
-  assert lib.assertMsg passed "Bundle regression: ${name}";
-  passed
-) checks
+  lib.mapAttrs (
+    name: passed:
+      assert lib.assertMsg passed "Bundle regression: ${name}"; passed
+  )
+  checks

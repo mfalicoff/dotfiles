@@ -7,12 +7,9 @@
   mkMonitoringTarget,
   mkCaddyVirtualHost,
   ...
-}:
-
-let
+}: let
   cfg = config.homelab.services.strava-statistics;
-in
-{
+in {
   options.homelab.services.strava-statistics = {
     enable = lib.mkEnableOption "Strava statistics service";
 
@@ -46,7 +43,7 @@ in
 
     virtualisation.oci-containers.containers."statistics-for-strava" = {
       image = "robiningelbrecht/strava-statistics:v3.7.3";
-      environmentFiles = [ config.sops.secrets.strava.path ];
+      environmentFiles = [config.sops.secrets.strava.path];
       volumes = [
         "/var/lib/strava/build:/var/www/build"
         "/var/lib/strava/config:/var/www/config/app"
@@ -57,7 +54,7 @@ in
         PUID = "991";
         PGID = "991";
       };
-      ports = [ "${toString cfg.port}:8080/tcp" ];
+      ports = ["${toString cfg.port}:8080/tcp"];
       log-driver = "journald";
       extraOptions = [
         "--network-alias=app"
@@ -84,7 +81,7 @@ in
     ];
 
     systemd.services."podman-network-strava-statistics_default" = {
-      path = [ pkgs.podman ];
+      path = [pkgs.podman];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -93,17 +90,17 @@ in
       script = ''
         podman network inspect strava-statistics_default || podman network create strava-statistics_default
       '';
-      partOf = [ "podman-compose-strava-statistics-root.target" ];
-      wantedBy = [ "podman-compose-strava-statistics-root.target" ];
+      partOf = ["podman-compose-strava-statistics-root.target"];
+      wantedBy = ["podman-compose-strava-statistics-root.target"];
     };
 
     systemd.targets."podman-compose-strava-statistics-root" = {
       unitConfig.Description = "Root target for Strava statistics (compose2nix)";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
     };
 
     systemd.services."statistics-for-strava-update" = {
-      path = [ pkgs.podman ];
+      path = [pkgs.podman];
       serviceConfig.Type = "oneshot";
       script = ''
         echo "Starting Strava data import..."
@@ -114,12 +111,12 @@ in
 
         echo "Strava data update completed"
       '';
-      after = [ "podman-statistics-for-strava.service" ];
-      requires = [ "podman-statistics-for-strava.service" ];
+      after = ["podman-statistics-for-strava.service"];
+      requires = ["podman-statistics-for-strava.service"];
     };
 
     systemd.timers."statistics-for-strava-update" = {
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       timerConfig = {
         OnCalendar = "01:00";
         Persistent = true;
@@ -134,7 +131,7 @@ in
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = "strava"; })
+      (mkMonitoringTarget {service = "strava";})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {

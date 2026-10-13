@@ -1,18 +1,15 @@
-{ inputs }:
-let
+{inputs}: let
   inherit (inputs.nixpkgs) lib;
-  system =
-    platform: settings:
-    (lib.nixosSystem {
-      system = platform;
-      specialArgs = { inherit inputs; };
-      modules = [
-        ../nix/nixos/modules/system/boot
-        { system.stateVersion = "24.11"; }
-        settings
-      ];
-    });
-  latest = system "x86_64-linux" { bootManager.enable = true; };
+  system = platform: settings: (lib.nixosSystem {
+    system = platform;
+    specialArgs = {inherit inputs;};
+    modules = [
+      ../nix/nixos/modules/system/boot
+      {system.stateVersion = "24.11";}
+      settings
+    ];
+  });
+  latest = system "x86_64-linux" {bootManager.enable = true;};
   defaultKernel = system "x86_64-linux" {
     bootManager = {
       enable = true;
@@ -31,7 +28,7 @@ let
       kernel = "cachyos";
     };
   };
-  disabled = system "x86_64-linux" { bootManager.kernel = "cachyos"; };
+  disabled = system "x86_64-linux" {bootManager.kernel = "cachyos";};
   unsupported = system "aarch64-linux" {
     bootManager = {
       enable = true;
@@ -59,16 +56,19 @@ let
     cachyosAddsItsCache = builtins.elem cache cachyos.config.nix.settings.substituters;
     otherKernelsDoNotAddTheCache = !(builtins.elem cache latest.config.nix.settings.substituters);
     disabledBootDoesNotSelectCachyos =
-      disabled.config.boot.kernelPackages.kernel.drvPath == disabled.pkgs.linuxPackages.kernel.drvPath
+      disabled.config.boot.kernelPackages.kernel.drvPath
+      == disabled.pkgs.linuxPackages.kernel.drvPath
       && !(builtins.elem cache disabled.config.nix.settings.substituters);
-    rejectsUnsupportedCachyosPlatform = builtins.any (
-      a: a.message == "bootManager.kernel = cachyos requires x86_64-linux." && !a.assertion
-    ) unsupported.config.assertions;
+    rejectsUnsupportedCachyosPlatform =
+      builtins.any (
+        a: a.message == "bootManager.kernel = cachyos requires x86_64-linux." && !a.assertion
+      )
+      unsupported.config.assertions;
     rejectsUnknownKernel = !(builtins.tryEval invalid.config.bootManager.kernel).success;
   };
 in
-lib.mapAttrs (
-  name: passed:
-  assert lib.assertMsg passed "Kernel regression: ${name}";
-  passed
-) checks
+  lib.mapAttrs (
+    name: passed:
+      assert lib.assertMsg passed "Kernel regression: ${name}"; passed
+  )
+  checks

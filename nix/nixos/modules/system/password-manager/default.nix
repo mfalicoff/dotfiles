@@ -5,11 +5,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.passwordManager;
-in
-{
+in {
   options.passwordManager = {
     enable = mkEnableOption "password management";
     onePassword.enable = mkEnableOption "1Password CLI and desktop app";
@@ -20,14 +18,14 @@ in
     programs._1password.enable = cfg.onePassword.enable;
     programs._1password-gui = mkIf cfg.onePassword.enable {
       enable = true;
-      polkitPolicyOwners = [ "${username}" ];
+      polkitPolicyOwners = ["${username}"];
     };
 
     systemd.user.services.polkit-gnome-authentication-agent-1 = mkIf cfg.desktopIntegration.enable {
       description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
+      wants = ["graphical-session.target"];
+      after = ["graphical-session.target"];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";

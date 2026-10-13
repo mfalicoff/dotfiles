@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   imports = [
     ./containers.nix
     ./virtual-machines.nix

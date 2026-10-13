@@ -35,7 +35,7 @@ nix build .#darwinConfigurations.fearful.system
 sudo darwin-rebuild switch --flake .#fearful
 ```
 
-Nixpkgs manages CLI tools, fonts, and VS Code. nix-darwin makes Nix-installed app bundles available in `/Applications/Nix Apps`. The `homebred` module owns the Homebrew formulae, casks, and App Store app list in `fearful/system.nix`; its activation uses `cleanup = "zap"`, so review removed entries before a switch. Zed is declared as a Homebrew cask. Home Manager owns shell, Git, Ghostty, and television settings; the television source files are in [`nix/darwin/config`](../../nix/darwin/config). Existing Home Manager target files are backed up with a `.pre-nix` suffix during activation.
+Nixpkgs manages CLI tools, fonts, and (through Home Manager) VS Code. nix-darwin makes Nix-installed app bundles available in `/Applications/Nix Apps`. The `homebred` module owns the Homebrew formulae, casks, and App Store app list in `fearful/system.nix`; its activation defaults to `cleanup = "uninstall"` and does not update Homebrew itself (`autoUpdate = false`); set `cleanup = "zap"` to also delete app data, and review removed entries before a switch. Zed is declared as a Homebrew cask. Home Manager owns shell, Git, Ghostty, and television settings; the television source files are in [`nix/darwin/config`](../../nix/darwin/config). Existing Home Manager target files are backed up with a `.pre-nix` suffix during activation.
 
 After switching, check the installed apps and CLI tools before removing any old manually installed copies. If a Nix GUI package does not build or launch, its declaration can be moved from [`modules/system/nix-darwin/default.nix`](../../nix/nixos/modules/system/nix-darwin/default.nix) to `homebred.casks` in the host's `system.nix`, then rebuilt.
 
@@ -44,3 +44,22 @@ Aerofi is installed from the upstream `frostymur/tap` Homebrew tap. Its structur
 Home Manager installs [`config/aerofi/config.toml`](../../nix/darwin/config/aerofi/config.toml) as `~/.config/aerofi/config.toml` and [`config/aerofi/theme.toml`](../../nix/darwin/config/aerofi/theme.toml) as `~/.config/aerofi/themes/dotfiles.toml`. The selected theme uses Catppuccin Mocha colors and a footer with keyboard hints and a reload button. Edit these repository files and rebuild, then press `Cmd+R` in Aerofi to reload. Restart the service with `brew services restart aerofi` after changing global hotkeys. These two files are read-only Nix store links; scripts, plugins, and runtime state remain writable, and theme-switching scripts should not rewrite the managed config.
 
 Aerofi scans only the immediate contents of each app directory, so `apps.extra_dirs` explicitly includes `~/Applications/Home Manager Apps` as well as `/Applications/Nix Apps`. Home Manager also runs [`cache-icons.py`](../../nix/darwin/config/aerofi/cache-icons.py) after linking the configuration to seed missing app icons from bundle resources using macOS `sips`. This fallback targets Aerofi 0.2.22's v4 icon cache and skips newer cache formats. The theme uses an explicit icon slot with 32-point icons. Reload Aerofi after rebuilding to pick up newly discovered apps and cached icons.
+
+## Work Mac (`MFALICOFF-MAC`)
+
+`darwinConfigurations.MFALICOFF-MAC` is an adopt-only configuration for an MDM-managed Mac whose account is `mfalicoff` (`workUsername` in [`flake.nix`](../../flake.nix)). Its files are in [`nix/nixos/hosts/darwin/work`](../../nix/nixos/hosts/darwin/work). It manages only the Nix daemon settings, `/etc` shell hooks and Home Manager itself: no hostname, macOS defaults, Stylix, Homebrew (`homebred` would zap existing casks), dotfiles or Git config. Enable shared Home Manager features in its `home.nix` one at a time, switching after each. The `development.git` module deletes `~/.gitconfig` and uses personal defaults, so set `userEmail` before enabling it.
+
+The host name used by `darwin-rebuild` does not match the Mac's local host name, so always pass the flake attribute explicitly.
+
+First switch:
+
+1. Build first: `nix build .#darwinConfigurations.MFALICOFF-MAC.system`. Git flakes ignore untracked files, so `git add` new files first.
+2. Move the files nix-darwin refuses to overwrite:
+
+   ```sh
+   for f in /etc/bashrc /etc/zshrc /etc/zshenv /etc/nix/nix.conf; do sudo mv "$f" "$f.before-nix-darwin"; done
+   ```
+
+3. `sudo nix run github:LnL7/nix-darwin/master#darwin-rebuild -- switch --flake .#MFALICOFF-MAC`
+
+Later rebuilds use `sudo darwin-rebuild switch --flake .#MFALICOFF-MAC`. The existing `~/.zshrc`, `~/.gitconfig` and installed apps are left alone.

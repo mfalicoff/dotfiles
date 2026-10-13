@@ -2,8 +2,7 @@
   inputs,
   username,
   ...
-}:
-{
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
     ../../modules/home
@@ -31,25 +30,5 @@
 
   # Settings for this machine
   browsers.enable = false;
-  development = {
-    enable = true;
-    git.enable = true;
-    cloud.enable = true;
-    containers.enable = true;
-    kubernetes.enable = true;
-    nix.enable = true;
-    secrets.enable = true;
-    tools.enable = true;
-    desktop.enable = false;
-    environment.enable = true;
-    languages = {
-      c.enable = true;
-      python.enable = true;
-      dotnet.enable = false;
-    };
-    editors = {
-      enable = true;
-      neovim.enable = true;
-    };
-  };
+  profiles.devWorkstation.enable = true;
 }

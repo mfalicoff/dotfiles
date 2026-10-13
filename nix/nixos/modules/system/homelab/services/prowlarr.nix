@@ -7,12 +7,10 @@
   mkCaddyVirtualHost,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homelab.services.prowlarr;
   service = "prowlarr";
-in
-{
+in {
   options.homelab.services.prowlarr = {
     enable = mkEnableOption "Enable prowlarr";
     port = mkOption {
@@ -33,11 +31,11 @@ in
     };
 
     homelab.services.glance.monitorSites = [
-      (mkGlanceMonitor { service = service; })
+      (mkGlanceMonitor {service = service;})
     ];
 
     homelab.monitoring.targets = [
-      (mkMonitoringTarget { service = service; })
+      (mkMonitoringTarget {service = service;})
     ];
 
     services.caddy.virtualHosts = mkCaddyVirtualHost {
