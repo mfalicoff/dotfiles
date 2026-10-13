@@ -39,11 +39,15 @@ Nixpkgs manages CLI tools, fonts, and (through Home Manager) VS Code. nix-darwin
 
 After switching, check the installed apps and CLI tools before removing any old manually installed copies. If a Nix GUI package does not build or launch, its declaration can be moved from [`modules/system/nix-darwin/default.nix`](../../nix/nixos/modules/system/nix-darwin/default.nix) to `homebred.casks` in the host's `system.nix`, then rebuilt.
 
+Both Mac configurations use the shared Podman development bundle. `fearful` no longer declares OrbStack, and the work Mac no longer declares the Homebrew Docker CLI. After rebuilding, open a new shell and run `podman machine init` once, then `podman machine start`. To install Podman Desktop through Nix as well, enable `development.containers.desktop.enable` in the host's home configuration. The [container guide](../modules/home.md#containers) covers Compose commands, Docker API tools, and existing container data.
+
 Aerofi is installed from the upstream `frostymur/tap` Homebrew tap. Its structured `homebrew.brews` entry in `fearful/system.nix` starts the launcher as a user service at login and restarts it when the formula changes. After switching, press the configured launcher shortcut (`Cmd+G`) to open it. Custom themes and scripts live in `~/.config/aerofi/`.
 
 Home Manager installs [`config/aerofi/config.toml`](../../nix/darwin/config/aerofi/config.toml) as `~/.config/aerofi/config.toml` and [`config/aerofi/theme.toml`](../../nix/darwin/config/aerofi/theme.toml) as `~/.config/aerofi/themes/dotfiles.toml`. The selected theme uses Catppuccin Mocha colors and a footer with keyboard hints and a reload button. Edit these repository files and rebuild, then press `Cmd+R` in Aerofi to reload. Restart the service with `brew services restart aerofi` after changing global hotkeys. These two files are read-only Nix store links; scripts, plugins, and runtime state remain writable, and theme-switching scripts should not rewrite the managed config.
 
 Aerofi scans only the immediate contents of each app directory, so `apps.extra_dirs` explicitly includes `~/Applications/Home Manager Apps` as well as `/Applications/Nix Apps`. Home Manager also runs [`cache-icons.py`](../../nix/darwin/config/aerofi/cache-icons.py) after linking the configuration to seed missing app icons from bundle resources using macOS `sips`. This fallback targets Aerofi 0.2.22's v4 icon cache and skips newer cache formats. The theme uses an explicit icon slot with 32-point icons. Reload Aerofi after rebuilding to pick up newly discovered apps and cached icons.
+
+Home Manager creates the writable script directory (`~/.config/aerofi/scripts`) and plugin directory (`~/Library/Application Support/aerofi/plugins`) during activation so Aerofi can watch them even when empty. The app scan excludes `~/.nix-profile/Applications`, which is absent on these setups; Nix apps are discovered through the directories above.
 
 ## Work Mac (`MFALICOFF-MAC`)
 

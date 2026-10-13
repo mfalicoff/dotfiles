@@ -29,6 +29,13 @@
     enable = true;
   };
 
+  # Aerofi watches these writable directories even when they are empty.
+  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run mkdir -p \
+      "${config.xdg.configHome}/aerofi/scripts" \
+      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
+  '';
+
   # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
   home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
     run ${lib.getExe pkgs.python3} ${../../../../darwin/config/aerofi/cache-icons.py} \
@@ -72,7 +79,7 @@
       enableLfs = false;
     };
     cloud.enable = true;
-    containers.enable = false;
+    containers.enable = true;
     kubernetes.enable = false;
     nix = {
       enable = true;

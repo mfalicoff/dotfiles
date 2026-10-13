@@ -44,7 +44,7 @@ Parent switches gate their children. Enabling `development`, `shellOptions`, `br
 | `git` | Git configuration, lazygit, gh, git-absorb, pre-commit, lefthook, a global ignore list; Delta and LFS defaults. `enableDifftastic` (off) swaps Delta for difftastic |
 | `tools` | Just, jq, yq, killport, httpie, hyperfine, watchexec, tokei |
 | `cloud` | Azure CLI; `aws.enable` and `gcp.enable` (both off) add the AWS and Google Cloud CLIs |
-| `containers` | compose2nix, lazydocker, dive, hadolint, docker-compose |
+| `containers` | Podman, Docker/Compose compatibility commands, compose2nix, lazydocker, dive, hadolint; `desktop.enable` (off) adds Podman Desktop |
 | `kubernetes` | kubectl, k9s, kubeseal, Helm, Kustomize, kubectx/kubens, stern, kubeconform, kind |
 | `nix` | nixfmt, nixd, Alejandra, statix, deadnix |
 | `secrets` | age, sops, ssh-to-age; `gnupg.enable` (off) adds GnuPG |
@@ -72,6 +72,40 @@ Parent switches gate their children. Enabling `development`, `shellOptions`, `br
 | `editors` | Select Zed, Neovim, and VS Code separately |
 
 Each area lives in its own file under [`development`](../../nix/nixos/modules/home/development). Language bundles live in `development/languages`. The old `development.sdk.enable` is now `development.languages.dotnet.enable`; the old mixed `development.tools` package selection is replaced by the bundles above.
+
+### Containers
+
+`development.containers.enable = true` installs Podman through Nix on Linux and macOS. The installed `docker` command forwards to Podman, including `docker compose`. The `docker-compose` command also runs `podman compose`; both use a pinned Docker Compose provider against Podman's socket, following [Podman's Compose integration](https://docs.podman.io/en/latest/markdown/podman-compose.1.html). These are executable commands, so scripts and television channels use them as well as interactive shells.
+
+To install the optional GUI, set this in the host's `home.nix` (or `nix/darwin/home.nix` for `fearful`):
+
+```nix
+development = {
+  enable = true;
+  containers = {
+    enable = true;
+    desktop.enable = true;
+  };
+};
+```
+
+Podman Desktop requires both parent switches and is off by default. On NixOS, enable `virt.enable` and `virt.containers.enable` in `system.nix` for the runtime's networking, rootless support and sockets. On macOS, initialize a machine once after rebuilding, then start it when needed:
+
+```sh
+podman machine init
+podman machine start
+podman info
+```
+
+See the [Podman installation guide](https://podman.io/docs/installation) for machine setup. Docker commands now manage Podman's containers; existing Docker/OrbStack images and volumes stay in their original engine and are not migrated by a rebuild.
+
+Tools that connect directly to the Docker API, such as lazydocker and SDKs, need `DOCKER_HOST` set to Podman's socket. After starting the machine on macOS:
+
+```sh
+export DOCKER_HOST="unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
+```
+
+On NixOS, use `export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"`. See [Podman's Docker API setup](https://podman-desktop.io/docs/migrating-from-docker/using-the-docker_host-environment-variable). For Dive on Linux, select the engine with `dive --source podman IMAGE`; [Dive's Podman image source](https://github.com/wagoodman/dive#multiple-image-sources-and-container-engines-supported) supports Linux only.
 
 The Rust, Lua, Dart, Kotlin, Swift, shell and markup bundles are new and, like every language, off until enabled.
 
@@ -160,7 +194,7 @@ Completion uses Blink's `enter` preset: arrow keys or `Ctrl n/p` select, Enter a
 | `monitoring` | fastfetch, btop; `duf.enable` and `procs.enable` (both off) add more |
 | `tmux` | tmux, tmuxinator, curated plugins and key bindings; `autoStart` (on) controls auto-attaching |
 
-`EDITOR` follows the enabled development editor (Neovim, then Zed, then VS Code) and is left unset when none is enabled; set `shellOptions.editor` to override it. The Oh My Zsh plugin list is `git` plus `docker`, `azure` and `fzf` when the containers, cloud and navigation bundles are enabled. tmux auto-start is skipped in VS Code, Zed and JetBrains terminals, and tmuxinator reads projects from `~/.config/tmuxinator`.
+`EDITOR` follows the enabled development editor (Neovim, then Zed, then VS Code) and is left unset when none is enabled; set `shellOptions.editor` to override it. The Oh My Zsh plugin list is `git` plus `docker` and `podman` for containers, `azure` for cloud, and `fzf` for navigation. tmux auto-start is skipped in VS Code, Zed and JetBrains terminals, and tmuxinator reads projects from `~/.config/tmuxinator`.
 
 These replace the former `shellOptions.shell` bundle. tmux, navigation, and the terminal can be selected independently of Zsh. tmux auto-attaches only when the Zsh bundle is also enabled.
 

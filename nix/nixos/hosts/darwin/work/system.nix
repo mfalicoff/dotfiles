@@ -30,7 +30,6 @@
     brews = [
       "anomalyco/tap/opencode-v2"
       "chezmoi"
-      "docker"
       "gh"
       "go"
       "k9s"

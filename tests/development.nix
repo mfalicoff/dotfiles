@@ -152,6 +152,27 @@
       environment.enable = true;
     };
   };
+  containersDesktop = home {
+    development = {
+      enable = true;
+      containers = {
+        enable = true;
+        desktop.enable = true;
+      };
+    };
+  };
+  disabledContainers = home {
+    development = {
+      enable = true;
+      containers.desktop.enable = true;
+    };
+  };
+  disabledContainerDevelopment = home {
+    development.containers = {
+      enable = true;
+      desktop.enable = true;
+    };
+  };
   desktopOn = home {
     development = {
       enable = true;
@@ -201,6 +222,18 @@
     };
   };
   checks = {
+    containersUsePodman =
+      builtins.all (name: builtins.elem name (packages everythingElse)) ["podman" "docker" "docker-compose"]
+      && everythingElse.home.sessionVariables.PODMAN_COMPOSE_PROVIDER == lib.getExe pkgs.docker-compose;
+    podmanDesktopIsOptIn =
+      builtins.elem "podman-desktop" (packages containersDesktop)
+      && !(builtins.elem "podman-desktop" (packages everythingElse));
+    containersRespectParents =
+      !(builtins.elem "podman" (packages disabledContainers))
+      && !(builtins.elem "podman-desktop" (packages disabledContainers))
+      && !(builtins.elem "podman" (packages disabledContainerDevelopment))
+      && !(builtins.elem "podman-desktop" (packages disabledContainerDevelopment))
+      && !(disabledContainerDevelopment.home.sessionVariables ? PODMAN_COMPOSE_PROVIDER);
     nixEditorsShareCompletionSources =
       allLanguages.programs.nixvim.plugins.lsp.servers.nixd.settings
       == allLanguages.programs.zed-editor.userSettings.lsp.nixd.settings;

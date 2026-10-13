@@ -36,6 +36,13 @@
   xdg.configFile."aerofi/config.toml".source = ./config/aerofi/config.toml;
   xdg.configFile."aerofi/themes/dotfiles.toml".source = ./config/aerofi/theme.toml;
 
+  # Aerofi watches these writable directories even when they are empty.
+  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run mkdir -p \
+      "${config.xdg.configHome}/aerofi/scripts" \
+      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
+  '';
+
   # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
   home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
     run ${lib.getExe pkgs.python3} ${./config/aerofi/cache-icons.py} \
@@ -67,6 +74,7 @@
     };
     cloud.enable = true;
     containers.enable = true;
+    containers.desktop.enable = true;
     kubernetes.enable = true;
     nix.enable = true;
     secrets.enable = true;

@@ -40,7 +40,6 @@
     casks = [
       "kartax/tap/immich-desktop"
       "insync"
-      "orbstack"
       "proton-mail"
       "skyhook-io/tap/radar-desktop"
       "wallspace"

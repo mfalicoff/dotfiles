@@ -230,7 +230,7 @@
       plugins = fullZsh.programs.zsh.oh-my-zsh.plugins;
       minimal = minimalZsh.programs.zsh.oh-my-zsh.plugins;
     in
-      builtins.all (p: builtins.elem p plugins) ["git" "docker" "azure" "fzf"]
+      builtins.all (p: builtins.elem p plugins) ["git" "docker" "podman" "azure" "fzf"]
       && minimal == ["git"]
       && !(builtins.elem "bun" plugins);
     tmuxAutoStartIsOptional =
