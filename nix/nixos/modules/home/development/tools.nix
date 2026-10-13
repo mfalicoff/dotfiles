@@ -12,6 +12,7 @@
       jq
       killport
       yaak
+      (pkgs.callPackage ../../../../packages/npm {})
     ];
   };
 }

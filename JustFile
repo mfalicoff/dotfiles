@@ -39,6 +39,16 @@ update:
 update-input input:
     nix flake lock --update-input {{input}} {{flake}}
 
+# Add an npm CLI, pin its dependencies, and refresh the Nix dependency hash
+npm-add package:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    nix shell --impure --expr 'let f = builtins.getFlake ("path:" + toString ./.); p = f.inputs.nixpkgs.legacyPackages.${builtins.currentSystem}; in [p.nodejs p.prefetch-npm-deps]' --command bash ./nix/packages/npm/update.sh "$1"
+
+# Refresh the lock and hash after editing nix/packages/npm/package.json
+npm-lock:
+    nix shell --impure --expr 'let f = builtins.getFlake ("path:" + toString ./.); p = f.inputs.nixpkgs.legacyPackages.${builtins.currentSystem}; in [p.nodejs p.prefetch-npm-deps]' --command bash ./nix/packages/npm/update.sh
+
 # Check NixOS configuration
 check-nixos hostname=hostname:
     nix eval --raw {{flake}}#nixosConfigurations.{{hostname}}.config.system.build.toplevel.drvPath

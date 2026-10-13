@@ -3,11 +3,9 @@
   lib,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.homebred;
-in
-{
+in {
   options.homebred = {
     # Homebrew basic configuration
     enable = mkEnableOption "homebrew";
@@ -15,22 +13,22 @@ in
     # App categories
     taps = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = "Homebrew taps to add";
     };
     brews = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = "Homebrew formulae to install";
     };
     casks = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = "Homebrew casks to install";
     };
     appStoreApps = mkOption {
       type = types.attrsOf types.int;
-      default = { };
+      default = {};
       description = "Apps to install from the App Store";
     };
   };
@@ -41,7 +39,7 @@ in
       enable = true;
       onActivation = {
         autoUpdate = true;
-        upgrade = false;
+        upgrade = true;
         # Homebrew disabled the deprecated --cleanup switch. Pass the
         # supported cleanup flag directly through nix-darwin.
         cleanup = "zap";

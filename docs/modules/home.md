@@ -73,6 +73,28 @@ Editors keep their shared UI, plugins, and general extensions. Existing Zed and 
 
 ## Neovim
 
+### Nix module completion
+
+With `development.nix.enable` and the desired editor enabled, Neovim and Zed share nixd settings for the current host's actual package set (including NUR and other overlays), system options, and Home Manager options including the host's per-user imports. This supplies completion and option types/documentation for custom bundles such as `development.languages.dotnet`, `shellOptions`, and `windowManager`. Zed uses the Nix-installed nixd binary.
+
+For Zen, `browsers.zen.extensions.` completes the bundled extension switches. Additional extensions go in `browsers.zen.advanced.extensions`; typing `pkgs.nur.repos.rycee.firefox-addons.` completes the NUR extension packages. nixd limits each response to 30 suggestions, so continue typing a prefix such as `ublock-` or `proton-p` to find later names. Completion also works inside `with pkgs.nur.repos.rycee.firefox-addons; [ ... ]`.
+
+This covers declared module options, packages from the selected host, and Nixpkgs library functions. Arbitrary free-form application settings and dynamically constructed attribute names may have no schema for nixd to complete.
+
+The completion expressions read the live checkout at `~/source/dotfiles`, using the system hostname to choose a flake configuration. If the checkout is elsewhere or you want another host's options:
+
+```nix
+development.nix.completion = {
+  flakePath = "/absolute/path/to/dotfiles";
+  hostName = "fearful";
+  # homeModule defaults to /nix/nixos/hosts/<hostName>/home.nix.
+};
+```
+
+Set `development.nix.completion.enable = false` to keep nixd's generic defaults, or override individual native LSP settings for another project. After applying these settings, restart Neovim or restart language servers in Zed. Restart nixd after changing module declarations to refresh its evaluated options. New source files must be added to Git for the Git-backed flake to include them.
+
+### Editor behavior
+
 Neovim stays declarative through Nixvim and uses LazyVim-style defaults: Snacks for the picker, explorer, dashboard, notifications, and indent guides; Blink.cmp with native snippets; Conform for formatting; Gitsigns, Flash, mini.ai/mini.pairs, Noice, Trouble, and Persistence. Catppuccin Mocha supplies lavender accents, subtle indent guides, and matching rounded popups. Lualine has rounded section separators, Bufferline uses the Catppuccin palette, and mini.icons supplies file icons. The centered dashboard includes shortcuts and recent files. Plugins and external tools are installed by Nix.
 
 The leader is Space; the local leader is backslash. Root-aware actions locate the current file's project using Git, .NET, Node, Python, Go, Elixir, or Zig markers, with the current directory as fallback. Uppercase variants use the current working directory.
