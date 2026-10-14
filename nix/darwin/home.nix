@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   username,
@@ -13,9 +12,6 @@
     packages = with pkgs; [
       chatgpt
       whatsapp-for-mac
-      (inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-        buildFeatures = (old.buildFeatures or []) ++ ["cover-art"];
-      }))
     ];
   };
 

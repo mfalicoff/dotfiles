@@ -1,0 +1,57 @@
+# Based on https://github.com/LargeModGames/spotatui/blob/main/examples/config.example.yml
+# Omitted settings keep Spotatui's defaults.
+behavior:
+  playback_poll_seconds: 5
+  table_scroll_padding: 5
+  startup_route: home
+  sidebar_position: left
+  playbar_position: bottom
+  small_terminal_width: 150
+  small_terminal_height: 45
+  # Show album art even in terminals without a graphics protocol.
+  draw_cover_art_forced: true
+  liked_icon: "♥"
+  playing_icon: "▶"
+  paused_icon: "⏸"
+
+format:
+  playbar_status: "{state} ({device} | Shuffle: {shuffle} | Repeat: {repeat} | Volume: {volume}%){party}"
+  playbar_status_source: "{state} ({source}{queue}{shuffle}{repeat} | Volume: {volume}%)"
+  window_title: "{title}{artist}"
+
+tables:
+  songs:
+    - { id: liked }
+    - { id: title, width_percent: 40 }
+    - { id: artist, width_percent: 30 }
+    - { id: album }
+    - { id: length }
+  album_tracks:
+    - { id: liked }
+    - { id: index }
+    - { id: title }
+    - { id: artist }
+    - { id: length }
+  albums:
+    - { id: title }
+    - { id: artist }
+    - { id: date }
+  podcasts:
+    - { id: title }
+    - { id: publisher }
+  episodes:
+    - { id: played }
+    - { id: date }
+    - { id: title }
+    - { id: duration }
+  recently_played:
+    - { id: liked }
+    - { id: title }
+    - { id: artist }
+    - { id: length }
+
+# Bindings suggested by the first-party plugin examples.
+plugin_commands:
+  track_info: "ctrl-i"
+  cycle_accent: "ctrl-y"
+  session_stats: "ctrl-s"

@@ -5,6 +5,7 @@
     ./windowManager
     ./rofi
     ./shell
+    ./spotatui
     ./profiles/dev-workstation.nix
   ];
 }
