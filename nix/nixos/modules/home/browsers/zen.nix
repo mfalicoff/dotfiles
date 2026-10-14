@@ -14,6 +14,18 @@ in {
   options.browsers.zen = shared.options "Zen Browser";
 
   config = lib.mkIf (config.browsers.enable && cfg.enable) {
+    # Gecko otherwise treats each new Nix store path as a separate install and
+    # selects a fresh profile, hiding the existing extensions and settings.
+    home.sessionVariables.MOZ_LEGACY_PROFILES = "1";
+    launchd.agents.zenLegacyProfiles = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+      enable = true;
+      config = {
+        Label = "org.nixos.zenLegacyProfiles";
+        ProgramArguments = ["/bin/launchctl" "setenv" "MOZ_LEGACY_PROFILES" "1"];
+        RunAtLoad = true;
+      };
+    };
+
     programs.zen-browser = {
       enable = true;
       profiles = lib.optionalAttrs (shared.needsProfile cfg) {
