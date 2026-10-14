@@ -1,4 +1,4 @@
-{darwinHostname, ...}: {
+{config, darwinHostname, username, ...}: {
   imports = [
     ./host-users.nix
     ../../modules/system/stylix
@@ -20,6 +20,20 @@
   networking.computerName = darwinHostname;
   system.defaults.smb.NetBIOSName = darwinHostname;
   time.timeZone = "America/Toronto";
+
+  # The Nix store path of Zen changes on every upgrade. Gecko treats each
+  # path as a new installation unless legacy profile selection is enabled.
+  launchd.user.envVariables.MOZ_LEGACY_PROFILES = "1";
+  launchd.user.agents.zenLegacyProfiles.serviceConfig = {
+    ProgramArguments = ["/bin/launchctl" "setenv" "MOZ_LEGACY_PROFILES" "1"];
+    RunAtLoad = true;
+  };
+  assertions = [
+    {
+      assertion = config.home-manager.users.${username}.programs.zen-browser.enable;
+      message = "The fearful host must keep Zen enabled to preserve its managed profile and extensions.";
+    }
+  ];
 
   services.tailscale.enable = true;
 

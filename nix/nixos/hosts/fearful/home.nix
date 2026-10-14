@@ -5,4 +5,6 @@
     ../../../darwin/plist.nix
     ../../modules/home
   ];
+
+  home.sessionVariables.MOZ_LEGACY_PROFILES = "1";
 }

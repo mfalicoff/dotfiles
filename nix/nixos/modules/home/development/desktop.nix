@@ -24,6 +24,6 @@ in {
     home.packages =
       lib.optional cfg.gitkraken.enable pkgs.gitkraken
       ++ lib.optional cfg.yaak.enable pkgs.yaak
-      ++ [pkgs.mongodb-compass pkgs.gitbutler];
+      ++ [pkgs.mongodb-compass];
   };
 }
