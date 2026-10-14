@@ -135,3 +135,15 @@ XDG_CACHE_HOME="$neovim_check_dir/cache" \
 ```
 
 These check startup, completion capabilities, keybindings after LSP attachment, project-root dispatch, picker/explorer windows, Treesitter highlighting, and actual formatting with save toggles. The isolated XDG directories keep the checks separate from live editor sessions.
+
+Check actual nixd completion against the generated option and package sources:
+
+```sh
+nixd_settings_file=$(mktemp)
+nix eval --json \
+  .#darwinConfigurations.fearful.config.home-manager.users.mazilious.programs.nixvim.plugins.lsp.servers.nixd.settings \
+  > "$nixd_settings_file"
+python3 tests/nixd.py "$nixd_settings_file"
+```
+
+This sends in-memory completion requests to nixd and checks custom language, shell, system, and Zen extension options, including the declared boolean type. It also checks Nixpkgs packages, library functions, and NUR extensions through direct attribute paths and `with` scopes. It does not edit the test document on disk.

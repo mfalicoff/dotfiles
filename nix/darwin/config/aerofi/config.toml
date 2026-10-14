@@ -23,7 +23,6 @@ ignore_names = ["Uninstall*", "Installer"]
 extra_dirs = [
   "/Applications/Nix Apps",
   "~/Applications/Home Manager Apps",
-  "~/.nix-profile/Applications",
 ]
 
 [bindings]

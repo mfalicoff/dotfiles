@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   username,
@@ -10,14 +11,11 @@
     homeDirectory = "/Users/${username}";
     stateVersion = "24.11";
     packages = with pkgs; [
-      bun
-      dockutil
-      gh
-      git-filter-repo
-      go
-      nodejs
-      opencode
-      openjdk
+      chatgpt
+      whatsapp-for-mac
+      (inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+        buildFeatures = (old.buildFeatures or []) ++ ["cover-art"];
+      }))
     ];
   };
 
@@ -37,6 +35,13 @@
   xdg.configFile."television".source = ./config/television;
   xdg.configFile."aerofi/config.toml".source = ./config/aerofi/config.toml;
   xdg.configFile."aerofi/themes/dotfiles.toml".source = ./config/aerofi/theme.toml;
+
+  # Aerofi watches these writable directories even when they are empty.
+  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run mkdir -p \
+      "${config.xdg.configHome}/aerofi/scripts" \
+      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
+  '';
 
   # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
   home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
@@ -69,6 +74,8 @@
     };
     cloud.enable = true;
     containers.enable = true;
+    containers.desktop.enable = true;
+    desktop.enable = true;
     kubernetes.enable = true;
     nix.enable = true;
     secrets.enable = true;

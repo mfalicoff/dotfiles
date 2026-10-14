@@ -96,6 +96,32 @@
       languages = lib.genAttrs languageNames (_: {enable = true;});
     };
   };
+  nixCompletionDisabled = home {
+    development = {
+      enable = true;
+      inherit editors;
+      nix = {
+        enable = true;
+        completion.enable = false;
+      };
+    };
+  };
+  nixCompletionOverrides = home {
+    development = {
+      enable = true;
+      editors = lib.recursiveUpdate editors {
+        zed.advanced.settings.lsp.nixd.settings.options.home_manager.expr = "custom-zed-options";
+      };
+      nix = {
+        enable = true;
+        completion = {
+          flakePath = "/tmp/custom-dotfiles";
+          hostName = "laptop";
+        };
+      };
+    };
+    programs.nixvim.plugins.lsp.servers.nixd.settings.options.home_manager.expr = "custom-neovim-options";
+  };
   everythingElse = home {
     development = {
       enable = true;
@@ -124,6 +150,27 @@
       cloud.enable = true;
       secrets.enable = true;
       environment.enable = true;
+    };
+  };
+  containersDesktop = home {
+    development = {
+      enable = true;
+      containers = {
+        enable = true;
+        desktop.enable = true;
+      };
+    };
+  };
+  disabledContainers = home {
+    development = {
+      enable = true;
+      containers.desktop.enable = true;
+    };
+  };
+  disabledContainerDevelopment = home {
+    development.containers = {
+      enable = true;
+      desktop.enable = true;
     };
   };
   desktopOn = home {
@@ -175,6 +222,31 @@
     };
   };
   checks = {
+    containersUsePodman =
+      builtins.all (name: builtins.elem name (packages everythingElse)) ["podman" "docker" "docker-compose"]
+      && everythingElse.home.sessionVariables.PODMAN_COMPOSE_PROVIDER == lib.getExe pkgs.docker-compose;
+    podmanDesktopIsOptIn =
+      builtins.elem "podman-desktop" (packages containersDesktop)
+      && !(builtins.elem "podman-desktop" (packages everythingElse));
+    containersRespectParents =
+      !(builtins.elem "podman" (packages disabledContainers))
+      && !(builtins.elem "podman-desktop" (packages disabledContainers))
+      && !(builtins.elem "podman" (packages disabledContainerDevelopment))
+      && !(builtins.elem "podman-desktop" (packages disabledContainerDevelopment))
+      && !(disabledContainerDevelopment.home.sessionVariables ? PODMAN_COMPOSE_PROVIDER);
+    nixEditorsShareCompletionSources =
+      allLanguages.programs.nixvim.plugins.lsp.servers.nixd.settings
+      == allLanguages.programs.zed-editor.userSettings.lsp.nixd.settings;
+    nixCompletionRespectsSelection =
+      !((bare.programs.zed-editor.userSettings.lsp or {}) ? nixd)
+      && !((nixCompletionDisabled.programs.zed-editor.userSettings.lsp or {}) ? nixd)
+      && (nixCompletionDisabled.programs.nixvim.plugins.lsp.servers.nixd.settings.options or {}) == {};
+    nixCompletionOverridesWork =
+      nixCompletionOverrides.programs.nixvim.plugins.lsp.servers.nixd.settings.options.home_manager.expr
+      == "custom-neovim-options"
+      && nixCompletionOverrides.programs.zed-editor.userSettings.lsp.nixd.settings.options.home_manager.expr == "custom-zed-options"
+      && lib.hasInfix "/tmp/custom-dotfiles" nixCompletionOverrides.programs.nixvim.plugins.lsp.servers.nixd.settings.options.system.expr
+      && lib.hasInfix "laptop" nixCompletionOverrides.programs.nixvim.plugins.lsp.servers.nixd.settings.options.system.expr;
     dotnetAutomaticallyConfiguresEditors =
       builtins.elem "ms-dotnettools.csharp" (extensionIds dotnet)
       && builtins.elem "csharpier.csharpier-vscode" (extensionIds dotnet)

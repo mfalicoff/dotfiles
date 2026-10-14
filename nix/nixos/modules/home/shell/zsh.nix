@@ -51,7 +51,7 @@ in {
         enable = true;
         plugins =
           ["git"]
-          ++ lib.optional (config.development.enable && config.development.containers.enable) "docker"
+          ++ lib.optionals (config.development.enable && config.development.containers.enable) ["docker" "podman"]
           ++ lib.optional (config.development.enable && config.development.cloud.enable) "azure"
           ++ lib.optional (config.shellOptions.navigation.enable) "fzf"
           ++ cfg.extraPlugins;

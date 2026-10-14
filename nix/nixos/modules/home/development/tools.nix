@@ -16,6 +16,7 @@
       watchexec
       tokei
       yq-go
+      (pkgs.callPackage ../../../../packages/npm {})
     ];
   };
 }

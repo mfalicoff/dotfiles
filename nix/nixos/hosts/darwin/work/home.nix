@@ -18,7 +18,7 @@
     stateVersion = "24.11";
     packages = with pkgs; [
       (inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-        buildFeatures = (old.buildFeatures or [ ]) ++ [ "cover-art" ];
+        buildFeatures = (old.buildFeatures or []) ++ ["cover-art"];
       }))
     ];
   };
@@ -28,6 +28,13 @@
   programs.nh = {
     enable = true;
   };
+
+  # Aerofi watches these writable directories even when they are empty.
+  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run mkdir -p \
+      "${config.xdg.configHome}/aerofi/scripts" \
+      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
+  '';
 
   # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
   home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
@@ -72,7 +79,7 @@
       enableLfs = false;
     };
     cloud.enable = true;
-    containers.enable = false;
+    containers.enable = true;
     kubernetes.enable = false;
     nix = {
       enable = true;
