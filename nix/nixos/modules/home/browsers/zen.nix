@@ -6,12 +6,54 @@
   ...
 }: let
   cfg = config.browsers.zen;
-  shared = import ./firefox-like.nix {inherit lib pkgs;};
+  extensionPackages = pkgs.nur.repos.rycee.firefox-addons;
+  bundledExtensions = {
+    ublockOrigin = extensionPackages.ublock-origin;
+    darkreader = extensionPackages.darkreader;
+    protonpass = extensionPackages.proton-pass;
+    karakeep = extensionPackages.karakeep;
+  };
+  needsProfile =
+    builtins.any (extension: cfg.extensions.${extension}) (builtins.attrNames bundledExtensions)
+    || cfg.settings.doNotTrack
+    || cfg.settings.trackingProtection
+    || cfg.settings.disableTelemetry
+    || cfg.advanced.extensions != []
+    || cfg.advanced.settings != {};
   profilesIni = "${config.programs.zen-browser.configPath}/profiles.ini";
 in {
   imports = [inputs.zen-browser.homeModules.beta];
 
-  options.browsers.zen = shared.options "Zen Browser";
+  options.browsers.zen = {
+    enable = lib.mkEnableOption "Zen Browser";
+    extensions =
+      builtins.mapAttrs (
+        extension: _:
+          lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Install the bundled ${extension} Zen Browser extension";
+          }
+      )
+      bundledExtensions;
+    settings = {
+      doNotTrack = lib.mkEnableOption "the Do Not Track header";
+      trackingProtection = lib.mkEnableOption "tracking protection";
+      disableTelemetry = lib.mkEnableOption "disabling telemetry";
+    };
+    advanced = {
+      extensions = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        description = "Additional Zen Browser extension packages";
+      };
+      settings = lib.mkOption {
+        type = lib.types.attrsOf lib.types.anything;
+        default = {};
+        description = "Additional or overriding Zen Browser profile preferences";
+      };
+    };
+  };
 
   config = lib.mkIf (config.browsers.enable && cfg.enable) {
     # Gecko otherwise treats each new Nix store path as a separate install and
@@ -28,14 +70,28 @@ in {
 
     programs.zen-browser = {
       enable = true;
-      profiles = lib.optionalAttrs (shared.needsProfile cfg) {
-        default = shared.profile cfg;
+      profiles = lib.optionalAttrs needsProfile {
+        default = {
+          settings =
+            lib.recursiveUpdate (
+              lib.optionalAttrs cfg.settings.doNotTrack {
+                "privacy.donottrackheader.enabled" = true;
+              }
+              // lib.optionalAttrs cfg.settings.trackingProtection {
+                "privacy.trackingprotection.enabled" = true;
+              }
+              // lib.optionalAttrs cfg.settings.disableTelemetry {
+                "toolkit.telemetry.enabled" = false;
+                "datareporting.healthreport.uploadEnabled" = false;
+              }
+            )
+            cfg.advanced.settings;
+          extensions.packages =
+            builtins.attrValues (lib.filterAttrs (extension: _: cfg.extensions.${extension}) bundledExtensions)
+            ++ cfg.advanced.extensions;
+        };
       };
     };
-    # // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-    #   # The macOS app is already installed by Homebrew.
-    #   package = null;
-    # };
 
     # Zen needs to update profiles.ini when it creates its first macOS profile.
     # The Firefox Home Manager module normally links this file to the read-only

@@ -36,7 +36,6 @@
 
   browsers = {
     enable = true;
-    firefox.enable = true;
     zen.enable = true;
     chrome.enable = true;
   };

@@ -28,16 +28,10 @@ in {
       description = "Default branch name for new repositories";
     };
 
-    enableDelta = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable delta diff viewer";
-    };
-
     enableDifftastic = mkOption {
       type = types.bool;
-      default = false;
-      description = "Use difftastic for structural diffs instead of delta";
+      default = true;
+      description = "Use difftastic for structural diffs";
     };
 
     enableLfs = mkOption {
@@ -49,12 +43,6 @@ in {
 
   config = mkIf (config.development.enable && cfg.enable) {
     home.packages = [pkgs.lazygit pkgs.gh pkgs.git-absorb pkgs.pre-commit pkgs.lefthook];
-
-    programs.delta = mkIf cfg.enableDelta {
-      enable = true;
-      enableGitIntegration = !cfg.enableDifftastic;
-      options.features = "side-by-side";
-    };
 
     programs.difftastic = mkIf cfg.enableDifftastic {
       enable = true;

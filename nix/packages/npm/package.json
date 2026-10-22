@@ -1,9 +1,0 @@
-{
-  "name": "dotfiles-npm-clis",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "@storyteller-platform/ghost-story": "0.3.3",
-    "node2nix": "1.11.0"
-  }
-}

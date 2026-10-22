@@ -147,7 +147,7 @@
     development.enable = true;
     development.editors.vscode.enable = true;
   };
-  disabledBrowsers = home {browsers.firefox.enable = true;};
+  disabledBrowsers = home {browsers.zen.enable = true;};
   disabledWM = home {
     windowManager.wayland = {
       enable = true;
@@ -248,7 +248,7 @@
       !disabledShell.programs.zsh.enable && !disabledShell.programs.tmux.enable;
     editorsRequireTheirArea = !disabledEditors.programs.vscode.enable;
     browsersRequireTheirDomain =
-      !disabledBrowsers.programs.firefox.enable && packages disabledBrowsers == packages empty;
+      !disabledBrowsers.programs.zen-browser.enable && packages disabledBrowsers == packages empty;
     windowManagersRequireTheirDomain =
       !disabledWM.wayland.windowManager.hyprland.enable && !disabledWM.programs.waybar.enable;
     windowManagersRequireWayland = !disabledWayland.wayland.windowManager.hyprland.enable;

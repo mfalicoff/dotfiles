@@ -206,7 +206,7 @@ Zsh exposes `extraPlugins`, `shellAliases`, and `initContent` for host-specific 
 
 ## Browsers and window managers
 
-Browsers already form separate bundles: enable `browsers.enable` and then `firefox.enable`, `zen.enable`, or `chrome.enable`. Firefox and Zen keep their curated extensions enabled by default. Their `extensions`, `settings`, and `advanced` options remain available; Chrome retains `settings` and `advanced.commandLineArgs`.
+Browsers already form separate bundles: enable `browsers.enable` and then `zen.enable` or `chrome.enable`. Zen keeps its curated extensions enabled by default. Its `extensions`, `settings`, and `advanced` options remain available; Chrome retains `settings` and `advanced.commandLineArgs`.
 
 Zen uses the pinned [Zen Browser flake](https://github.com/0xc000022070/zen-browser-flake). On macOS, Home Manager makes `profiles.ini` writable for profile setup. Stylix profile targeting remains a host setting.
 

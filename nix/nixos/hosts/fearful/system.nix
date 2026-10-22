@@ -48,6 +48,7 @@
       "kartax/tap/immich-desktop"
       "insync"
       "proton-mail"
+      "zed"
       "skyhook-io/tap/radar-desktop"
       "wallspace"
       "yubico-authenticator"

@@ -1,6 +1,5 @@
 {lib, ...}: {
   imports = [
-    ./firefox.nix
     ./zen.nix
     ./chrome.nix
   ];

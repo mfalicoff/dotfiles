@@ -3,16 +3,17 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   examples = "${inputs.spotatui}/examples/plugins";
-in
-{
+in {
   # This shared Home Manager tree also serves nix-darwin; install here on NixOS only.
-  config = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+  config = {
     home.packages = [
       (inputs.spotatui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-        buildFeatures = (old.buildFeatures or [ ]) ++ [ "cover-art" ];
+        # buildRustPackage derives cargoBuildFeatures from buildFeatures before
+        # overrideAttrs runs, so the hook only sees the cargo* attributes.
+        cargoBuildFeatures = (old.cargoBuildFeatures or []) ++ ["cover-art"];
+        cargoCheckFeatures = (old.cargoCheckFeatures or []) ++ ["cover-art"];
       }))
     ];
 

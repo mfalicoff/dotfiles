@@ -11,6 +11,9 @@
   security.pam.services.sudo_local.touchIdAuth = true;
 
   nix.gc.automatic = false;
+  nix.settings = {
+    trusted-users = ["root" "mfalicoff"];
+  };
 
   styling.stylix.enable = true;
 
@@ -28,21 +31,9 @@
       "powershell/tap"
     ];
     brews = [
-      "anomalyco/tap/opencode-v2"
-      "chezmoi"
-      "gh"
-      "go"
-      "k9s"
-      "kubernetes-cli"
-      "lazygit"
       "mas"
       "mole"
       "powershell"
-      "rtk"
-      "rustup"
-      "sesh"
-      "tree-sitter-cli"
-      "uv"
     ];
     casks = [
       "dotnet-sdk"
@@ -55,10 +46,7 @@
       "mongodb-compass"
       "obsidian"
       "omniwm"
-      "opencode-desktop"
       "pocket-casts"
-      "spotify"
-      "terraform-linters/tap/tflint"
       "textream"
       "visual-studio-code"
       "vorssaint"

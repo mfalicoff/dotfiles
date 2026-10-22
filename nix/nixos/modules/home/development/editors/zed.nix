@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -13,6 +14,11 @@ with lib; let
     catppuccinIcons = "catppuccin-icons";
     just = "just";
   };
+  # The flake's zed-editor package is never pushed to the Zed binary cache, so
+  # on macOS use the Homebrew cask and expose its CLI under the same name.
+  darwinCliShim = pkgs.writeShellScriptBin "zeditor" ''
+    exec /Applications/Zed.app/Contents/MacOS/cli "$@"
+  '';
 in {
   options.development.editors.zed = {
     enable = mkEnableOption "Enable Zed Editor";
@@ -60,6 +66,10 @@ in {
   config = mkIf (config.development.enable && config.development.editors.enable && cfg.enable) {
     programs.zed-editor = {
       enable = true;
+      package =
+        if pkgs.stdenv.hostPlatform.isDarwin
+        then darwinCliShim // {meta.mainProgram = "zeditor";}
+        else inputs.zed-editor.packages.${pkgs.system}.default;
       extensions =
         builtins.attrValues (lib.filterAttrs (name: _: cfg.extensions.${name}) bundledExtensions)
         ++ cfg.advanced.extensions;

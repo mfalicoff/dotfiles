@@ -39,7 +39,7 @@ These are imported through [`modules/home/default.nix`](../../nix/nixos/modules/
 
 | Module | Main option | Source |
 | --- | --- | --- |
-| Browsers | `browsers.enable` with Firefox, Zen, and Chrome | [browsers](../../nix/nixos/modules/home/browsers/default.nix) |
+| Browsers | `browsers.enable` with Zen and Chrome | [browsers](../../nix/nixos/modules/home/browsers/default.nix) |
 | Development | `development.enable` with cloud, containers, Kubernetes, Nix, Git, languages, and editor bundles | [development](../../nix/nixos/modules/home/development/default.nix) |
 | Shell | `shellOptions.enable` with Zsh, terminal, navigation, monitoring, and tmux bundles | [shell](../../nix/nixos/modules/home/shell/default.nix) |
 | Window manager | `windowManager.enable` with Hyprland and AeroSpace | [windowManager](../../nix/nixos/modules/home/windowManager/default.nix) |

@@ -75,7 +75,7 @@
     };
     cloud.enable = true;
     containers.enable = true;
-    kubernetes.enable = false;
+    kubernetes.enable = true;
     nix = {
       enable = true;
       completion = {
@@ -115,7 +115,7 @@
         intellij.enable = false;
       };
       go = {
-        enable = false;
+        enable = true;
         goland.enable = false;
       };
       php = {
