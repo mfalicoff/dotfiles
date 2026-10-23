@@ -242,6 +242,7 @@
           echo '${builtins.toJSON (import file {inherit inputs;})}' > $out
         '';
     in {
+      ai = suite "ai" ./tests/ai.nix;
       bundles = suite "bundles" ./tests/bundles.nix;
       development = suite "development" ./tests/development.nix;
       kernels = suite "kernels" ./tests/kernels.nix;

@@ -33,12 +33,15 @@ The shared [`nix-core.nix`](../../nix/nixos/nix-core.nix) sets Nix features, unf
 | Mac user | macOS user and shell | [host-users.nix](../../nix/nixos/hosts/fearful/host-users.nix) |
 | Styling | Shared `styling.stylix.enable` | [stylix](../../nix/nixos/modules/system/stylix/default.nix) |
 
+Both Mac hosts import the shared [Aerofi service](../../nix/nixos/hosts/darwin/aerofi-system.nix) and [Home Manager setup](../../nix/nixos/hosts/darwin/common-home.nix). The latter owns the account path, Homebrew shell environment, and Aerofi files and activation steps. Host files retain their own applications and feature switches.
+
 ## Home Manager modules
 
 These are imported through [`modules/home/default.nix`](../../nix/nixos/modules/home/default.nix). See the [Home Manager options guide](home.md) for examples and defaults.
 
 | Module | Main option | Source |
 | --- | --- | --- |
+| AI | `ai.enable` with optional ChatGPT, Pi, Claude Code, Copilot CLI, and Codex CLI | [ai](../../nix/nixos/modules/home/ai/default.nix) |
 | Browsers | `browsers.enable` with Zen and Chrome | [browsers](../../nix/nixos/modules/home/browsers/default.nix) |
 | Development | `development.enable` with cloud, containers, Kubernetes, Nix, Git, languages, and editor bundles | [development](../../nix/nixos/modules/home/development/default.nix) |
 | Shell | `shellOptions.enable` with Zsh, terminal, navigation, monitoring, and tmux bundles | [shell](../../nix/nixos/modules/home/shell/default.nix) |

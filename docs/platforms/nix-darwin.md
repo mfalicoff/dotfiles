@@ -41,7 +41,7 @@ After switching, check the installed apps and CLI tools before removing any old 
 
 Both Mac configurations use the shared Podman development bundle. `fearful` no longer declares OrbStack, and the work Mac no longer declares the Homebrew Docker CLI. After rebuilding, open a new shell and run `podman machine init` once, then `podman machine start`. To install Podman Desktop through Nix as well, enable `development.containers.desktop.enable` in the host's home configuration. The [container guide](../modules/home.md#containers) covers Compose commands, Docker API tools, and existing container data.
 
-Aerofi is installed from the upstream `frostymur/tap` Homebrew tap. Its structured `homebrew.brews` entry in `fearful/system.nix` starts the launcher as a user service at login and restarts it when the formula changes. After switching, press the configured launcher shortcut (`Cmd+G`) to open it. Custom themes and scripts live in `~/.config/aerofi/`.
+Aerofi is installed from the upstream `frostymur/tap` Homebrew tap. The shared [Aerofi service module](../../nix/nixos/hosts/darwin/aerofi-system.nix) starts the launcher as a user service at login and restarts it when the formula changes. After switching, press the configured launcher shortcut (`Cmd+G`) to open it. Custom themes and scripts live in `~/.config/aerofi/`.
 
 Home Manager installs [`config/aerofi/config.toml`](../../nix/nixos/hosts/darwin/config/aerofi/config.toml) as `~/.config/aerofi/config.toml` and [`config/aerofi/theme.toml`](../../nix/nixos/hosts/darwin/config/aerofi/theme.toml) as `~/.config/aerofi/themes/dotfiles.toml`. The selected theme uses Catppuccin Mocha colors and a footer with keyboard hints and a reload button. Edit these repository files and rebuild, then press `Cmd+R` in Aerofi to reload. Restart the service with `brew services restart aerofi` after changing global hotkeys. These two files are read-only Nix store links; scripts, plugins, and runtime state remain writable, and theme-switching scripts should not rewrite the managed config.
 
@@ -51,7 +51,7 @@ Home Manager creates the writable script directory (`~/.config/aerofi/scripts`) 
 
 ## Work Mac (`MFALICOFF-MAC`)
 
-`darwinConfigurations.MFALICOFF-MAC` is an adopt-only configuration for an MDM-managed Mac whose account is `mfalicoff` (`workUsername` in [`flake.nix`](../../flake.nix)). Its files are in [`nix/nixos/hosts/darwin/work`](../../nix/nixos/hosts/darwin/work). It manages only the Nix daemon settings, `/etc` shell hooks and Home Manager itself: no hostname, macOS defaults, Stylix, Homebrew (`homebred` would zap existing casks), dotfiles or Git config. Enable shared Home Manager features in its `home.nix` one at a time, switching after each. The `development.git` module deletes `~/.gitconfig` and uses personal defaults, so set `userEmail` before enabling it.
+`darwinConfigurations.MFALICOFF-MAC` configures an MDM-managed Mac whose account is `mfalicoff` (`workUsername` in [`flake.nix`](../../flake.nix)). Its files are in [`nix/nixos/hosts/darwin/work`](../../nix/nixos/hosts/darwin/work). Both Macs import the shared [Home Manager setup](../../nix/nixos/hosts/darwin/common-home.nix) and [Aerofi service](../../nix/nixos/hosts/darwin/aerofi-system.nix). The work host also enables Stylix, Homebrew, and selected shell and development bundles. It leaves the hostname, macOS defaults, and Git config unmanaged. Review its `homebred` list before switching: `cleanup = "zap"` removes undeclared Homebrew packages and their data. The `development.git` module deletes `~/.gitconfig` and uses personal defaults, so set `userEmail` before enabling it.
 
 The host name used by `darwin-rebuild` does not match the Mac's local host name, so always pass the flake attribute explicitly.
 
@@ -66,4 +66,4 @@ First switch:
 
 3. `sudo nix run github:LnL7/nix-darwin/master#darwin-rebuild -- switch --flake .#MFALICOFF-MAC`
 
-Later rebuilds use `sudo darwin-rebuild switch --flake .#MFALICOFF-MAC`. The existing `~/.zshrc`, `~/.gitconfig` and installed apps are left alone.
+Later rebuilds use `sudo darwin-rebuild switch --flake .#MFALICOFF-MAC`. Git config remains unmanaged; Home Manager owns the enabled shell files, and Homebrew activation follows the work host's `homebred` declarations.

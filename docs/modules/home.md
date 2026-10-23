@@ -4,7 +4,36 @@ The shared modules live in [`nix/nixos/modules/home`](../../nix/nixos/modules/ho
 
 A bundle owns its package list and sensible program settings. Enabling it selects the entire bundle. Adding a tool to an existing bundle takes one edit in that module; hosts already using the bundle receive it automatically. Host-specific extra packages can still go in `home.packages`, and native Home Manager options remain available for exceptional overrides.
 
-Parent switches gate their children. Enabling `development`, `shellOptions`, `browsers`, or `windowManager` does not select their child bundles automatically.
+Parent switches gate their children. Enabling `ai`, `development`, `shellOptions`, `browsers`, or `windowManager` does not select their child bundles automatically.
+
+## AI applications and agents
+
+`ai.enable` gates five independent switches. All are off by default:
+
+```nix
+ai = {
+  enable = true;
+  chatgpt.enable = true; # macOS desktop app
+  pi.enable = true;
+  claudeCode.enable = true;
+  copilot.enable = true;
+  codex.enable = true;
+};
+
+# Pi uses Home Manager's native module for configuration.
+programs.pi-coding-agent = {
+  settings = {
+    theme = "dark";
+    defaultProvider = "anthropic";
+  };
+  # Other options include models, keybindings, context, appendSystem,
+  # configDir, extraPackages, and package.
+};
+```
+
+Pi includes these packages by default when enabled: [`pi-web-access`](https://pi.dev/packages/pi-web-access), [`pi-subagents`](https://pi.dev/packages/pi-subagents), [`@juicesharp/rpiv-ask-user-question`](https://pi.dev/packages/@juicesharp/rpiv-ask-user-question), and [`openwiki`](https://pi.dev/packages/openwiki). Node.js is available to Pi so it can install the npm packages. Override the list with `programs.pi-coding-agent.settings.packages` in a host configuration.
+
+`chatgpt` is available on macOS. `pi`, `claudeCode`, `copilot`, and `codex` select their Home Manager program modules; their native `programs.*` options remain available for settings and other customization. See the [Pi Home Manager options](https://mynixos.com/home-manager/options/programs.pi-coding-agent) for its full configuration surface. Pi's settings are written to `~/.pi/agent/settings.json` when nonempty. Keep API keys and login state out of Nix settings.
 
 ## Development
 
@@ -202,7 +231,7 @@ Zsh exposes `extraPlugins`, `shellAliases`, and `initContent` for host-specific 
 
 ## Workstation profile
 
-`profiles.devWorkstation.enable = true` selects the shared development defaults (git, cloud, containers, kubernetes, nix, secrets, tools, environment, the C and Python languages, and Neovim). Every value is a `mkDefault`, so a host overrides only what differs, such as `development.kubernetes.enable = false`. Desktop tools, other languages and the GUI editors stay per host.
+`profiles.devBase.enable = true` selects the core development defaults: cloud, containers, Kubernetes, Nix, tools, and the editor area. The work Mac uses this profile without enabling Git, secrets, C/Python, or Neovim. `profiles.devWorkstation.enable = true` includes that core and adds Git, secrets, environment, C/Python, and Neovim; the personal Mac and NixOS workstations use it. Every value is a `mkDefault`, so a host overrides only what differs, such as `development.kubernetes.enable = false`. Desktop tools, other languages, and GUI editors stay per host.
 
 ## Browsers and window managers
 

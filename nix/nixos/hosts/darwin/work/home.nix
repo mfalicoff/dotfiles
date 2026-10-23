@@ -1,54 +1,15 @@
 {
   config,
   inputs,
-  lib,
-  pkgs,
-  username,
   ...
 }: {
   imports = [
     inputs.nixvim.homeModules.nixvim
-
+    ../common-home.nix
     ../../../modules/home
   ];
 
-  home = {
-    inherit username;
-    homeDirectory = "/Users/${username}";
-    stateVersion = "24.11";
-  };
-
-  programs.home-manager.enable = true;
-
-  programs.nh = {
-    enable = true;
-  };
-
-  # Aerofi watches these writable directories even when they are empty.
-  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
-    run mkdir -p \
-      "${config.xdg.configHome}/aerofi/scripts" \
-      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
-  '';
-
-  # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
-  home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
-    run ${lib.getExe pkgs.python3} ${../config/aerofi/cache-icons.py} \
-      "${config.xdg.configHome}/aerofi/config.toml"
-  '';
-  xdg.configFile."aerofi/config.toml".source = ../config/aerofi/config.toml;
-  xdg.configFile."aerofi/themes/dotfiles.toml".source = ../config/aerofi/theme.toml;
-
-  # Homebrew is installed outside the Nix profile. Restore its shell
-  # environment for every Zsh session, including non-login terminal shells,
-  # without failing if Brew is absent.
   programs.zsh.envExtra = ''
-    if [[ -x /opt/homebrew/bin/brew ]]; then
-      eval "$('/opt/homebrew/bin/brew' shellenv)"
-    elif [[ -x /usr/local/bin/brew ]]; then
-      eval "$('/usr/local/bin/brew' shellenv)"
-    fi
-
     export PATH="$PATH:$HOME/.dotnet/tools"
   '';
 
@@ -64,80 +25,29 @@
     tmux.enable = true;
   };
 
-  programs.github-copilot-cli.enable = true;
+  ai = {
+    enable = true;
+    copilot.enable = true;
+  };
+
+  profiles.devBase.enable = true;
 
   development = {
-    enable = true;
-    git = {
-      enable = false;
-      enableLfs = false;
-    };
-    cloud.enable = true;
-    containers.enable = true;
-    kubernetes.enable = true;
-    nix = {
+    git.enableLfs = false;
+    nix.completion = {
       enable = true;
-      completion = {
-        enable = true;
-        flakePath = "${config.home.homeDirectory}/dotfiles";
-        hostName = "MFALICOFF-MAC";
-        homeModule = "/nix/nixos/hosts/darwin/work/home.nix";
-      };
+      flakePath = "${config.home.homeDirectory}/dotfiles";
+      hostName = "MFALICOFF-MAC";
+      homeModule = "/nix/nixos/hosts/darwin/work/home.nix";
     };
-    secrets.enable = false;
-    tools.enable = true;
     desktop = {
       enable = true;
       gitkraken.enable = false; # Installed as a Homebrew cask
     };
-    environment.enable = false;
-    mobile.enable = false;
     languages = {
-      c = {
-        enable = false;
-        clion.enable = false;
-      };
-      python = {
-        enable = false;
-        pycharm.enable = false;
-      };
-      dotnet = {
-        enable = false;
-        rider.enable = false;
-      };
-      javascript = {
-        enable = false;
-        webstorm.enable = false;
-      };
-      java = {
-        enable = false;
-        intellij.enable = false;
-      };
-      go = {
-        enable = true;
-        goland.enable = false;
-      };
-      php = {
-        enable = false;
-        phpstorm.enable = false;
-      };
-      ruby = {
-        enable = false;
-        rubymine.enable = false;
-      };
-      sql = {
-        enable = false;
-        datagrip.enable = false;
-      };
+      go.enable = true;
       terraform.enable = true;
-      zig.enable = false;
-      elixir.enable = false;
     };
-    editors = {
-      enable = true;
-      zed.enable = true;
-      neovim.enable = false;
-      vscode.enable = false;
-    };
+    editors.zed.enable = true;
   };
 }

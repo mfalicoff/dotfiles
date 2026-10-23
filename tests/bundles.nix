@@ -135,6 +135,7 @@
     };
   };
   workstation = home {profiles.devWorkstation.enable = true;};
+  devBase = home {profiles.devBase.enable = true;};
   workstationOverride = home {
     profiles.devWorkstation.enable = true;
     development.kubernetes.enable = false;
@@ -243,6 +244,20 @@
       && !workstation.development.languages.dotnet.enable
       && !workstation.development.desktop.enable
       && !workstationOverride.development.kubernetes.enable;
+    baseProfileLeavesPersonalToolsOff =
+      devBase.development.enable
+      && devBase.development.cloud.enable
+      && devBase.development.containers.enable
+      && devBase.development.kubernetes.enable
+      && devBase.development.nix.enable
+      && devBase.development.tools.enable
+      && devBase.development.editors.enable
+      && !devBase.development.git.enable
+      && !devBase.development.secrets.enable
+      && !devBase.development.environment.enable
+      && !devBase.development.languages.c.enable
+      && !devBase.development.languages.python.enable
+      && !devBase.development.editors.neovim.enable;
     profileIsOptIn = !empty.development.enable;
     shellChildrenRequireTheirDomain =
       !disabledShell.programs.zsh.enable && !disabledShell.programs.tmux.enable;

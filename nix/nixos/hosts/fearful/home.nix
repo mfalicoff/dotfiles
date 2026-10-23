@@ -1,63 +1,31 @@
 {
-  config,
   lib,
   pkgs,
-  username,
   inputs,
   ...
 }: {
   imports = [
     inputs.nixvim.homeModules.nixvim
     ./plist.nix
+    ../darwin/common-home.nix
     ../../modules/home
   ];
 
-  home = {
-    inherit username;
-    homeDirectory = "/Users/${username}";
-    stateVersion = "24.11";
-    packages = with pkgs; [
-      chatgpt
-      whatsapp-for-mac
-    ];
+  home.packages = with pkgs; [
+    whatsapp-for-mac
+  ];
+
+  ai = {
+    enable = true;
+    chatgpt.enable = true;
+    codex.enable = true;
+    pi.enable = true;
   };
 
-  programs.home-manager.enable = true;
-
-  # Homebrew is installed outside the Nix profile. Restore its shell
-  # environment for every Zsh session, including non-login terminal shells,
-  # without failing if Brew is absent.
-  programs.zsh.envExtra = ''
-    if [[ -x /opt/homebrew/bin/brew ]]; then
-      eval "$('/opt/homebrew/bin/brew' shellenv)"
-    elif [[ -x /usr/local/bin/brew ]]; then
-      eval "$('/usr/local/bin/brew' shellenv)"
-    fi
-  '';
-
   xdg.configFile."television".source = ../darwin/config/television;
-  xdg.configFile."aerofi/config.toml".source = ../darwin/config/aerofi/config.toml;
-  xdg.configFile."aerofi/themes/dotfiles.toml".source = ../darwin/config/aerofi/theme.toml;
-
-  # Aerofi watches these writable directories even when they are empty.
-  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
-    run mkdir -p \
-      "${config.xdg.configHome}/aerofi/scripts" \
-      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
-  '';
-
-  # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
-  home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
-    run ${lib.getExe pkgs.python3} ${../darwin/config/aerofi/cache-icons.py} \
-      "${config.xdg.configHome}/aerofi/config.toml"
-  '';
-
   browsers = {
     enable = true;
     zen.enable = true;
-  };
-  programs.nh = {
-    enable = true;
   };
   stylix.targets.zen-browser = {
     enable = true;
@@ -68,39 +36,21 @@
     omniwm.enable = true;
   };
 
+  profiles.devWorkstation.enable = true;
+
   development = {
-    enable = true;
-    git = {
-      enable = true;
-      enableLfs = true;
-    };
-    cloud.enable = true;
-    containers.enable = true;
     containers.desktop.enable = true;
     desktop.enable = true;
-    kubernetes.enable = true;
-    nix.enable = true;
-    secrets.enable = true;
-    tools.enable = true;
-    environment.enable = true;
     mobile.enable = true;
     languages = {
-      c.enable = true;
-      python.enable = true;
       dotnet = {
         enable = true;
         rider.enable = true;
       };
+      java.enable = true;
     };
-    editors = {
-      enable = true;
-      zed.enable = true;
-      neovim.enable = true;
-    };
+    editors.zed.enable = true;
   };
-
-  programs.codex.enable = true;
-  programs.discord.enable = true;
 
   # Keep the additional Git settings from the former Darwin .gitconfig while
   # letting the shared development module own the generated Git config.

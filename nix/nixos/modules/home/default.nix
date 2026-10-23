@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./ai
     ./browsers
     ./development
     ./windowManager
