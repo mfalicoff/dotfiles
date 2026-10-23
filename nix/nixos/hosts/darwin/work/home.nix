@@ -33,11 +33,11 @@
 
   # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
   home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
-    run ${lib.getExe pkgs.python3} ${../../../../darwin/config/aerofi/cache-icons.py} \
+    run ${lib.getExe pkgs.python3} ${../config/aerofi/cache-icons.py} \
       "${config.xdg.configHome}/aerofi/config.toml"
   '';
-  xdg.configFile."aerofi/config.toml".source = ../../../../darwin/config/aerofi/config.toml;
-  xdg.configFile."aerofi/themes/dotfiles.toml".source = ../../../../darwin/config/aerofi/theme.toml;
+  xdg.configFile."aerofi/config.toml".source = ../config/aerofi/config.toml;
+  xdg.configFile."aerofi/themes/dotfiles.toml".source = ../config/aerofi/theme.toml;
 
   # Homebrew is installed outside the Nix profile. Restore its shell
   # environment for every Zsh session, including non-login terminal shells,
@@ -70,7 +70,6 @@
     enable = true;
     git = {
       enable = false;
-      enableDelta = false;
       enableLfs = false;
     };
     cloud.enable = true;

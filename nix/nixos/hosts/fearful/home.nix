@@ -1,8 +1,134 @@
-{inputs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  username,
+  inputs,
+  ...
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
-    ../../../darwin/home.nix
-    ../../../darwin/plist.nix
+    ./plist.nix
     ../../modules/home
   ];
+
+  home = {
+    inherit username;
+    homeDirectory = "/Users/${username}";
+    stateVersion = "24.11";
+    packages = with pkgs; [
+      chatgpt
+      whatsapp-for-mac
+    ];
+  };
+
+  programs.home-manager.enable = true;
+
+  # Homebrew is installed outside the Nix profile. Restore its shell
+  # environment for every Zsh session, including non-login terminal shells,
+  # without failing if Brew is absent.
+  programs.zsh.envExtra = ''
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+      eval "$('/opt/homebrew/bin/brew' shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+      eval "$('/usr/local/bin/brew' shellenv)"
+    fi
+  '';
+
+  xdg.configFile."television".source = ../darwin/config/television;
+  xdg.configFile."aerofi/config.toml".source = ../darwin/config/aerofi/config.toml;
+  xdg.configFile."aerofi/themes/dotfiles.toml".source = ../darwin/config/aerofi/theme.toml;
+
+  # Aerofi watches these writable directories even when they are empty.
+  home.activation.prepareAerofiDirectories = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run mkdir -p \
+      "${config.xdg.configHome}/aerofi/scripts" \
+      "${config.home.homeDirectory}/Library/Application Support/aerofi/plugins"
+  '';
+
+  # Seed icons from bundle resources when Aerofi's AppKit extraction fails.
+  home.activation.cacheAerofiIcons = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    run ${lib.getExe pkgs.python3} ${../darwin/config/aerofi/cache-icons.py} \
+      "${config.xdg.configHome}/aerofi/config.toml"
+  '';
+
+  browsers = {
+    enable = true;
+    zen.enable = true;
+  };
+  programs.nh = {
+    enable = true;
+  };
+  stylix.targets.zen-browser = {
+    enable = true;
+    profileNames = ["default"];
+  };
+  windowManager = {
+    enable = true;
+    omniwm.enable = true;
+  };
+
+  development = {
+    enable = true;
+    git = {
+      enable = true;
+      enableLfs = true;
+    };
+    cloud.enable = true;
+    containers.enable = true;
+    containers.desktop.enable = true;
+    desktop.enable = true;
+    kubernetes.enable = true;
+    nix.enable = true;
+    secrets.enable = true;
+    tools.enable = true;
+    environment.enable = true;
+    mobile.enable = true;
+    languages = {
+      c.enable = true;
+      python.enable = true;
+      dotnet = {
+        enable = true;
+        rider.enable = true;
+      };
+    };
+    editors = {
+      enable = true;
+      zed.enable = true;
+      neovim.enable = true;
+    };
+  };
+
+  programs.codex.enable = true;
+  programs.discord.enable = true;
+
+  # Keep the additional Git settings from the former Darwin .gitconfig while
+  # letting the shared development module own the generated Git config.
+  programs.git.settings = {
+    user.signingKey = "~/.ssh/id_ed25519.pub";
+    commit.gpgSign = true;
+    gpg.format = "ssh";
+    merge.conflictstyle = "diff3";
+    diff.colorMoved = "default";
+    core.pager = "delta";
+    interactive.diffFilter = "delta --color-only";
+  };
+
+  programs.delta.options = {
+    navigate = true;
+    light = false;
+  };
+
+  shellOptions = {
+    enable = true;
+    zsh.enable = true;
+    terminal.enable = true;
+    navigation.enable = true;
+    monitoring.enable = true;
+    tmux.enable = true;
+  };
+
+  home.activation.showLibrary = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    /usr/bin/chflags nohidden "$HOME/Library"
+  '';
 }

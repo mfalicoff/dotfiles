@@ -16,14 +16,15 @@ in {
       }))
     ];
 
-  xdg.configFile = {
-    "spotatui/config.yml".source = ./config.yml;
-    "spotatui/plugins/track-notifier.lua".source = "${examples}/track-notifier.lua";
-    "spotatui/plugins/track-info-popup.lua".source = "${examples}/track-info-popup.lua";
-    "spotatui/plugins/accent-cycler.lua".source = "${examples}/accent-cycler.lua";
-    "spotatui/plugins/session-stats" = {
-      source = "${examples}/session-stats";
-      recursive = true;
+    xdg.configFile = {
+      "spotatui/config.yml".source = ./config.yml;
+      "spotatui/plugins/track-notifier.lua".source = "${examples}/track-notifier.lua";
+      "spotatui/plugins/track-info-popup.lua".source = "${examples}/track-info-popup.lua";
+      "spotatui/plugins/accent-cycler.lua".source = "${examples}/accent-cycler.lua";
+      "spotatui/plugins/session-stats" = {
+        source = "${examples}/session-stats";
+        recursive = true;
+      };
     };
   };
 }

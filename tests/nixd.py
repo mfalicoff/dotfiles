@@ -99,7 +99,7 @@ try:
     notify("initialized", {})
     notify("workspace/didChangeConfiguration", {"settings": {"nixd": settings}})
     # Documents stay in memory. No edits are written to the user's configuration.
-    uri = (root / "nix/darwin/home.nix").as_uri()
+    uri = (root / "nix/nixos/hosts/fearful/home.nix").as_uri()
     scenarios = [
         ("development.languages.", {"dotnet", "python", "javascript", "elixir"}),
         ("development.languages.dotnet.", {"enable", "rider"}),

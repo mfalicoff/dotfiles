@@ -1,6 +1,6 @@
 # Home Manager bundles
 
-The shared modules live in [`nix/nixos/modules/home`](../../nix/nixos/modules/home). Hosts select bundles in `home.nix`; macOS selects them in [`nix/darwin/home.nix`](../../nix/darwin/home.nix).
+The shared modules live in [`nix/nixos/modules/home`](../../nix/nixos/modules/home). Each host selects bundles in its `home.nix`, including the personal Mac in [`hosts/fearful/home.nix`](../../nix/nixos/hosts/fearful/home.nix).
 
 A bundle owns its package list and sensible program settings. Enabling it selects the entire bundle. Adding a tool to an existing bundle takes one edit in that module; hosts already using the bundle receive it automatically. Host-specific extra packages can still go in `home.packages`, and native Home Manager options remain available for exceptional overrides.
 
@@ -77,7 +77,7 @@ Each area lives in its own file under [`development`](../../nix/nixos/modules/ho
 
 `development.containers.enable = true` installs Podman through Nix on Linux and macOS. The installed `docker` command forwards to Podman, including `docker compose`. The `docker-compose` command also runs `podman compose`; both use a pinned Docker Compose provider against Podman's socket, following [Podman's Compose integration](https://docs.podman.io/en/latest/markdown/podman-compose.1.html). These are executable commands, so scripts and television channels use them as well as interactive shells.
 
-To install the optional GUI, set this in the host's `home.nix` (or `nix/darwin/home.nix` for `fearful`):
+To install the optional GUI, set this in the host's `home.nix`:
 
 ```nix
 development = {
