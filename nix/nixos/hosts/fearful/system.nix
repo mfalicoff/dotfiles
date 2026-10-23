@@ -1,4 +1,9 @@
-{config, darwinHostname, username, ...}: {
+{
+  config,
+  darwinHostname,
+  username,
+  ...
+}: {
   imports = [
     ./host-users.nix
     ../../modules/system/stylix
@@ -53,10 +58,12 @@
       "wallspace"
       "yubico-authenticator"
       "vorssaint"
+      "xcodes"
     ];
     appStoreApps = {
       AutoMounter = 1160435653;
       "Infuse 7" = 1136220934;
+      "Xcode" = 497799835;
     };
   };
 

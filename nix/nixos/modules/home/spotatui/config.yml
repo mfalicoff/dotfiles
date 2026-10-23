@@ -54,4 +54,4 @@ tables:
 plugin_commands:
   track_info: "ctrl-i"
   cycle_accent: "ctrl-y"
-  session_stats: "ctrl-s"
+  session_stats: "alt-t"
