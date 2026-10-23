@@ -24,6 +24,7 @@
     };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [(import ../overlays/fabric.nix)];
 
   nix.package = pkgs.nix;
 

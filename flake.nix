@@ -233,6 +233,10 @@
       system: nixpkgs.legacyPackages.${system}.alejandra
     );
 
+    checks.aarch64-darwin.fabric = import ./tests/fabric.nix {
+      pkgs = self.darwinConfigurations.${darwinHostname}.pkgs;
+    };
+
     # Module regression tests; each asserts at evaluation time and the
     # derivation only records the results.
     checks.x86_64-linux = let
